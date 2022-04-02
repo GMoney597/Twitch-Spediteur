@@ -47,7 +47,13 @@ namespace Twitch_Spediteur
             filestream.Close();
 
             tbkMessage.Text = spielerList.Count.ToString() + " Spieler bereits registriert.";
-            
+
+            SpielerListeAktualisieren();
+        }
+
+        private void SpielerListeAktualisieren()
+        {
+            lstSpieler.ItemsSource = null;
             lstSpieler.Items.Clear();
             lstSpieler.ItemsSource = spielerList;
         }
@@ -61,7 +67,7 @@ namespace Twitch_Spediteur
             // Prüfe, ob alle Felder ausgefüllt wurden
             if(String.IsNullOrEmpty(txtName.Text) || 
                 String.IsNullOrEmpty(txtMail.Text) || 
-                String.IsNullOrEmpty(pwdPasswort.Password))
+                String.IsNullOrEmpty(pwdPasswort.Text))
             {
                 tbkMessage.Foreground = Brushes.Red;
                 tbkMessage.Text = "Keine Daten angebeben.";
@@ -72,19 +78,17 @@ namespace Twitch_Spediteur
                 tbkMessage.Foreground= Brushes.Black;
 
                 // Lege einen neuen Spieler an
-                Spieler spieler = new Spieler(txtName.Text, txtMail.Text, pwdPasswort.Password);
+                Spieler spieler = new Spieler(txtName.Text, txtMail.Text, pwdPasswort.Text);
                 spielerList.Add(spieler);
 
                 StreamWriter sw = File.AppendText(path);
-                sw.WriteLine(txtName.Text + ';' + txtMail.Text + ';' + pwdPasswort.Password);
+                sw.WriteLine(spieler.HoleRegistrierdaten());
                 sw.Flush();
                 sw.Close();
 
                 tbkMessage.Text = spielerList.Count.ToString() + " Spieler sind angelegt.";
 
-                txtName.Text = "";
-                txtMail.Text = "";
-                pwdPasswort.Password = "";
+                LeereFormular();
             }
             else
             {
@@ -92,19 +96,59 @@ namespace Twitch_Spediteur
                 tbkMessage.Foreground = Brushes.Red;
                 tbkMessage.Text = "Mail ist ungültig!";
             }
+
+            SpielerListeAktualisieren();
+        }
+
+        private void cmdEinloggen_Click(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(txtName.Text) && 
+                !String.IsNullOrEmpty(pwdPasswort.Text))
+            {
+                PruefeEinloggen(txtName.Text, pwdPasswort.Text);
+                LeereFormular();
+            }
+            else if(!String.IsNullOrEmpty(txtMail.Text) &&
+                !String.IsNullOrEmpty(pwdPasswort.Text))
+            {
+                PruefeEinloggen(txtMail.Text, pwdPasswort.Text);
+                LeereFormular();
+            }
+            else
+            {
+                // Bringe eine Fehlermeldung, dass Mail-Adresse oder Spielername fehlt
+                tbkMessage.Foreground = Brushes.Red;
+                tbkMessage.Text = "Spielername oder Mailadresse fehlen!";
+            }
+        }
+
+        private void LeereFormular()
+        {
+            txtMail.Text = "";
+            txtName.Text = "";
+            pwdPasswort.Text = "";
+        }
+
+        private void PruefeEinloggen(string name_mail, string passwort)
+        {
+            foreach (Spieler sp in spielerList)
+            {
+                if (sp.Spielername == name_mail && sp.PruefePasswort(passwort))
+                {
+                    tbkMessage.Foreground = Brushes.Black;
+                    tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                }
+                else if(sp.Mail == name_mail && sp.PruefePasswort(passwort))
+                {
+                    tbkMessage.Foreground = Brushes.Black;
+                    tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                }
+                else
+                {
+                    tbkMessage.Foreground = Brushes.Red;
+                    tbkMessage.Text = "Anmeldung fehlgeschlagen.";
+                }
+            }
         }
     }
 }
-
-/* Regex-Expression RFC532
- * \A(?:[a-z0-9!#$%&'*+/=?^_‘{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_‘{|}~-]+)*
- |  "(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]
-      |  \\[\x01-\x09\x0b\x0c\x0e-\x7f])*")
-@ (?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?
-  |  \[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}
-       (?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:
-          (?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]
-          |  \\[\x01-\x09\x0b\x0c\x0e-\x7f])+)
-     \])\z
-*/
-
