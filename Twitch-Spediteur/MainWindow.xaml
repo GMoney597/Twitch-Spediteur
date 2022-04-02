@@ -1,0 +1,32 @@
+﻿<Window x:Class="Twitch_Spediteur.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Twitch_Spediteur"
+        mc:Ignorable="d"
+        Title="Twitch-Spediteur" Height="450" Width="800" Background="#6441a5">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0">
+            <TextBlock Text="Spielername:" />
+            <TextBox Name="txtName" />
+            <TextBlock Text="Mail-Adresse" />
+            <TextBox Name="txtMail" />
+            <TextBlock Text="Passwort" />
+            <PasswordBox Name="pwdPasswort" PasswordChar="°"/>
+            <TextBlock Name="tbkMessage"/>
+            <Button Name="cmdRegistrieren" Content="Registrieren" Click="cmdRegistrieren_Click"/>
+        </StackPanel>
+        <ListView Name="lstSpieler" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Spielername" Width="200" DisplayMemberBinding="{Binding Spielername}" />
+                </GridView>
+            </ListView.View>
+        </ListView>
+    </Grid>
+</Window>
