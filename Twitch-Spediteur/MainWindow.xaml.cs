@@ -1,19 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Twitch_Spediteur
 {
@@ -136,12 +126,16 @@ namespace Twitch_Spediteur
                 if (sp.Spielername == name_mail && sp.PruefePasswort(passwort))
                 {
                     tbkMessage.Foreground = Brushes.Black;
-                    tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                    UserInterface user = new UserInterface(sp);
+                    user.Show();
                 }
                 else if(sp.Mail == name_mail && sp.PruefePasswort(passwort))
                 {
                     tbkMessage.Foreground = Brushes.Black;
-                    tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                    UserInterface user = new UserInterface(sp);
+                    user.Show();
                 }
                 else
                 {

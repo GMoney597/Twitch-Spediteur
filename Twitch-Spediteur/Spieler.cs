@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Twitch_Spediteur
 {
-    internal class Spieler
+    public class Spieler
     {
         SHA256 sHA256 = SHA256.Create();
 
