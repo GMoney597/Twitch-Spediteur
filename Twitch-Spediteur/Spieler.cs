@@ -14,18 +14,25 @@ namespace Twitch_Spediteur
         public string Spielername { get; private set; }
         public string Mail { get; private set; }   
         private byte[] Passwort_alt;
-        private string Passwort_neu;
+        public byte[] Passwort_neu { get; private set; }
 
 
         public Spieler(string Name, string Mail, string Passwort)
         {
-            // byte[] pwValue = sHA256.ComputeHash(Encoding.UTF8.GetBytes(Passwort));
+            byte[] pwValue = sHA256.ComputeHash(Encoding.UTF8.GetBytes(Passwort));
             Spielername = Name;
             this.Mail = Mail;
-            Passwort_neu = Passwort;
+            Passwort_neu = pwValue;
             // Passwort_alt = "";
+
+            Bargeld = 1000.0M;
+            Konto = 0.0M;
         }
 
+        public Spieler(string Name)
+        {
+            Spielername = Name;
+        }
 
         public decimal Bargeld
         {
@@ -61,12 +68,16 @@ namespace Twitch_Spediteur
 
         public bool Registrieren()
         {
-            throw new System.NotImplementedException();
+            SQLite sql = new SQLite();
+            bool register = sql.RegistriereSpieler(this);
+            return register;
         }
 
-        public bool Einloggen()
+        public bool Einloggen(string name_mail, string passwort)
         {
-            throw new System.NotImplementedException();
+            SQLite sql = new SQLite();
+            bool login = sql.EinloggenSpieler(name_mail, passwort);
+            return login;
         }
 
         public bool Nachricht_schreiben()
@@ -74,16 +85,18 @@ namespace Twitch_Spediteur
             throw new System.NotImplementedException();
         }
 
-        internal string HoleRegistrierdaten()
-        {
-            // gib mit gehashtem Passwort zurück
-            // return Spielername + ";" + Mail + ";" + Encoding.Default.GetString(Passwort_neu);
-            return Spielername + ";" + Mail + ";" + Passwort_neu;
-        }
+        //internal string HoleRegistrierdaten()
+        //{
+        //    // gib mit gehashtem Passwort zurück
+        //    // return Spielername + ";" + Mail + ";" + Encoding.Default.GetString(Passwort_neu);
+        //    // return Spielername + ";" + Mail + ";" + Passwort_neu;
+        //}
 
         internal bool PruefePasswort(string passwort)
         {
-            if (Passwort_neu == passwort)
+            byte[] pwValid = sHA256.ComputeHash(Encoding.UTF8.GetBytes(passwort));
+
+            if (Passwort_neu == pwValid)
             {
                 return true;
             }

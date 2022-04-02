@@ -13,28 +13,31 @@ namespace Twitch_Spediteur
     public partial class MainWindow : Window
     {
         List<Spieler> spielerList = new List<Spieler>();
-        static string path = @"e:\projects\twitch.csv";
-        FileStream filestream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+        // static string path = @"e:\projects\twitch.csv";
+        //FileStream filestream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
+        SQLite sql = new SQLite();
 
         public MainWindow()
         {
             InitializeComponent();
-            InitializeSpielerliste(spielerList);
+            InitializeSpielerliste();
         }
 
-        private void InitializeSpielerliste(List<Spieler> spielerList)
+        private void InitializeSpielerliste()
         {
-            StreamReader sr = new StreamReader(filestream);
+            //StreamReader sr = new StreamReader(filestream);
 
-            while (!sr.EndOfStream)
-            {
-                string[] player = sr.ReadLine().Split(';');
-                Spieler spieler = new Spieler(player[0], player[1], player[2]);
-                spielerList.Add(spieler);
-            }
+            //while (!sr.EndOfStream)
+            //{
+            //    string[] player = sr.ReadLine().Split(';');
+            //    Spieler spieler = new Spieler(player[0], player[1], player[2]);
+            //    spielerList.Add(spieler);
+            //}
 
-            sr.Close();
-            filestream.Close();
+            //sr.Close();
+            //filestream.Close();
+
+            spielerList = sql.HoleSpieler();
 
             tbkMessage.Text = spielerList.Count.ToString() + " Spieler bereits registriert.";
 
@@ -69,12 +72,15 @@ namespace Twitch_Spediteur
 
                 // Lege einen neuen Spieler an
                 Spieler spieler = new Spieler(txtName.Text, txtMail.Text, pwdPasswort.Text);
-                spielerList.Add(spieler);
+                if (spieler.Registrieren())
+                {
+                    spielerList.Add(spieler);
+                }               
 
-                StreamWriter sw = File.AppendText(path);
-                sw.WriteLine(spieler.HoleRegistrierdaten());
-                sw.Flush();
-                sw.Close();
+                //StreamWriter sw = File.AppendText(path);
+                //sw.WriteLine(spieler.HoleRegistrierdaten());
+                //sw.Flush();
+                //sw.Close();
 
                 tbkMessage.Text = spielerList.Count.ToString() + " Spieler sind angelegt.";
 
@@ -123,24 +129,30 @@ namespace Twitch_Spediteur
         {
             foreach (Spieler sp in spielerList)
             {
-                if (sp.Spielername == name_mail && sp.PruefePasswort(passwort))
+                //if (sp.Spielername == name_mail && sp.PruefePasswort(passwort))
+                //{
+                //    tbkMessage.Foreground = Brushes.Black;
+                //    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                //    UserInterface user = new UserInterface(sp);
+                //    user.Show();
+                //}
+                //else if(sp.Mail == name_mail && sp.PruefePasswort(passwort))
+                //{
+                //    tbkMessage.Foreground = Brushes.Black;
+                //    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
+                //    UserInterface user = new UserInterface(sp);
+                //    user.Show();
+                //}
+                //else
+                //{
+                //    tbkMessage.Foreground = Brushes.Red;
+                //    tbkMessage.Text = "Anmeldung fehlgeschlagen.";
+                //}
+
+                if (sp.Einloggen(name_mail, passwort))
                 {
-                    tbkMessage.Foreground = Brushes.Black;
-                    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
                     UserInterface user = new UserInterface(sp);
                     user.Show();
-                }
-                else if(sp.Mail == name_mail && sp.PruefePasswort(passwort))
-                {
-                    tbkMessage.Foreground = Brushes.Black;
-                    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
-                    UserInterface user = new UserInterface(sp);
-                    user.Show();
-                }
-                else
-                {
-                    tbkMessage.Foreground = Brushes.Red;
-                    tbkMessage.Text = "Anmeldung fehlgeschlagen.";
                 }
             }
         }
