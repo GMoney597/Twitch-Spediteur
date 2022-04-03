@@ -15,6 +15,11 @@ namespace Twitch_Spediteur
         public string Mail { get; private set; }   
         private byte[] Passwort_alt;
         public byte[] Passwort_neu { get; private set; }
+        public decimal Bargeld { get; private set; }
+        public decimal Konto { get; private set; }
+        public int Fuhrpark { get; private set; }
+        public int Nachrichten { get; private set; }
+        public string Startort { get; private set; }
 
 
         public Spieler(string Name, string Mail, string Passwort)
@@ -29,42 +34,15 @@ namespace Twitch_Spediteur
             Konto = 0.0M;
         }
 
-        public Spieler(string Name, string Mail)
+        public Spieler(string Name, string Mail, decimal Bar, decimal Kontostand, int Fuhr, int Nach, string Ort)
         {
             Spielername = Name;
             this.Mail = Mail;
-        }
-
-        public decimal Bargeld
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public decimal Konto
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public int Fuhrpark
-        {
-            get => default;
-            set
-            {
-            }
-        }
-
-        public int Nachrichten
-        {
-            get => default;
-            set
-            {
-            }
+            Bargeld = Bar;
+            Konto = Kontostand;
+            Fuhrpark = Fuhr;
+            Nachrichten = Nach;
+            Startort = Ort;
         }
 
         public bool Registrieren()

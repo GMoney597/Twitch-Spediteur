@@ -55,9 +55,38 @@ namespace Twitch_Spediteur
             return result;
         }
 
+        internal bool SpeichereStartort(Spieler sp, string ort)
+        {
+            bool result = false;
+
+            sqlCom.CommandText = ("UPDATE t_Spieler SET Startort = @ort WHERE Spielername = @spieler");
+            sqlCom.Parameters.AddWithValue("@ort", ort);
+            sqlCom.Parameters.AddWithValue("@spieler", sp.Spielername.ToString());
+
+            try
+            {
+                sqlCon.Open();
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCom.ExecuteNonQuery();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            return result;
+        }
+
         internal List<Spieler> HoleSpieler()
         {
-            sqlCom.CommandText = ("SELECT Spielername, Mail FROM t_Spieler");
+            sqlCom.CommandText = ("SELECT Spielername, Mail, Bargeld, Kontostand, Fuhrpark, Nachrichten, Startort FROM t_Spieler");
             sqlDA.SelectCommand = sqlCom;
             sqlDA.Fill(dtaTemp);
 
@@ -65,7 +94,9 @@ namespace Twitch_Spediteur
 
             foreach (DataRow dr in dtaTemp.Rows)
             {
-                list.Add(new Spieler(dr.ItemArray[0].ToString(), dr.ItemArray[1].ToString()));
+                list.Add(new Spieler(dr.ItemArray[0].ToString(), dr.ItemArray[1].ToString(), 
+                    Convert.ToDecimal(dr.ItemArray[2]), Convert.ToDecimal(dr.ItemArray[3]), 
+                    Convert.ToInt16(dr.ItemArray[4]), Convert.ToInt16(dr.ItemArray[5]), dr.ItemArray[6].ToString()));
             }
 
             return list;

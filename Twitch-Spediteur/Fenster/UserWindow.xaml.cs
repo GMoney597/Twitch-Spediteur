@@ -20,15 +20,51 @@ namespace Twitch_Spediteur
     public partial class UserWindow : Window
     {
         private Spieler sp;
+        //FileStream file = new FileStream("")
 
         public UserWindow(Spieler spieler)
         {
-            InitializeComponent();
             sp = spieler;
+            InitializeComponent();
+            InitializeOrteListe();
+            PruefeSpielerStartort();
 
             tbkSpieler.Text = sp.Spielername;
+            txtStandort.Text = sp.Startort;
             txtBargeld.Text = Convert.ToDecimal(sp.Bargeld) + " €";
             txtKontostand.Text = Convert.ToDecimal(sp.Konto) + " €";
-        }        
+        }
+
+        private void PruefeSpielerStartort()
+        {
+            if (!String.IsNullOrEmpty(sp.Startort))
+            {
+                stackOrtWaehlen.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void InitializeOrteListe()
+        {
+            cboOrte.Items.Add("Hannover");
+            cboOrte.Items.Add("Berlin");
+            cboOrte.Items.Add("München");
+            cboOrte.Items.Add("Bonn");
+            cboOrte.Items.Add("Stuttgart");
+            cboOrte.Items.Add("Hamburg");
+            cboOrte.Items.Add("Leverkusen");
+        }
+
+        private void cmdSpeichereStandort_Click(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(sp.Startort))
+            {
+                SQLite sql = new SQLite();
+                if (sql.SpeichereStartort(sp, cboOrte.SelectedValue.ToString()))
+                {
+                    stackOrtWaehlen.Visibility = Visibility.Collapsed;
+                    txtStandort.Text = cboOrte.SelectedValue.ToString();
+                }                
+            }
+        }
     }
 }

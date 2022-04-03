@@ -12,14 +12,21 @@
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-            <TextBlock Name="tbkSpieler" Text="Spieler"/>
+            <TextBlock Name="tbkSpieler" Text="Spieler" FontSize="20"/>
             <Label Background="DarkGray" Height="15" />
+            <TextBlock Text="Standort:" />
+            <TextBox Name="txtStandort" IsReadOnly="True" />
             <TextBlock Text="Bargeld:" />
-            <TextBox Name="txtBargeld" />
+            <TextBox Name="txtBargeld" TextAlignment="Right" IsReadOnly="True"/>
             <TextBlock Text="Kontostand:" />
-            <TextBox Name="txtKontostand" />
+            <TextBox Name="txtKontostand" TextAlignment="Right" IsReadOnly="True"/>
             <TextBlock Name="tbkNachrichten" Text="Nachrichten:" />
             <ListBox Name="lbxNachrichten" Height="200"/>
+        </StackPanel>
+        <StackPanel Name="stackOrtWaehlen" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <TextBlock Name="tbkOrtWaehlen" Text="Wähle deinen Start-Ort:" />
+            <ComboBox Name="cboOrte" Margin= "0, 0, 0, 10" />
+            <Button Name="cmdSpeichereStandort" Content="Speichern" Margin="0, 10, 0, 0" Click="cmdSpeichereStandort_Click"/>
         </StackPanel>
     </Grid>
 </Window>
