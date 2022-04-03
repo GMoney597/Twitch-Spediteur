@@ -43,6 +43,7 @@
 	- Saarbrücken
 	- Fürth
 	- Aachen
+	- Leverkusen
 
 + Warenangebot
 	- Zeitschriften
@@ -70,3 +71,4 @@
 	- Gas, gefahr
 	- Öl, gefahr
 	- Benzin, gefahr
+	- Munition, gefahr

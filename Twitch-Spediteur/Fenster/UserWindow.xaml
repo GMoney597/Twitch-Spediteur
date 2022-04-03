@@ -25,7 +25,7 @@
         </StackPanel>
         <StackPanel Name="stackOrtWaehlen" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <TextBlock Name="tbkOrtWaehlen" Text="Wähle deinen Start-Ort:" />
-            <ComboBox Name="cboOrte" Margin= "0, 0, 0, 10" />
+            <ComboBox Name="cboOrte" IsEditable="True" Margin= "0, 0, 0, 10" />
             <Button Name="cmdSpeichereStandort" Content="Speichern" Margin="0, 10, 0, 0" Click="cmdSpeichereStandort_Click"/>
         </StackPanel>
     </Grid>

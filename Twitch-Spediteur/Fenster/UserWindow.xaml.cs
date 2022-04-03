@@ -1,16 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Twitch_Spediteur
 {
@@ -19,6 +9,8 @@ namespace Twitch_Spediteur
     /// </summary>
     public partial class UserWindow : Window
     {
+        //public static List<Ort> ortsListe = new List<Ort>();
+
         private Spieler sp;
         //FileStream file = new FileStream("")
 
@@ -45,6 +37,8 @@ namespace Twitch_Spediteur
 
         private void InitializeOrteListe()
         {
+            //Ort ort = new Ort("Bremen");
+            //cboOrte.ItemsSource = ortsListe;
             cboOrte.Items.Add("Hannover");
             cboOrte.Items.Add("Berlin");
             cboOrte.Items.Add("München");
@@ -59,12 +53,32 @@ namespace Twitch_Spediteur
             if (String.IsNullOrEmpty(sp.Startort))
             {
                 SQLite sql = new SQLite();
-                if (sql.SpeichereStartort(sp, cboOrte.SelectedValue.ToString()))
+                if (sql.SpeichereStartort(sp, cboOrte.Text))
                 {
                     stackOrtWaehlen.Visibility = Visibility.Collapsed;
-                    txtStandort.Text = cboOrte.SelectedValue.ToString();
+                    txtStandort.Text = cboOrte.Text;
                 }                
             }
         }
     }
+
+    //public class Ort
+    //{
+    //    public string ortsName { get; private set; }
+
+    //    public Ort(string name)
+    //    {
+    //        UserWindow.ortsListe.Add(new Ort("Aachen"));
+    //        UserWindow.ortsListe.Add(new Ort("München"));
+    //        UserWindow.ortsListe.Add(new Ort("Nürnberg"));
+    //        UserWindow.ortsListe.Add(new Ort("Berlin"));
+    //        UserWindow.ortsListe.Add(new Ort("Bonn"));
+    //        UserWindow.ortsListe.Add(new Ort("Stuttgart"));
+    //        UserWindow.ortsListe.Add(new Ort("Hannover"));
+    //        UserWindow.ortsListe.Add(new Ort("Düsseldorf"));
+    //        UserWindow.ortsListe.Add(new Ort("Köln"));
+    //        UserWindow.ortsListe.Add(new Ort("Leverkusen"));
+    //        UserWindow.ortsListe.Add(new Ort("Hamburg"));
+    //    }
+    //}
 }
