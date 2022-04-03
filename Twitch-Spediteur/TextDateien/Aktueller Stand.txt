@@ -43,3 +43,30 @@
 	- Saarbrücken
 	- Fürth
 	- Aachen
+
++ Warenangebot
+	- Zeitschriften
+	- Kurier-Dokumente, eilig
+	- Medikamente, eilig
+	- Lebensmittel, eilig
+	- Stahl
+	- Autos
+	- Kohle
+	- Tiere, lebend
+	- Holz
+	- Kies
+	- Stein
+	- Erze
+	- Sand
+	- Elektronik
+	- Chemie, gefahr
+	- Salz
+	- Zucker
+	- Kunststoff
+	- Möbel
+	- Düngemittel, gefahr
+	- Glas, gefahr
+	- Getreide
+	- Gas, gefahr
+	- Öl, gefahr
+	- Benzin, gefahr

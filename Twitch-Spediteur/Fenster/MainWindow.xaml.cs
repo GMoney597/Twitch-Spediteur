@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using Twitch_Spediteur.Fenster;
 
 namespace Twitch_Spediteur
 {
@@ -133,13 +134,25 @@ namespace Twitch_Spediteur
                 {
                     if (sp.Einloggen(name_mail, passwort))
                     {
-                        UserInterface user = new UserInterface(sp);
+                        UserWindow user = new UserWindow(sp);
                         user.Show();
                     }
 
                     continue;
                 }
             }
+        }
+
+        private void cmdFahrzeuge_Click(object sender, RoutedEventArgs e)
+        {
+            VehicleWindow vehicle = new VehicleWindow();
+            vehicle.Show();
+        }
+
+        private void cmdFrachtmarkt_Click(object sender, RoutedEventArgs e)
+        {
+            WareWindow ware = new WareWindow();
+            ware.Show();
         }
     }
 }

@@ -6,7 +6,38 @@
     <RootNamespace>Twitch_Spediteur</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <StartupObject>Twitch_Spediteur.App</StartupObject>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Bilder\kombi.jpg" />
+    <None Remove="Bilder\lkw.jpg" />
+    <None Remove="Bilder\lkw12.jpg" />
+    <None Remove="Bilder\minitruck.jpg" />
+    <None Remove="Bilder\sattelzug.jpg" />
+    <None Remove="Bilder\transporter.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Bilder\kombi.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bilder\lkw.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bilder\lkw12.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bilder\minitruck.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bilder\sattelzug.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Bilder\transporter.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />

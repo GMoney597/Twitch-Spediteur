@@ -12,23 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace Twitch_Spediteur
+namespace Twitch_Spediteur.Fenster
 {
     /// <summary>
-    /// Interaktionslogik für UserInterface.xaml
+    /// Interaktionslogik für WareWindow.xaml
     /// </summary>
-    public partial class UserWindow : Window
+    public partial class WareWindow : Window
     {
-        private Spieler sp;
-
-        public UserWindow(Spieler spieler)
+        public WareWindow()
         {
             InitializeComponent();
-            sp = spieler;
-
-            tbkSpieler.Text = sp.Spielername;
-            txtBargeld.Text = Convert.ToDecimal(sp.Bargeld) + " €";
-            txtKontostand.Text = Convert.ToDecimal(sp.Konto) + " €";
-        }        
+        }
     }
 }

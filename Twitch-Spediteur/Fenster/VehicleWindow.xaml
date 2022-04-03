@@ -164,8 +164,8 @@
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="200l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
                 <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button Name="cmdMieteSattelzug" Content="15.000 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
-                <Button Name="cmdKaufSattelzug" Content="300.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
+                <Button x:Name="cmdMieteSattelzug" Content="15.000 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
+                <Button x:Name="cmdKaufSattelzug" Content="300.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
             </Grid>
         </StackPanel>
     </Grid>
