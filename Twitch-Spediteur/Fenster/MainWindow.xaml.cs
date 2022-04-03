@@ -58,8 +58,8 @@ namespace Twitch_Spediteur
             Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
 
             // Prüfe, ob alle Felder ausgefüllt wurden
-            if(String.IsNullOrEmpty(txtName.Text) || 
-                String.IsNullOrEmpty(txtMail.Text) || 
+            if (String.IsNullOrEmpty(txtName.Text) ||
+                String.IsNullOrEmpty(txtMail.Text) ||
                 String.IsNullOrEmpty(pwdPasswort.Text))
             {
                 tbkMessage.Foreground = Brushes.Red;
@@ -68,14 +68,14 @@ namespace Twitch_Spediteur
             // Prüfe, ob die angegebene Mail-Adresse gültig ist
             else if (regex.Match(txtMail.Text).Success)
             {
-                tbkMessage.Foreground= Brushes.Black;
+                tbkMessage.Foreground = Brushes.Black;
 
                 // Lege einen neuen Spieler an
                 Spieler spieler = new Spieler(txtName.Text, txtMail.Text, pwdPasswort.Text);
                 if (spieler.Registrieren())
                 {
                     spielerList.Add(spieler);
-                }               
+                }
 
                 //StreamWriter sw = File.AppendText(path);
                 //sw.WriteLine(spieler.HoleRegistrierdaten());
@@ -98,13 +98,13 @@ namespace Twitch_Spediteur
 
         private void cmdEinloggen_Click(object sender, RoutedEventArgs e)
         {
-            if (!String.IsNullOrEmpty(txtName.Text) && 
+            if (!String.IsNullOrEmpty(txtName.Text) &&
                 !String.IsNullOrEmpty(pwdPasswort.Text))
             {
                 PruefeEinloggen(txtName.Text, pwdPasswort.Text);
                 LeereFormular();
             }
-            else if(!String.IsNullOrEmpty(txtMail.Text) &&
+            else if (!String.IsNullOrEmpty(txtMail.Text) &&
                 !String.IsNullOrEmpty(pwdPasswort.Text))
             {
                 PruefeEinloggen(txtMail.Text, pwdPasswort.Text);
@@ -129,30 +129,15 @@ namespace Twitch_Spediteur
         {
             foreach (Spieler sp in spielerList)
             {
-                //if (sp.Spielername == name_mail && sp.PruefePasswort(passwort))
-                //{
-                //    tbkMessage.Foreground = Brushes.Black;
-                //    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
-                //    UserInterface user = new UserInterface(sp);
-                //    user.Show();
-                //}
-                //else if(sp.Mail == name_mail && sp.PruefePasswort(passwort))
-                //{
-                //    tbkMessage.Foreground = Brushes.Black;
-                //    // tbkMessage.Text = "Anmeldung ist erfolgreich.";
-                //    UserInterface user = new UserInterface(sp);
-                //    user.Show();
-                //}
-                //else
-                //{
-                //    tbkMessage.Foreground = Brushes.Red;
-                //    tbkMessage.Text = "Anmeldung fehlgeschlagen.";
-                //}
-
-                if (sp.Einloggen(name_mail, passwort))
+                if (sp.Spielername == name_mail || sp.Mail == name_mail)
                 {
-                    UserInterface user = new UserInterface(sp);
-                    user.Show();
+                    if (sp.Einloggen(name_mail, passwort))
+                    {
+                        UserInterface user = new UserInterface(sp);
+                        user.Show();
+                    }
+
+                    continue;
                 }
             }
         }

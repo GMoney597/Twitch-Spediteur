@@ -29,9 +29,10 @@ namespace Twitch_Spediteur
             Konto = 0.0M;
         }
 
-        public Spieler(string Name)
+        public Spieler(string Name, string Mail)
         {
             Spielername = Name;
+            this.Mail = Mail;
         }
 
         public decimal Bargeld
@@ -84,13 +85,6 @@ namespace Twitch_Spediteur
         {
             throw new System.NotImplementedException();
         }
-
-        //internal string HoleRegistrierdaten()
-        //{
-        //    // gib mit gehashtem Passwort zurück
-        //    // return Spielername + ";" + Mail + ";" + Encoding.Default.GetString(Passwort_neu);
-        //    // return Spielername + ";" + Mail + ";" + Passwort_neu;
-        //}
 
         internal bool PruefePasswort(string passwort)
         {

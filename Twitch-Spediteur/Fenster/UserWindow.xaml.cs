@@ -27,6 +27,8 @@ namespace Twitch_Spediteur
             sp = spieler;
 
             tbkSpieler.Text = sp.Spielername;
+            txtBargeld.Text = Convert.ToDecimal(sp.Bargeld) + " €";
+            txtKontostand.Text = Convert.ToDecimal(sp.Konto) + " €";
         }        
     }
 }

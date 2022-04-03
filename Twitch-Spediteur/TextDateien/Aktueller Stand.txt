@@ -1,0 +1,45 @@
+﻿Aktueller Stand
+
+02.April 2022
++ Spieler-Klasse angelegt, kann sich registrieren und einloggen
++ Hauptmaske angelegt und mit Funktionen versehen
+	- Registrieren
+	- Einloggen
+
+03. April 2022
++ Fahrzeuge anlegen
+	- PKW-Combi		(500kg)
+	- Transporter	(1.5t)
+	- Minitruck		(2.8t)
+	- LKW			(7.5t)
+	- Gross-LKW		(12t)
+	- Sattelzug		(30t)
++ Fahrzeuge mieten oder kaufen (Schaltflächen)
+	- Funktion noch hinterlegen
+
++ Orte anlegen
+	- Nürnberg
+	- München
+	- Augsburg
+	- Köln
+	- Düsseldorf
+	- Bochum
+	- Dortmund
+	- Essen
+	- Bonn
+	- Berlin
+	- Hamburg
+	- Bremen
+	- Stuttgart
+	- Leipzig
+	- Kiel
+	- Würzburg
+	- Ansbach
+	- Siegen
+	- Frankfurt
+	- Erfurt
+	- Kassel
+	- Koblenz
+	- Saarbrücken
+	- Fürth
+	- Aachen

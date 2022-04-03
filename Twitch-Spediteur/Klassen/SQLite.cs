@@ -57,7 +57,7 @@ namespace Twitch_Spediteur
 
         internal List<Spieler> HoleSpieler()
         {
-            sqlCom.CommandText = ("SELECT Spielername FROM t_Spieler");
+            sqlCom.CommandText = ("SELECT Spielername, Mail FROM t_Spieler");
             sqlDA.SelectCommand = sqlCom;
             sqlDA.Fill(dtaTemp);
 
@@ -65,7 +65,7 @@ namespace Twitch_Spediteur
 
             foreach (DataRow dr in dtaTemp.Rows)
             {
-                list.Add(new Spieler(dr.ItemArray[0].ToString()));
+                list.Add(new Spieler(dr.ItemArray[0].ToString(), dr.ItemArray[1].ToString()));
             }
 
             return list;
