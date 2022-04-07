@@ -59,9 +59,19 @@ namespace Twitch_Spediteur
             return login;
         }
 
+        public void FahrzeugMieten(decimal mietpreis)
+        {
+            Bargeld -= mietpreis;
+        }
+
         public bool Nachricht_schreiben()
         {
             throw new System.NotImplementedException();
+        }
+
+        internal void FahrzeugKaufen(decimal kaufpreis)
+        {
+            Bargeld -= kaufpreis;
         }
     }
 }

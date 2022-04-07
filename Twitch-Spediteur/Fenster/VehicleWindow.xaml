@@ -39,8 +39,8 @@
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="50l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
                 <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button Name="cmdMieteKombi" Content="400 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
-                <Button Name="cmdKaufKombi" Content="40.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
+                <Button Name="cmdMieteKombi" Content="400 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0" Click="cmdMieteKombi_Click"/>
+                <Button Name="cmdKaufKombi" Content="40.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0" Click="cmdKaufKombi_Click"/>
             </Grid>
         </StackPanel>
         <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Margin="10">

@@ -58,7 +58,7 @@ namespace Twitch_Spediteur
                 tbkMessage.Foreground = Brushes.Black;
 
                 // Lege einen neuen Spieler an
-                Spieler spieler = new Spieler(txtName.Text, txtMail.Text, pwdPasswort.Text);
+                Spieler spieler = new Spieler(txtName.Text, txtMail.Text, pwdPasswort.Password);
                 if (spieler.Registrieren())
                 {
                     spielerList.Add(spieler);
@@ -131,8 +131,8 @@ namespace Twitch_Spediteur
 
         private void cmdFahrzeuge_Click(object sender, RoutedEventArgs e)
         {
-            VehicleWindow vehicle = new VehicleWindow();
-            vehicle.Show();
+            //VehicleWindow vehicle = new VehicleWindow();
+            //vehicle.Show();
         }
 
         private void cmdFrachtmarkt_Click(object sender, RoutedEventArgs e)

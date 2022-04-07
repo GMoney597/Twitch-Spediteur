@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using Twitch_Spediteur.Fenster;
+using Twitch_Spediteur.Klassen;
 
 namespace Twitch_Spediteur
 {
@@ -11,6 +12,7 @@ namespace Twitch_Spediteur
     public partial class UserWindow : Window
     {
         //public static List<Ort> ortsListe = new List<Ort>();
+        public List<Fahrzeug> fuhrpark = new List<Fahrzeug>();
 
         private Spieler sp;
         //FileStream file = new FileStream("")
@@ -57,16 +59,16 @@ namespace Twitch_Spediteur
                 if (sql.SpeichereStartort(sp, cboOrte.Text))
                 {
                     stackOrtWaehlen.Visibility = Visibility.Collapsed;
-                    txtStandort.Text = cboOrte.Text;
-                    
+                    txtStandort.Text = cboOrte.Text;                    
                 }                
             }
         }
 
         private void cmdFahrzeug_Click(object sender, RoutedEventArgs e)
         {
-            VehicleWindow vehicle = new VehicleWindow();
-            vehicle.Show();
+            VehicleWindow vehicle = new VehicleWindow(fuhrpark, sp);
+            vehicle.ShowDialog();
+            txtBargeld.Text = sp.Bargeld.ToString();
         }
     }
 }
