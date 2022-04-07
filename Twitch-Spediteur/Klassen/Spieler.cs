@@ -13,8 +13,7 @@ namespace Twitch_Spediteur
 
         public string Spielername { get; private set; }
         public string Mail { get; private set; }   
-        private byte[] Passwort_alt;
-        public byte[] Passwort_neu { get; private set; }
+        public string Passwort { get; private set; }
         public decimal Bargeld { get; private set; }
         public decimal Konto { get; private set; }
         public int Fuhrpark { get; private set; }
@@ -22,12 +21,13 @@ namespace Twitch_Spediteur
         public string Startort { get; private set; }
 
 
-        public Spieler(string Name, string Mail, string Passwort)
+        public Spieler(string name, string mail, string passwort)
         {
-            byte[] pwValue = sHA256.ComputeHash(Encoding.UTF8.GetBytes(Passwort));
-            Spielername = Name;
-            this.Mail = Mail;
-            Passwort_neu = pwValue;
+            byte[] pwValue = sHA256.ComputeHash(Encoding.UTF8.GetBytes(passwort));
+            string pwHash = Convert.ToBase64String(pwValue);
+            Spielername = name;
+            this.Mail = mail;
+            this.Passwort = pwHash;
             // Passwort_alt = "";
 
             Bargeld = 1000.0M;
@@ -62,20 +62,6 @@ namespace Twitch_Spediteur
         public bool Nachricht_schreiben()
         {
             throw new System.NotImplementedException();
-        }
-
-        internal bool PruefePasswort(string passwort)
-        {
-            byte[] pwValid = sHA256.ComputeHash(Encoding.UTF8.GetBytes(passwort));
-
-            if (Passwort_neu == pwValid)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Twitch_Spediteur
                 "VALUES (@name, @mail, @pass, @bar, @konto)");
             sqlCom.Parameters.AddWithValue("@name", spieler.Spielername);
             sqlCom.Parameters.AddWithValue("@mail", spieler.Mail);
-            sqlCom.Parameters.AddWithValue("@pass", spieler.Passwort_neu);
+            sqlCom.Parameters.AddWithValue("@pass", spieler.Passwort);
             sqlCom.Parameters.AddWithValue("@bar", spieler.Bargeld);
             sqlCom.Parameters.AddWithValue("@konto", spieler.Konto);
 
@@ -106,7 +106,8 @@ namespace Twitch_Spediteur
         {
             bool result = false;
 
-            // byte[] pwValid = sha256.ComputeHash(Encoding.UTF8.GetBytes(passwort));
+            byte[] pwValid = sha256.ComputeHash(Encoding.UTF8.GetBytes(passwort));
+            string pwComp = Convert.ToBase64String(pwValid);
 
             sqlCom.CommandText = ("SELECT * FROM t_Spieler WHERE Spielername = @name OR Mail = @mail");
             sqlCom.Parameters.AddWithValue("@name", name_mail);
@@ -120,7 +121,7 @@ namespace Twitch_Spediteur
                     sqlDA.SelectCommand = sqlCom;
                     sqlDA.Fill(dtaTemp);
 
-                    if (dtaTemp.Rows[0].ItemArray[3].ToString() == passwort)
+                    if (dtaTemp.Rows[0].ItemArray[3].ToString() == pwComp)
                     {
                        result = true;
                     }
