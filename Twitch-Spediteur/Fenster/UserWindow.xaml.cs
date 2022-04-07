@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using Twitch_Spediteur.Fenster;
 
 namespace Twitch_Spediteur
 {
@@ -57,28 +58,15 @@ namespace Twitch_Spediteur
                 {
                     stackOrtWaehlen.Visibility = Visibility.Collapsed;
                     txtStandort.Text = cboOrte.Text;
+                    
                 }                
             }
         }
+
+        private void cmdFahrzeug_Click(object sender, RoutedEventArgs e)
+        {
+            VehicleWindow vehicle = new VehicleWindow();
+            vehicle.Show();
+        }
     }
-
-    //public class Ort
-    //{
-    //    public string ortsName { get; private set; }
-
-    //    public Ort(string name)
-    //    {
-    //        UserWindow.ortsListe.Add(new Ort("Aachen"));
-    //        UserWindow.ortsListe.Add(new Ort("München"));
-    //        UserWindow.ortsListe.Add(new Ort("Nürnberg"));
-    //        UserWindow.ortsListe.Add(new Ort("Berlin"));
-    //        UserWindow.ortsListe.Add(new Ort("Bonn"));
-    //        UserWindow.ortsListe.Add(new Ort("Stuttgart"));
-    //        UserWindow.ortsListe.Add(new Ort("Hannover"));
-    //        UserWindow.ortsListe.Add(new Ort("Düsseldorf"));
-    //        UserWindow.ortsListe.Add(new Ort("Köln"));
-    //        UserWindow.ortsListe.Add(new Ort("Leverkusen"));
-    //        UserWindow.ortsListe.Add(new Ort("Hamburg"));
-    //    }
-    //}
 }

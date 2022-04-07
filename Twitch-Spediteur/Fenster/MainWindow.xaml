@@ -18,8 +18,7 @@
             <TextBlock Text="Mail-Adresse" />
             <TextBox Name="txtMail" />
             <TextBlock Text="Passwort" />
-            <!--PasswordBox Name="pwdPasswort" PasswordChar="°"/-->
-            <TextBox Name="pwdPasswort" />
+            <PasswordBox Name="pwdPasswort" PasswordChar="°"/>
             <TextBlock Name="tbkMessage"/>
             <Button Name="cmdRegistrieren" Content="Registrieren" Click="cmdRegistrieren_Click"/>
             <TextBlock />

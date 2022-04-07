@@ -14,8 +14,6 @@ namespace Twitch_Spediteur
     public partial class MainWindow : Window
     {
         List<Spieler> spielerList = new List<Spieler>();
-        // static string path = @"e:\projects\twitch.csv";
-        //FileStream filestream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.ReadWrite);
         SQLite sql = new SQLite();
 
         public MainWindow()
@@ -26,18 +24,6 @@ namespace Twitch_Spediteur
 
         private void InitializeSpielerliste()
         {
-            //StreamReader sr = new StreamReader(filestream);
-
-            //while (!sr.EndOfStream)
-            //{
-            //    string[] player = sr.ReadLine().Split(';');
-            //    Spieler spieler = new Spieler(player[0], player[1], player[2]);
-            //    spielerList.Add(spieler);
-            //}
-
-            //sr.Close();
-            //filestream.Close();
-
             spielerList = sql.HoleSpieler();
 
             tbkMessage.Text = spielerList.Count.ToString() + " Spieler bereits registriert.";
@@ -61,7 +47,7 @@ namespace Twitch_Spediteur
             // Prüfe, ob alle Felder ausgefüllt wurden
             if (String.IsNullOrEmpty(txtName.Text) ||
                 String.IsNullOrEmpty(txtMail.Text) ||
-                String.IsNullOrEmpty(pwdPasswort.Text))
+                String.IsNullOrEmpty(pwdPasswort.Password))
             {
                 tbkMessage.Foreground = Brushes.Red;
                 tbkMessage.Text = "Keine Daten angebeben.";
@@ -100,15 +86,15 @@ namespace Twitch_Spediteur
         private void cmdEinloggen_Click(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrEmpty(txtName.Text) &&
-                !String.IsNullOrEmpty(pwdPasswort.Text))
+                !String.IsNullOrEmpty(pwdPasswort.Password))
             {
-                PruefeEinloggen(txtName.Text, pwdPasswort.Text);
+                PruefeEinloggen(txtName.Text, pwdPasswort.Password);
                 LeereFormular();
             }
             else if (!String.IsNullOrEmpty(txtMail.Text) &&
-                !String.IsNullOrEmpty(pwdPasswort.Text))
+                !String.IsNullOrEmpty(pwdPasswort.Password))
             {
-                PruefeEinloggen(txtMail.Text, pwdPasswort.Text);
+                PruefeEinloggen(txtMail.Text, pwdPasswort.Password);
                 LeereFormular();
             }
             else
@@ -123,7 +109,7 @@ namespace Twitch_Spediteur
         {
             txtMail.Text = "";
             txtName.Text = "";
-            pwdPasswort.Text = "";
+            pwdPasswort.Password = "";
         }
 
         private void PruefeEinloggen(string name_mail, string passwort)
