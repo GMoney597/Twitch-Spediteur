@@ -33,7 +33,6 @@
         </ListView>
 
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical" Grid.Column="2">
-            <Button Name="cmdFahrzeuge" Content="Fahrzeugmarkt" Margin="10" Padding="5" Click="cmdFahrzeuge_Click" />
             <Button Name="cmdFrachtmarkt" Content="Frachtmarkt" Margin="10" Padding="5" Click="cmdFrachtmarkt_Click" />
         </StackPanel>
     </Grid>

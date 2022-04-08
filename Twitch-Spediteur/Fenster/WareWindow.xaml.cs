@@ -23,5 +23,10 @@ namespace Twitch_Spediteur.Fenster
         {
             InitializeComponent();
         }
+
+        private void cmdSpeichern_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

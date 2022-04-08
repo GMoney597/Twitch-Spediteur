@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
+using Twitch_Spediteur.Klassen;
 
 namespace Twitch_Spediteur
 {
@@ -16,8 +15,8 @@ namespace Twitch_Spediteur
         public string Passwort { get; private set; }
         public decimal Bargeld { get; private set; }
         public decimal Konto { get; private set; }
-        public int Fuhrpark { get; private set; }
-        public int Nachrichten { get; private set; }
+        public List<Fahrzeug> Fuhrpark { get; private set; } = new List<Fahrzeug>();
+        public List<Nachricht> Nachrichten { get; private set; } = new List<Nachricht>();
         public string Startort { get; private set; }
 
 
@@ -34,14 +33,12 @@ namespace Twitch_Spediteur
             Konto = 0.0M;
         }
 
-        public Spieler(string Name, string Mail, decimal Bar, decimal Kontostand, int Fuhr, int Nach, string Ort)
+        public Spieler(string Name, string Mail, decimal Bar, decimal Kontostand, string Ort)
         {
             Spielername = Name;
             this.Mail = Mail;
             Bargeld = Bar;
             Konto = Kontostand;
-            Fuhrpark = Fuhr;
-            Nachrichten = Nach;
             Startort = Ort;
         }
 
@@ -59,19 +56,14 @@ namespace Twitch_Spediteur
             return login;
         }
 
-        public void FahrzeugMieten(decimal mietpreis)
-        {
-            Bargeld -= mietpreis;
-        }
-
         public bool Nachricht_schreiben()
         {
             throw new System.NotImplementedException();
         }
 
-        internal void FahrzeugKaufen(decimal kaufpreis)
+        internal void GeldTransaktion(decimal preis)
         {
-            Bargeld -= kaufpreis;
+            Bargeld -= preis;
         }
     }
 }

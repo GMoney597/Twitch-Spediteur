@@ -5,20 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Spediteur.Fenster"
         mc:Ignorable="d"
-        Title="VehicleWindow" Height="450" Width="800" Background="#FFDEFFCC" >
+        Title="Fahrzeughändler" Height="450" Width="800" Background="#FFDEFFCC" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="2*"/>
-            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="44*"/>
+            <ColumnDefinition Width="178*"/>
+            <ColumnDefinition Width="178*"/>
+            <ColumnDefinition Width="178*"/>
+            <ColumnDefinition Width="123*"/>
+            <ColumnDefinition Width="55*"/>
+            <ColumnDefinition Width="44*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="10">
+        <StackPanel Name="Kombi" Orientation="Vertical" Grid.Row="0" Grid.Column="1" Margin="10,10,10,10">
             <Image Source="..\bilder\kombi.jpg" />
             <Grid>
                 <Grid.RowDefinitions>
@@ -38,12 +40,13 @@
                 <TextBlock Text="500kg" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="1" Grid.Column="1"/>
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="50l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button Name="cmdMieteKombi" Content="400 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0" Click="cmdMieteKombi_Click"/>
-                <Button Name="cmdKaufKombi" Content="40.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0" Click="cmdKaufKombi_Click"/>
+                <TextBlock Text="Miet-Preis:" Grid.Row="3"/>
+                <TextBlock Text="400 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="Kauf-Preis:" Grid.Row="4"/>
+                <TextBlock Text="40.000 €" TextAlignment="Right" Grid.Row="4" Grid.Column="1" />
             </Grid>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Margin="10">
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="2" Margin="10,10,10,10">
             <Image Source="..\bilder\transporter.jpg" />
             <Grid>
                 <Grid.RowDefinitions>
@@ -63,12 +66,13 @@
                 <TextBlock Text="1.5t" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="1" Grid.Column="1"/>
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="60l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button Name="cmdMieteTransporter" Content="900 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
-                <Button Name="cmdKaufTransporter" Content="60.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
+                <TextBlock Text="Miet-Preis:" Grid.Row="3"/>
+                <TextBlock Text="900 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="Kauf-Preis:" Grid.Row="4"/>
+                <TextBlock Text="60.000 €" TextAlignment="Right" Grid.Row="4" Grid.Column="1" />
             </Grid>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="3" Margin="10">
+        <StackPanel Orientation="Vertical" Grid.Row="0" Grid.Column="3" Margin="10,10,10,10">
             <Image Source="..\bilder\minitruck.jpg" />
             <Grid>
                 <Grid.RowDefinitions>
@@ -88,12 +92,13 @@
                 <TextBlock Text="2.8t" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="1" Grid.Column="1"/>
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="70l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button Name="cmdMieteMinitruck" Content="1.350 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
-                <Button Name="cmdKaufMinitruck" Content="75.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
+                <TextBlock Text="Miet-Preis:" Grid.Row="3"/>
+                <TextBlock Text="1.350 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="Kauf-Preis:" Grid.Row="4"/>
+                <TextBlock Text="75.000 €" TextAlignment="Right" Grid.Row="4" Grid.Column="1" />
             </Grid>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="10">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="1" Margin="10,10,10,10">
             <Image Source="..\bilder\lkw.jpg" />
             <Grid>
                 <Grid.RowDefinitions>
@@ -113,12 +118,13 @@
                 <TextBlock Text="7.5t" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="1" Grid.Column="1"/>
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="100l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button Name="cmdMieteLKW75" Content="2.000 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
-                <Button Name="cmdKaufLKW75" Content="100.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
+                <TextBlock Text="Miet-Preis:" Grid.Row="3"/>
+                <TextBlock Text="2.000 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="Kauf-Preis:" Grid.Row="4"/>
+                <TextBlock Text="100.000 €" TextAlignment="Right" Grid.Row="4" Grid.Column="1" />
             </Grid>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Margin="10">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2" Margin="10,10,10,10">
             <Image Source="..\bilder\lkw12.jpg" />
             <Grid>
                 <Grid.RowDefinitions>
@@ -138,12 +144,13 @@
                 <TextBlock Text="12t" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="1" Grid.Column="1"/>
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="120l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button Name="cmdMieteLKW12" Content="4.500 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
-                <Button Name="cmdKaufLKW12" Content="150.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
+                <TextBlock Text="Miet-Preis:" Grid.Row="3"/>
+                <TextBlock Text="4.000 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="Kauf-Preis:" Grid.Row="4"/>
+                <TextBlock Text="150.000 €" TextAlignment="Right" Grid.Row="4" Grid.Column="1" />
             </Grid>
         </StackPanel>
-        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" Margin="10">
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="3" Margin="10,10,10,10">
             <Image Source="..\bilder\sattelzug.jpg" />
             <Grid>
                 <Grid.RowDefinitions>
@@ -163,10 +170,23 @@
                 <TextBlock Text="30t" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="1" Grid.Column="1"/>
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="200l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
-                <TextBlock Text="Preis: (Wochenmiete / Kaufpreis)" HorizontalAlignment="Left" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"/>
-                <Button x:Name="cmdMieteSattelzug" Content="15.000 €" Grid.Row="4" Grid.Column="0" Margin="5 ,0"/>
-                <Button x:Name="cmdKaufSattelzug" Content="300.000 €" Grid.Row="4" Grid.Column="1" Margin="5,0"/>
+                <TextBlock Text="Miet-Preis:" Grid.Row="3"/>
+                <TextBlock Text="15.00 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="Kauf-Preis:" Grid.Row="4"/>
+                <TextBlock Text="300.000 €" TextAlignment="Right" Grid.Row="4" Grid.Column="1" />
             </Grid>
+        </StackPanel>
+        <StackPanel Grid.Column="4" Grid.RowSpan="2" VerticalAlignment="Top" Margin="10,84,10,0" Grid.ColumnSpan="2">
+            <TextBlock Text="Aktion wählen" TextAlignment="Center" Foreground="DarkSeaGreen" FontSize="20" FontWeight="Bold" Margin="5"/>
+            <ComboBox Name="cboNeuFahrzeuge" DisplayMemberPath="Typ" Margin="5" SelectionChanged="cboNeuFahrzeuge_SelectionChanged" />
+            <TextBox Name="txtMietpreis" Margin="5"/>
+            <Button Name="cmdMieten" Content="Mieten" Margin="5" Click="cmdMieten_Click"/>
+            <TextBox Name="txtKaufpreis" Margin="5"/>
+            <Button Name="cmdKaufen" Content="Kaufen" Margin="5" Click="cmdKaufen_Click"/>
+            <TextBox Name="txtVerkaufpreis" Margin="5" Visibility="Hidden"/>
+            <Button Name="cmdVerkaufen" Content="Verkaufen" Margin="5" Visibility="Hidden" Click="cmdVerkaufen_Click"/>
+            <Label Height="5" Background="Black" Margin="2" />
+            <Button Name="cmdClose" Content="Verlassen" Margin="5" Click="cmdClose_Click"/>
         </StackPanel>
     </Grid>
 </Window>

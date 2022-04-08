@@ -28,11 +28,25 @@ namespace Twitch_Spediteur.Klassen
             AktionsDatum = DateTime.Now;
         }
 
+        /*
+         * Kombi:       mieten 400      kaufen 40000
+         * Transporter: mieten 900      kaufen 60000
+         * Mini-Truck:  mieten 1350     kaufen 75000
+         * LKW 7.5t:    mieten 2000     kaufen 120000
+         * LKW 12t:     mieten 4500     kaufen 150000
+         * Sattelzug:   mieten 15000    kaufen 300000
+         */
+
         public decimal FahrzeugMieten()
         {
             AktionsDatum = DateTime.Now;
             IsGekauft = false;
             return MietPreis;
+        }
+
+        internal void WurdeGekauft()
+        {
+            this.IsGekauft = true;
         }
     }
 }

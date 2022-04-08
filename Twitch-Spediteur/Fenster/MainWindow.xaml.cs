@@ -64,11 +64,6 @@ namespace Twitch_Spediteur
                     spielerList.Add(spieler);
                 }
 
-                //StreamWriter sw = File.AppendText(path);
-                //sw.WriteLine(spieler.HoleRegistrierdaten());
-                //sw.Flush();
-                //sw.Close();
-
                 tbkMessage.Text = spielerList.Count.ToString() + " Spieler sind angelegt.";
 
                 LeereFormular();
@@ -127,12 +122,6 @@ namespace Twitch_Spediteur
                     continue;
                 }
             }
-        }
-
-        private void cmdFahrzeuge_Click(object sender, RoutedEventArgs e)
-        {
-            //VehicleWindow vehicle = new VehicleWindow();
-            //vehicle.Show();
         }
 
         private void cmdFrachtmarkt_Click(object sender, RoutedEventArgs e)

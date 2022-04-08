@@ -86,7 +86,7 @@ namespace Twitch_Spediteur
 
         internal List<Spieler> HoleSpieler()
         {
-            sqlCom.CommandText = ("SELECT Spielername, Mail, Bargeld, Kontostand, Fuhrpark, Nachrichten, Startort FROM t_Spieler");
+            sqlCom.CommandText = ("SELECT Spielername, Mail, Bargeld, Kontostand, Startort FROM t_Spieler");
             sqlDA.SelectCommand = sqlCom;
             sqlDA.Fill(dtaTemp);
 
@@ -96,7 +96,7 @@ namespace Twitch_Spediteur
             {
                 list.Add(new Spieler(dr.ItemArray[0].ToString(), dr.ItemArray[1].ToString(), 
                     Convert.ToDecimal(dr.ItemArray[2]), Convert.ToDecimal(dr.ItemArray[3]), 
-                    Convert.ToInt16(dr.ItemArray[4]), Convert.ToInt16(dr.ItemArray[5]), dr.ItemArray[6].ToString()));
+                    dr.ItemArray[4].ToString()));
             }
 
             return list;

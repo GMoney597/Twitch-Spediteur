@@ -66,7 +66,7 @@ namespace Twitch_Spediteur
 
         private void cmdFahrzeug_Click(object sender, RoutedEventArgs e)
         {
-            VehicleWindow vehicle = new VehicleWindow(fuhrpark, sp);
+            VehicleWindow vehicle = new VehicleWindow(sp);
             vehicle.ShowDialog();
             txtBargeld.Text = sp.Bargeld.ToString();
         }
