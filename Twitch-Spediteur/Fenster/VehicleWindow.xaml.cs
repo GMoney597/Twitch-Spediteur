@@ -102,9 +102,14 @@ namespace Twitch_Spediteur.Fenster
         {
             if (temp != null)
             {
-                sp.Fuhrpark.Add(temp);
-                sp.GeldTransaktion(temp.MietPreis);
-                cmdClose_Click(sender, e);
+                MessageBoxResult result = MessageBox.Show("Willst Du das Fahrzeug zu einem Preis von " + temp.MietPreis + " für eine" +
+                    " Woche mieten?\nAbgabe ist am: " + DateTime.Today.AddDays(7).ToShortDateString(), "Bestätige den Mietvertrag", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                {
+                    sp.Fuhrpark.Add(temp);
+                    sp.GeldTransaktion(temp.MietPreis);
+                    cmdClose_Click(sender, e);
+                }
             }
         }
 

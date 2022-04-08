@@ -6,6 +6,9 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Windows.Media;
+using Twitch_Spediteur.Fenster;
 
 namespace Twitch_Spediteur
 {
@@ -33,6 +36,39 @@ namespace Twitch_Spediteur
             sqlCom.Parameters.AddWithValue("@pass", spieler.Passwort);
             sqlCom.Parameters.AddWithValue("@bar", spieler.Bargeld);
             sqlCom.Parameters.AddWithValue("@konto", spieler.Konto);
+
+            try
+            {
+                sqlCon.Open();
+                if (sqlCon.State == ConnectionState.Open)
+                {
+                    sqlCom.ExecuteNonQuery();
+                    result = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            return result;
+        }
+
+        internal bool SpeichereWare(Ware temp)
+        {
+            bool result = false;
+
+            sqlCom.CommandText = ("INSERT INTO t_Waren (W_Bezeichnung, W_Verladung, W_Preis, W_Einheit, W_Merkmal) " +
+                "VALUES (@bez, @verl, @preis, @ein, @merk)");
+            sqlCom.Parameters.AddWithValue("@bez", temp.Bezeichnung);
+            sqlCom.Parameters.AddWithValue("@verl", (int)temp.Ladung);
+            sqlCom.Parameters.AddWithValue("@preis", temp.Preis);
+            sqlCom.Parameters.AddWithValue("@ein", (int)temp.BasisEinheit);
+            sqlCom.Parameters.AddWithValue("@merk", (int)temp.TransportMerkmal);
 
             try
             {

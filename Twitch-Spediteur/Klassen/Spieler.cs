@@ -11,7 +11,7 @@ namespace Twitch_Spediteur
         SHA256 sHA256 = SHA256.Create();
 
         public string Spielername { get; private set; }
-        public string Mail { get; private set; }   
+        public string Mail { get; private set; }
         public string Passwort { get; private set; }
         public decimal Bargeld { get; private set; }
         public decimal Konto { get; private set; }
@@ -25,9 +25,8 @@ namespace Twitch_Spediteur
             byte[] pwValue = sHA256.ComputeHash(Encoding.UTF8.GetBytes(passwort));
             string pwHash = Convert.ToBase64String(pwValue);
             Spielername = name;
-            this.Mail = mail;
-            this.Passwort = pwHash;
-            // Passwort_alt = "";
+            Mail = mail;
+            Passwort = pwHash;
 
             Bargeld = 1000.0M;
             Konto = 0.0M;
