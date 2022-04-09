@@ -16,6 +16,7 @@
     <None Remove="Bilder\minitruck.jpg" />
     <None Remove="Bilder\sattelzug.jpg" />
     <None Remove="Bilder\transporter.jpg" />
+    <None Remove="ExterneDateien\Entfernungen.csv" />
   </ItemGroup>
 
   <ItemGroup>
@@ -35,6 +36,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Bilder\transporter.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExterneDateien\Entfernungen.csv">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

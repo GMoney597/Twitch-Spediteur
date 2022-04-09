@@ -129,5 +129,11 @@ namespace Twitch_Spediteur
             WareWindow ware = new WareWindow();
             ware.Show();
         }
+
+        private void cmdEntfernungen_Click(object sender, RoutedEventArgs e)
+        {
+            Entfernungen entfernungen = new Entfernungen();
+            entfernungen.Show();
+        }
     }
 }
