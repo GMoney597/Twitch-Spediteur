@@ -15,7 +15,7 @@
 	- Gross-LKW		(12t)
 	- Sattelzug		(30t)
 + Fahrzeuge mieten oder kaufen (Schaltflächen)
-	- Funktion noch hinterlegen
+	- Funktion noch hinterlegen - erledigt
 
 + Orte anlegen
 	- Nürnberg
@@ -72,3 +72,12 @@
 	- Öl, gefahr
 	- Benzin, gefahr
 	- Munition, gefahr
+
+	08. April 2022
+	- Fahrzeuge miet-/kaufbar und in einem Fuhrpark gespeichert
+	- Warenmarkt-Funktion aufgebaut, Daten werden in Datenbank gespeichert
+
+	09. April 2022
+	- Speichere Fahrzeuge aus dem Fuhrpark nicht mehr temporär sondern in der Datenbank - erledigt
+	- Implementiere Nachrichtensystem 
+	- Waren in Datenbank gespeichert und auslesbar - erledigt

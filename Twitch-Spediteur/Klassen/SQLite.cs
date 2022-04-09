@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using Twitch_Spediteur.Fenster;
+using Twitch_Spediteur.Klassen;
 
 namespace Twitch_Spediteur
 {
@@ -56,6 +57,94 @@ namespace Twitch_Spediteur
             }
 
             return result;
+        }
+
+        internal List<Ware> HoleWaren()
+        {
+            List<Ware> waren = new List<Ware>();
+
+            sqlCom.CommandText = "SELECT * FROM t_Waren";
+            sqlDA.SelectCommand = sqlCom;
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+                sqlDA.Fill(dtaTemp);
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            foreach (DataRow row in dtaTemp.Rows)
+            {
+                waren.Add(new Ware(row.ItemArray[1].ToString(), (Ware.Verladung)Convert.ToInt16(row.ItemArray[2]),
+                    Convert.ToDecimal(row.ItemArray[3]), (Ware.Einheit)Convert.ToInt16(row.ItemArray[4]),
+                    (Ware.Merkmal)Convert.ToInt16(row.ItemArray[5])));
+            }
+
+            return waren;
+        }
+
+        internal void BargeldUpdate(string spielername, decimal bargeld)
+        {
+            sqlCom.CommandText = "UPDATE t_Spieler SET Bargeld = @bar WHERE Spielername = @spieler";
+            sqlCom.Parameters.AddWithValue("@bar", bargeld);
+            sqlCom.Parameters.AddWithValue("@spieler", spielername);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
+        internal void ParkeFahrzeug(string spielername, Fahrzeug temp)
+        {
+            SQLiteCommand sqlCom2 = new SQLiteCommand(sqlCon);
+            sqlCom2.CommandText = "SELECT S_ID FROM t_Spieler WHERE Spielername = @spieler";
+            sqlCom2.Parameters.AddWithValue("@spieler", spielername);
+            int rowID = -1;
+
+            sqlCom.CommandText = "INSERT INTO t_Fahrzeuge (Bezeichnung, Spieler_ID, IsGekauft, Erwerbdatum, Abgabedatum) " +
+                "VALUES (@bez, @spieler, @gekauft, @erwerb, @abgabe)";
+            sqlCom.Parameters.AddWithValue("@bez", temp.Typ);
+            //sqlCom.Parameters.AddWithValue("@spieler", rowID);
+            sqlCom.Parameters.AddWithValue("@gekauft", temp.IsGekauft);
+            sqlCom.Parameters.AddWithValue("@erwerb", temp.AktionsDatum);
+            if (!temp.IsGekauft)
+            {
+                sqlCom.Parameters.AddWithValue("@abgabe", temp.AktionsDatum.AddDays(7));
+            }
+
+            try
+            {
+                sqlCon.Open();
+                rowID = Convert.ToInt16(sqlCom2.ExecuteScalar());
+                sqlCom.Parameters.AddWithValue("@spieler", rowID);
+                sqlCom.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
         }
 
         internal bool SpeichereWare(Ware temp)

@@ -106,7 +106,7 @@ namespace Twitch_Spediteur.Fenster
                     " Woche mieten?\nAbgabe ist am: " + DateTime.Today.AddDays(7).ToShortDateString(), "Bestätige den Mietvertrag", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
-                    sp.Fuhrpark.Add(temp);
+                    sp.ParkeFahrzeug(temp);
                     sp.GeldTransaktion(temp.MietPreis);
                     cmdClose_Click(sender, e);
                 }

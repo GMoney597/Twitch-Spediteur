@@ -17,17 +17,16 @@ namespace Twitch_Spediteur.Fenster
         public WareWindow()
         {
             InitializeComponent();
-
-            Ware benzin = new Ware("Benzin", Verladung.Tank, 0.5m, Einheit.Liter, Merkmal.Gefahr);
-            Ware öl = new Ware("Öl", Verladung.Tank, 1.2m, Einheit.Liter, Merkmal.Gefahr);
-
-            waren.Add(benzin);
-            waren.Add(öl);
+            InitializeWarenKatalog();
 
             cboVerladung.ItemsSource = Enum.GetValues(typeof(Ware.Verladung));
             cboEinheit.ItemsSource = Enum.GetValues(typeof(Ware.Einheit));
             cboMerkmal.ItemsSource = Enum.GetValues(typeof(Ware.Merkmal));
+        }
 
+        private void InitializeWarenKatalog()
+        {
+            waren = sql.HoleWaren();
             AktualisiereWarenKatalog();
         }
 
