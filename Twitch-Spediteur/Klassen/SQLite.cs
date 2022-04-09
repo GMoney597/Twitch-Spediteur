@@ -59,6 +59,11 @@ namespace Twitch_Spediteur
             return result;
         }
 
+        internal void SpeichereEntfernung(string start, string ziel, int distanz)
+        {
+
+        }
+
         internal List<Ware> HoleWaren()
         {
             List<Ware> waren = new List<Ware>();

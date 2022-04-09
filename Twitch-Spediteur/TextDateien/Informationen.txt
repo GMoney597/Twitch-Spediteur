@@ -12,3 +12,10 @@
      \])\z
 */
 
+
+ private bool Contains(ref List<Entfernung> distances, string start, string end) 
+ { foreach (var distance in distances) 
+ { if((distance.Start.Equals(start) && distance.Ziel.Equals(end)) || 
+ (distance.Start.Equals(end) && distance.Ziel.Equals(start))) 
+ return true; } 
+ return false; }

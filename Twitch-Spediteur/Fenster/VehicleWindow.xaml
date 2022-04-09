@@ -171,7 +171,7 @@
                 <TextBlock Text="Tankvolumen:" Grid.Row="2" Grid.Column="0"/>
                 <TextBlock Text="200l" HorizontalAlignment="Right" TextAlignment="Right" Grid.Row="2" Grid.Column="1"/>
                 <TextBlock Text="Miet-Preis:" Grid.Row="3"/>
-                <TextBlock Text="15.00 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
+                <TextBlock Text="15.000 €" TextAlignment="Right" Grid.Row="3" Grid.Column="1" />
                 <TextBlock Text="Kauf-Preis:" Grid.Row="4"/>
                 <TextBlock Text="300.000 €" TextAlignment="Right" Grid.Row="4" Grid.Column="1" />
             </Grid>

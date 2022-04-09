@@ -1,12 +1,12 @@
 ﻿namespace Twitch_Spediteur.Fenster
 {
-    internal class Entfernung
+    public class Entfernung
     {
-        internal string Start { get; private set; }
-        internal string Ziel { get; private set; }
-        internal int Distanz { get; private set; }
+        public string Start { get; private set; }
+        public string Ziel { get; private set; }
+        public int Distanz { get; private set; }
 
-        internal Entfernung(string start, string ziel, int dist)
+        public Entfernung(string start, string ziel, int dist)
         {
             Start = start;
             Ziel = ziel;

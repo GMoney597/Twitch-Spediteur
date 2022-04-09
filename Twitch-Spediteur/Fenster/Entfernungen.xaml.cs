@@ -21,6 +21,7 @@ namespace Twitch_Spediteur.Fenster
     public partial class Entfernungen : Window
     {
         List<Entfernung> distances = new List<Entfernung>();
+        SQLite sql = new SQLite();
 
         public Entfernungen()
         {
@@ -30,7 +31,7 @@ namespace Twitch_Spediteur.Fenster
         private void cmdImport_Click(object sender, RoutedEventArgs e)
         {
             FileStream file = new FileStream(@".\ExterneDateien\Entfernungen.csv", FileMode.Open, FileAccess.Read);
-            StreamReader sr = new StreamReader(file);
+            StreamReader sr = new StreamReader(file, Encoding.UTF7);
 
             string[] staedte = sr.ReadLine().Split(';');
 
@@ -40,14 +41,12 @@ namespace Twitch_Spediteur.Fenster
 
                 for (int i = 1; i < staedte.Length; i++)
                 {
-                    int dist = 0;
-
                     if (!String.IsNullOrEmpty(zeile[i]))
                     {
-                        dist = Convert.ToInt32(zeile[i]); 
-                    }
+                        distances.Add(new Entfernung(zeile[0], staedte[i], Convert.ToInt32(zeile[i])));
 
-                    distances.Add(new Entfernung(zeile[0], staedte[i], dist));
+                        sql.SpeichereEntfernung(zeile[0], staedte[i], Convert.ToInt32(zeile[i]));
+                    }
                 }
             }
 
