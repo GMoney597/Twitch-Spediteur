@@ -21,6 +21,8 @@ namespace Twitch_Spediteur.Fenster
     public partial class Entfernungen : Window
     {
         List<Entfernung> distances = new List<Entfernung>();
+        List<string> sz = new List<string>();
+
         SQLite sql = new SQLite();
 
         public Entfernungen()
@@ -41,10 +43,10 @@ namespace Twitch_Spediteur.Fenster
 
                 for (int i = 1; i < staedte.Length; i++)
                 {
+                    // Nullentfernungen übergehen
                     if (!String.IsNullOrEmpty(zeile[i]))
                     {
                         distances.Add(new Entfernung(zeile[0], staedte[i], Convert.ToInt32(zeile[i])));
-
                         sql.SpeichereEntfernung(zeile[0], staedte[i], Convert.ToInt32(zeile[i]));
                     }
                 }

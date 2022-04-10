@@ -23,11 +23,20 @@ namespace Twitch_Spediteur
             InitializeComponent();
             InitializeOrteListe();
             PruefeSpielerStartort();
+            PruefeSpielerFuhrpark();
 
             tbkSpieler.Text = sp.Spielername;
             txtStandort.Text = sp.Startort;
             txtBargeld.Text = Convert.ToDecimal(sp.Bargeld) + " €";
             txtKontostand.Text = Convert.ToDecimal(sp.Konto) + " €";
+        }
+
+        private void PruefeSpielerFuhrpark()
+        {
+            if (fuhrpark.Count > 0)
+            {
+                cmdFracht.Visibility = Visibility.Visible;
+            }
         }
 
         private void PruefeSpielerStartort()
@@ -69,6 +78,12 @@ namespace Twitch_Spediteur
             VehicleWindow vehicle = new VehicleWindow(sp);
             vehicle.ShowDialog();
             txtBargeld.Text = sp.Bargeld.ToString();
+        }
+
+        private void cmdFracht_Click(object sender, RoutedEventArgs e)
+        {
+            FreightWindow freight = new FreightWindow(sp);
+            freight.ShowDialog();
         }
     }
 }

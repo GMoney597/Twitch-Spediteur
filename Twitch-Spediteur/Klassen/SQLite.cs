@@ -61,7 +61,37 @@ namespace Twitch_Spediteur
 
         internal void SpeichereEntfernung(string start, string ziel, int distanz)
         {
+            int row = 0;
 
+            SQLiteCommand sqlCom2 = new SQLiteCommand(sqlCon);
+            sqlCom2.CommandText = "SELECT SZ_Bezeichnung FROM t_Entfernungen WHERE SZ_Bezeichnung = @sz OR SZ_Bezeichnung = @zs";
+            sqlCom2.Parameters.AddWithValue(@"sz", start+ziel);
+            sqlCom2.Parameters.AddWithValue(@"zs", ziel+start);
+
+                sqlCom.CommandText = "INSERT INTO t_Entfernungen (Start, Ziel, Distanz, SZ_Bezeichnung) " +
+                    "VALUES (@start, @ziel, @dist, @sz)";
+                sqlCom.Parameters.AddWithValue(@"start", start);
+                sqlCom.Parameters.AddWithValue(@"ziel", ziel);
+                sqlCom.Parameters.AddWithValue(@"dist", distanz);
+                sqlCom.Parameters.AddWithValue(@"sz", start + ziel);
+
+            try
+            {
+                sqlCon.Open();
+                row = Convert.ToInt32(sqlCom2.ExecuteNonQuery());
+                if (row <= 1)
+                {
+                    sqlCom.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
         }
 
         internal List<Ware> HoleWaren()

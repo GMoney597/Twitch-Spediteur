@@ -26,7 +26,7 @@
         </StackPanel>
         <UniformGrid DockPanel.Dock="Top">
             <Button Name="cmdFahrzeug" Content="Fahrzeug-Angebot" Padding="10" Margin="5" Click="cmdFahrzeug_Click"/>
-            <Button Name="cmdFracht" Content="Fracht-Börse" Padding="10" Margin="5"/>
+            <Button Name="cmdFracht" Content="Fracht-Börse" Padding="10" Margin="5" Click="cmdFracht_Click"/>
         </UniformGrid>
         <TextBlock Text="laufende Aufträge und Frachten" HorizontalAlignment="Center" DockPanel.Dock="Top" FontSize="30"/>
         <DataGrid Margin="10">

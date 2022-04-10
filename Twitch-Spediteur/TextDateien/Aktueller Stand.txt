@@ -81,3 +81,5 @@
 	- Speichere Fahrzeuge aus dem Fuhrpark nicht mehr temporär sondern in der Datenbank - erledigt
 	- Implementiere Nachrichtensystem 
 	- Waren in Datenbank gespeichert und auslesbar - erledigt
+	- Import der Entfernungen eingebaut - müssen noch in SQL gespeichert werden
+

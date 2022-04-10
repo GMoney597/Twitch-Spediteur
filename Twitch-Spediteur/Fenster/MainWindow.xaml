@@ -34,7 +34,7 @@
 
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical" Grid.Column="2">
             <Button Name="cmdFrachtmarkt" Content="Frachtmarkt" Margin="10" Padding="5" Click="cmdFrachtmarkt_Click" />
-            <Button Name="cmdEntfernungen" Content="Entfernungen" Margin="10" Padding="5" Click="cmdEntfernungen_Click" />
+            <Button Name="cmdEntfernungen" Content="Entfernungen" Margin="10" Padding="5" Click="cmdEntfernungen_Click" Visibility="Collapsed"/>
         </StackPanel>
     </Grid>
 </Window>
