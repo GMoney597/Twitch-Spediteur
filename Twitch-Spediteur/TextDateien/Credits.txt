@@ -10,3 +10,5 @@
 - dortom
 - Chrisdev0
 - sirh3e
+- AndersEben
+- Zerray

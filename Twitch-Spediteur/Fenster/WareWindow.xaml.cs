@@ -26,7 +26,7 @@ namespace Twitch_Spediteur.Fenster
 
         private void InitializeWarenKatalog()
         {
-            waren = sql.HoleWaren();
+            waren = sql.HoleWaren(waren);
             AktualisiereWarenKatalog();
         }
 

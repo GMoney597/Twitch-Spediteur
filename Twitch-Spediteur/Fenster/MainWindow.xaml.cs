@@ -14,19 +14,12 @@ namespace Twitch_Spediteur
     public partial class MainWindow : Window
     {
         List<Spieler> spielerList = new List<Spieler>();
-        List<Fracht> auftraege = new List<Fracht>();
         SQLite sql = new SQLite();
 
         public MainWindow()
         {
             InitializeComponent();
             InitializeSpielerliste();
-            InitializeFrachtBoerse();
-        }
-
-        private void InitializeFrachtBoerse()
-        {
-            
         }
 
         private void InitializeSpielerliste()

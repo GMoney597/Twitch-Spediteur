@@ -11,7 +11,7 @@ namespace Twitch_Spediteur
     {
         SQLite sql = new SQLite();
         SHA256 sHA256 = SHA256.Create();
-
+        public int ID { get; private set; }
         public string Spielername { get; private set; }
         public string Mail { get; private set; }
         public string Passwort { get; private set; }
@@ -35,8 +35,9 @@ namespace Twitch_Spediteur
             Konto = 0.0M;
         }
 
-        public Spieler(string Name, string Mail, decimal Bar, decimal Kontostand, string Ort)
+        public Spieler(int id, string Name, string Mail, decimal Bar, decimal Kontostand, string Ort)
         {
+            ID = id;
             Spielername = Name;
             this.Mail = Mail;
             Bargeld = Bar;

@@ -59,6 +59,79 @@ namespace Twitch_Spediteur
             return result;
         }
 
+        internal List<Entfernung> HoleOrte(List<Entfernung> orte)
+        {
+            sqlCom.CommandText = "SELECT * FROM t_Entfernungen";
+            sqlDA.SelectCommand = sqlCom;
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+                sqlDA.Fill(dtaTemp = new DataTable());
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            foreach (DataRow row in dtaTemp.Rows)
+            {
+                orte.Add(new Entfernung(row.ItemArray[1].ToString(), row.ItemArray[2].ToString(), Convert.ToInt16(row.ItemArray[3])));
+            }
+
+            return orte;
+        }
+
+        internal List<Fracht> HoleAuftraege(List<Fracht> frachten, Spieler sp)
+        {
+            Spieler spieler = sp;
+
+            sqlCom.CommandText = "SELECT * FROM t_Auftraege";
+            sqlDA.SelectCommand = sqlCom;
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+                sqlDA.Fill(dtaTemp = new DataTable());
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            // Werte: ID, Startort, Zielort, Bezeichnung, Menge, Wert, Status, FahrzeugID
+            foreach (DataRow row in dtaTemp.Rows)
+            {
+                if (Convert.ToInt16(row[6]) == 0)
+                {
+                    frachten.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(), 
+                        row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]), 
+                        (Fracht.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt16(row.ItemArray[8])));
+                }
+                else if (Convert.ToInt16(row[6]) == 1)
+                {
+                    if (Convert.ToInt16(row[7]) == sp.ID)
+                    {
+                        sp.Auftraege.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(),
+                        row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]),
+                        (Fracht.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt16(row.ItemArray[8])));
+                    }
+                }
+            }
+
+            return frachten;
+        }
+
         internal void SpeichereEntfernung(string start, string ziel, int distanz)
         {
             int row = 0;
@@ -94,10 +167,8 @@ namespace Twitch_Spediteur
             }
         }
 
-        internal List<Ware> HoleWaren()
+        internal List<Ware> HoleWaren(List<Ware> waren)
         {
-            List<Ware> waren = new List<Ware>();
-
             sqlCom.CommandText = "SELECT * FROM t_Waren";
             sqlDA.SelectCommand = sqlCom;
 
@@ -105,7 +176,7 @@ namespace Twitch_Spediteur
             {
                 sqlCon.Open();
                 sqlCom.ExecuteNonQuery();
-                sqlDA.Fill(dtaTemp);
+                sqlDA.Fill(dtaTemp = new DataTable());
             }
             catch (Exception ex)
             {
@@ -246,17 +317,17 @@ namespace Twitch_Spediteur
 
         internal List<Spieler> HoleSpieler()
         {
-            sqlCom.CommandText = ("SELECT Spielername, Mail, Bargeld, Kontostand, Startort FROM t_Spieler");
+            sqlCom.CommandText = ("SELECT S_ID, Spielername, Mail, Bargeld, Kontostand, Startort FROM t_Spieler");
             sqlDA.SelectCommand = sqlCom;
-            sqlDA.Fill(dtaTemp);
+            sqlDA.Fill(dtaTemp = new DataTable());
 
             List<Spieler> list = new List<Spieler>();
 
             foreach (DataRow dr in dtaTemp.Rows)
             {
-                list.Add(new Spieler(dr.ItemArray[0].ToString(), dr.ItemArray[1].ToString(), 
-                    Convert.ToDecimal(dr.ItemArray[2]), Convert.ToDecimal(dr.ItemArray[3]), 
-                    dr.ItemArray[4].ToString()));
+                list.Add(new Spieler(Convert.ToInt16(dr[0]), dr.ItemArray[1].ToString(), dr.ItemArray[2].ToString(), 
+                    Convert.ToDecimal(dr.ItemArray[3]), Convert.ToDecimal(dr.ItemArray[4]), 
+                    dr.ItemArray[5].ToString()));
             }
 
             return list;
@@ -279,7 +350,7 @@ namespace Twitch_Spediteur
                 if (sqlCon.State == ConnectionState.Open)
                 {
                     sqlDA.SelectCommand = sqlCom;
-                    sqlDA.Fill(dtaTemp);
+                    sqlDA.Fill(dtaTemp = new DataTable());
 
                     if (dtaTemp.Rows[0].ItemArray[3].ToString() == pwComp)
                     {
