@@ -59,6 +59,34 @@ namespace Twitch_Spediteur
             return result;
         }
 
+        internal void HoleFuhrpark(Spieler spieler)
+        {
+            sqlCom.CommandText = "SELECT * FROM t_Fahrzeuge WHERE Spieler_ID = @sid";
+            sqlCom.Parameters.AddWithValue("@sid", spieler.ID);
+            sqlDA.SelectCommand = sqlCom;
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+                sqlDA.Fill(dtaTemp = new DataTable());
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            foreach (DataRow row in dtaTemp.Rows)
+            {
+                spieler.Fuhrpark.Add(new Fahrzeug("Kombi", 0.5m, 60, 400, 4000, 6, 
+                    Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()), DateTime.Parse(row.ItemArray[5].ToString())));
+            }
+        }
+
         internal List<Entfernung> HoleOrte(List<Entfernung> orte)
         {
             sqlCom.CommandText = "SELECT * FROM t_Entfernungen";

@@ -1,4 +1,6 @@
-﻿namespace Twitch_Spediteur.Fenster
+﻿using System;
+
+namespace Twitch_Spediteur.Fenster
 {
     public class Ware
     {
@@ -7,18 +9,19 @@
         public Einheit BasisEinheit { get; private set; }
         public Merkmal TransportMerkmal { get; private set; }
         public decimal Preis { get; private set; }
-
+        
+        [Flags]
         public enum Verladung
         {
-            Tank,
-            Container,
-            Pritsche,
-            Kühl,
-            Tief,
-            Fahrzeug,
-            Tier,
-            Silo,
-            Offen
+            Tank = 1,
+            Container = 2,
+            Pritsche = 4,
+            Kühl = 8,
+            Tief = 16,
+            Fahrzeug = 32,
+            Tier = 64,
+            Silo = 128,
+            Offen = 256
         }
 
         public enum Einheit

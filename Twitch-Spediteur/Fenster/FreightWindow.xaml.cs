@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Twitch_Spediteur.Klassen;
 
 namespace Twitch_Spediteur.Fenster
 {
@@ -23,19 +24,22 @@ namespace Twitch_Spediteur.Fenster
         List<Entfernung> orte = new List<Entfernung>();
         List<Ware> waren = new List<Ware>();
         List<Fracht> frachten = new List<Fracht>();
+        List<Ware> moeglicheWaren = new List<Ware>();
+
+        List<int> ladungsKeys = new List<int>();
         Spieler spieler;
         SQLite sql = new SQLite();
 
         public FreightWindow(Spieler sp)
         {
             InitializeComponent();
-            InitializeFrachtBoerse();
-
             spieler = sp;
+            InitializeFrachtBoerse();
         }
 
         private void InitializeFrachtBoerse()
         {
+
             // Hole aktuelle Frachtaufträge aus der DB und weise sie der Börse oder dem Spieler zu
             frachten = sql.HoleAuftraege(frachten, spieler);
 
@@ -45,12 +49,30 @@ namespace Twitch_Spediteur.Fenster
                 orte = sql.HoleOrte(orte);
                 waren = sql.HoleWaren(waren);
 
-                while(frachten.Count < 10)
+                foreach (Fahrzeug fahrzeug in spieler.Fuhrpark)
                 {
-                    Ware w = waren[rand.Next(waren.Count)];
+                    //for (int val = 0; val <= 16; val++)
+                    //    Console.WriteLine("{0,3} - {1:G}", val, (MultiHue)val);
+
+                    // Wenn Spieler ein Fahrzeug hat X
+                    // ladungsKeys.Add(fahrzeug.VerladeSchlüssel);
+                    //var treffer = waren.FindAll(x => x.Ladung.HasFlag(fahrzeug.VerladeSchlüssel));
+                    var treffer = waren.FindAll(x => ((Ware.Verladung)fahrzeug.VerladeSchlüssel).ToString().Contains(x.Ladung.ToString()));
+                    foreach (var item in treffer)
+                    {
+                        moeglicheWaren.Add(item);
+                    }
+                }
+
+                while (frachten.Count < 10)
+                {
+                    Ware w = moeglicheWaren[rand.Next(moeglicheWaren.Count)];
+
+                    int menge = rand.Next(0, 500);
+                    decimal summe = Math.Round(Convert.ToDecimal((rand.Next(50, 120) * (Double)w.Preis) * menge), 2);
 
                     frachten.Add(new Fracht(orte[rand.Next(orte.Count)].Start, orte[rand.Next(orte.Count)].Ziel,
-                        w.Bezeichnung, rand.Next(500, 1000), Convert.ToDecimal(rand.NextDouble() * (Double)w.Preis)));
+                        w.Bezeichnung, menge, summe));
                 }
             }
 

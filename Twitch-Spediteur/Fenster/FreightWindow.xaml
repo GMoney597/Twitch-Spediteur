@@ -22,7 +22,13 @@
                 <DataGridTextColumn Header="Lieferort" Binding="{Binding Lieferort}" />
                 <DataGridTextColumn Header="Frachtart" Binding="{Binding Bezeichnung}" />
                 <DataGridTextColumn Header="Lade-Menge" Binding="{Binding Kapazitaet}" />
-                <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Wert}" />
+                <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Wert, StringFormat=#0.00 €}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTemplateColumn Header="Auftrag annehmen" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

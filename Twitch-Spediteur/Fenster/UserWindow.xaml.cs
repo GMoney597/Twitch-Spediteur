@@ -11,6 +11,7 @@ namespace Twitch_Spediteur
     /// </summary>
     public partial class UserWindow : Window
     {
+        SQLite sql = new SQLite();
         //public static List<Ort> ortsListe = new List<Ort>();
         public List<Fahrzeug> fuhrpark = new List<Fahrzeug>();
 
@@ -33,10 +34,24 @@ namespace Twitch_Spediteur
 
         private void PruefeSpielerFuhrpark()
         {
-            if (fuhrpark.Count > 0)
+            sql.HoleFuhrpark(sp);
+
+            if (sp.Fuhrpark.Count > 0)
             {
                 cmdFracht.Visibility = Visibility.Visible;
             }
+            //else
+            //{
+            //    try
+            //    {
+            //        cmdFracht.Visibility = Visibility.Visible;
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        string error = ex.Message;
+            //        MessageBox.Show("Dieser Spieler hat noch keinen Fuhrpark.", "Fuhrpark leer", MessageBoxButton.OK, MessageBoxImage.Information);
+            //    }
+            //}
         }
 
         private void PruefeSpielerStartort()
