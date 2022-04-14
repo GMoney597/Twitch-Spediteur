@@ -25,11 +25,19 @@ namespace Twitch_Spediteur
             InitializeOrteListe();
             PruefeSpielerStartort();
             PruefeSpielerFuhrpark();
+            PruefeSpielerAuftraege();
 
             tbkSpieler.Text = sp.Spielername;
             txtStandort.Text = sp.Startort;
             txtBargeld.Text = Convert.ToDecimal(sp.Bargeld) + " €";
             txtKontostand.Text = Convert.ToDecimal(sp.Konto) + " €";
+        }
+
+        private void PruefeSpielerAuftraege()
+        {
+            dtgSpielerAuftrage.ItemsSource = null;
+            // dtgSpielerAuftrage.ItemsSource = sql.HoleAuftraege(sp);
+            dtgSpielerAuftrage.ItemsSource = sp.Auftraege;
         }
 
         private void PruefeSpielerFuhrpark()
@@ -40,18 +48,6 @@ namespace Twitch_Spediteur
             {
                 cmdFracht.Visibility = Visibility.Visible;
             }
-            //else
-            //{
-            //    try
-            //    {
-            //        cmdFracht.Visibility = Visibility.Visible;
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        string error = ex.Message;
-            //        MessageBox.Show("Dieser Spieler hat noch keinen Fuhrpark.", "Fuhrpark leer", MessageBoxButton.OK, MessageBoxImage.Information);
-            //    }
-            //}
         }
 
         private void PruefeSpielerStartort()
@@ -99,6 +95,13 @@ namespace Twitch_Spediteur
         {
             FreightWindow freight = new FreightWindow(sp);
             freight.ShowDialog();
+            PruefeSpielerAuftraege();
+        }
+
+        private void cmdAusfuehren_Click(object sender, RoutedEventArgs e)
+        {
+            Fracht temp = (Fracht)dtgSpielerAuftrage.SelectedItem;
+            int row = dtgSpielerAuftrage.SelectedIndex;            
         }
     }
 }

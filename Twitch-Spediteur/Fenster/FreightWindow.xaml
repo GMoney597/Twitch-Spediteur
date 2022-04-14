@@ -8,20 +8,45 @@
         Title="FreightWindow" Height="450" Width="800" Background="CornflowerBlue" ResizeMode="NoResize" >
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="6*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
             <RowDefinition Height="9*" />
         </Grid.RowDefinitions>
-        <TextBlock Text="FRACHT - BÖRSE" Grid.Row="0" Grid.Column="1" Foreground="AliceBlue" FontFamily="Alfa Slab One" FontSize="30" TextAlignment="Center" Margin="10, 5"/>
-        <DataGrid Name="dtgFracht" Grid.Row="1" Grid.Column="1" Margin="10" AlternationCount="2" AutoGenerateColumns="False">
+        <TextBlock Text="FRACHT - BÖRSE" Grid.Row="0" Foreground="AliceBlue" FontFamily="Alfa Slab One" FontSize="30" TextAlignment="Center" Margin="10, 5"/>
+        <DataGrid Name="dtgFracht" Grid.Row="1" Margin="10" AlternationCount="2" AutoGenerateColumns="False">
+            <DataGrid.RowBackground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="#FFF9A72E" Offset="1"/>
+                </LinearGradientBrush>
+            </DataGrid.RowBackground>
+            <DataGrid.AlternatingRowBackground>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="#FFFF8383" Offset="1"/>
+                </LinearGradientBrush>
+            </DataGrid.AlternatingRowBackground>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Abholort" Binding="{Binding Abholort}"/>
                 <DataGridTextColumn Header="Lieferort" Binding="{Binding Lieferort}" />
+                <DataGridTextColumn Header="Entfernung" Binding="{Binding Entfernung, StringFormat=#0 km}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Frachtart" Binding="{Binding Bezeichnung}" />
-                <DataGridTextColumn Header="Lade-Menge" Binding="{Binding Kapazitaet}" />
+                <DataGridTextColumn Header="Lade-Menge" Binding="{Binding Kapazitaet}" >
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="HorizontalAlignment" Value="Right" />
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Einheit" Binding="{Binding Basiseinheit}" />
                 <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Wert, StringFormat=#0.00 €}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">

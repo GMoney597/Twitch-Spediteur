@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
@@ -57,6 +58,11 @@ namespace Twitch_Spediteur
             }
 
             return result;
+        }
+
+        internal List<Fracht> HoleAuftraege(Spieler sp)
+        {
+            return null;
         }
 
         internal void HoleFuhrpark(Spieler spieler)

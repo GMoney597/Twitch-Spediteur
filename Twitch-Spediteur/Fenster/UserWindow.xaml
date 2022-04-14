@@ -19,7 +19,7 @@
             <TextBlock Name="tbkNachrichten" Text="Nachrichten:" />
             <ListBox Name="lbxNachrichten" Height="200"/>
         </StackPanel>
-        <StackPanel Name="stackOrtWaehlen"  DockPanel.Dock="Left" VerticalAlignment="Center" Margin="50" Visibility="Visible">
+        <StackPanel Name="stackOrtWaehlen"  DockPanel.Dock="Left" VerticalAlignment="Center" Margin="50" Visibility="Collapsed">
             <TextBlock Name="tbkOrtWaehlen" Text="Wähle deinen Start-Ort:" />
             <ComboBox Name="cboOrte" IsEditable="True" Margin= "0, 0, 0, 10" />
             <Button Name="cmdSpeichereStandort" Content="Speichern" Margin="0, 10, 0, 0" Click="cmdSpeichereStandort_Click"/>
@@ -29,7 +29,32 @@
             <Button Name="cmdFracht" Content="Fracht-Börse" Padding="10" Margin="5" Click="cmdFracht_Click" Visibility="Hidden"/>
         </UniformGrid>
         <TextBlock Text="laufende Aufträge und Frachten" HorizontalAlignment="Center" DockPanel.Dock="Top" FontSize="30"/>
-        <DataGrid Margin="10">
+        <DataGrid Name="dtgSpielerAuftrage" Margin="10" AutoGenerateColumns="False" >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Start" Binding="{Binding Abholort}"/>
+                <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}"/>
+                <DataGridTemplateColumn Header="Strecke in %">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Name="tbkStrecke" TextAlignment="Center" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Wert, StringFormat=#0.00 €}"/>
+                <DataGridTextColumn Header="Status" Binding="{Binding Ausfuehrung}"/>
+                <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" Visibility="Collapsed"/>
+                <DataGridComboBoxColumn Header="Fahrzeug" SelectedItemBinding="{Binding sp.fuhrpark}">
+                </DataGridComboBoxColumn>
+                <DataGridTemplateColumn Header="Ausführen" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Name="cmdAusfuehren" Content="LOS !" Margin="2" Click="cmdAusfuehren_Click"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+
+                </DataGridTemplateColumn>
+
+            </DataGrid.Columns>
             
         </DataGrid>
     </DockPanel>

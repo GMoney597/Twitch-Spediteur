@@ -51,12 +51,6 @@ namespace Twitch_Spediteur.Fenster
 
                 foreach (Fahrzeug fahrzeug in spieler.Fuhrpark)
                 {
-                    //for (int val = 0; val <= 16; val++)
-                    //    Console.WriteLine("{0,3} - {1:G}", val, (MultiHue)val);
-
-                    // Wenn Spieler ein Fahrzeug hat X
-                    // ladungsKeys.Add(fahrzeug.VerladeSchlüssel);
-                    //var treffer = waren.FindAll(x => x.Ladung.HasFlag(fahrzeug.VerladeSchlüssel));
                     var treffer = waren.FindAll(x => ((Ware.Verladung)fahrzeug.VerladeSchlüssel).HasFlag(x.Ladung));
                     foreach (var item in treffer)
                     {
@@ -69,10 +63,12 @@ namespace Twitch_Spediteur.Fenster
                     Ware w = moeglicheWaren[rand.Next(moeglicheWaren.Count)];
 
                     int menge = rand.Next(0, 500);
-                    decimal summe = Math.Round(Convert.ToDecimal((rand.Next(50, 120) * (Double)w.Preis) * menge), 2);
+                    // decimal summe = Math.Round(Convert.ToDecimal((rand.Next(50, 120) * (Double)w.Preis) * menge), 2);
 
-                    frachten.Add(new Fracht(orte[rand.Next(orte.Count)].Start, orte[rand.Next(orte.Count)].Ziel,
-                        w.Bezeichnung, menge, summe));
+                    Entfernung ort = orte[rand.Next(orte.Count)];
+                    decimal summe = ort.Distanz * 0.5m;
+
+                    frachten.Add(new Fracht(ort.Start, ort.Ziel, ort.Distanz, w.Bezeichnung, w.BasisEinheit.ToString(), menge, summe));
                 }
             }
 
@@ -81,18 +77,22 @@ namespace Twitch_Spediteur.Fenster
 
         private void cmdAnnehmen_Click(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult msgResult = MessageBox.Show("Du hast folgenden Auftrag angeklickt: " + 
-                ((Fracht)dtgFracht.CurrentItem).Bezeichnung, "Fracht annehmen", 
+            Fracht temp = (Fracht)dtgFracht.CurrentItem;
+            //MessageBoxButton accept = new MessageBoxButton();
+            //MessageBoxButton decline = new MessageBoxButton();
+
+            MessageBoxResult msgResult = MessageBox.Show("Auftrag: \t" + 
+                temp.Bezeichnung + "\nBezahlung: \t" + String.Format("{0:C2}", temp.Wert) + " annehmen?\n" +
+                "Abhol-Ort: \t" + temp.Abholort + "\nLiefer-Ort: \t" + temp.Lieferort, "Fracht annehmen", 
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             
             if (msgResult == MessageBoxResult.Yes)
             {
-                spieler.Auftraege.Add((Fracht)dtgFracht.CurrentItem);
+                spieler.Auftraege.Add(temp);
 
                 dtgFracht.ItemsSource = null;
-                frachten.Remove((Fracht)dtgFracht.CurrentItem);
+                frachten.Remove(temp);
                 dtgFracht.ItemsSource = frachten;
-                //this.Close();
             }
         }
     }
