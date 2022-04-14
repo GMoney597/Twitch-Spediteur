@@ -57,7 +57,7 @@ namespace Twitch_Spediteur.Fenster
                     // Wenn Spieler ein Fahrzeug hat X
                     // ladungsKeys.Add(fahrzeug.VerladeSchlüssel);
                     //var treffer = waren.FindAll(x => x.Ladung.HasFlag(fahrzeug.VerladeSchlüssel));
-                    var treffer = waren.FindAll(x => ((Ware.Verladung)fahrzeug.VerladeSchlüssel).ToString().Contains(x.Ladung.ToString()));
+                    var treffer = waren.FindAll(x => ((Ware.Verladung)fahrzeug.VerladeSchlüssel).HasFlag(x.Ladung));
                     foreach (var item in treffer)
                     {
                         moeglicheWaren.Add(item);
