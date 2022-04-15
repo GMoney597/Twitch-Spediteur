@@ -60,11 +60,6 @@ namespace Twitch_Spediteur
             return result;
         }
 
-        internal List<Fracht> HoleAuftraege(Spieler sp)
-        {
-            return null;
-        }
-
         internal void HoleFuhrpark(Spieler spieler)
         {
             sqlCom.CommandText = "SELECT * FROM t_Fahrzeuge WHERE Spieler_ID = @sid";
@@ -89,7 +84,9 @@ namespace Twitch_Spediteur
             foreach (DataRow row in dtaTemp.Rows)
             {
                 spieler.Fuhrpark.Add(new Fahrzeug("Kombi", 0.5m, 60, 400, 4000, 6, 
-                    Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()), DateTime.Parse(row.ItemArray[5].ToString())));
+                    Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()), 
+                    DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(), 
+                    Convert.ToBoolean(row.ItemArray[7])));
             }
         }
 
@@ -121,7 +118,7 @@ namespace Twitch_Spediteur
             return orte;
         }
 
-        internal List<Fracht> HoleAuftraege(List<Fracht> frachten, Spieler sp)
+        internal List<Angebot> HoleAuftraege(List<Angebot> frachten, Spieler sp)
         {
             Spieler spieler = sp;
 
@@ -143,25 +140,25 @@ namespace Twitch_Spediteur
                 sqlCon.Close();
             }
 
-            // Werte: ID, Startort, Zielort, Bezeichnung, Menge, Wert, Status, FahrzeugID
-            foreach (DataRow row in dtaTemp.Rows)
-            {
-                if (Convert.ToInt16(row[6]) == 0)
-                {
-                    frachten.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(), 
-                        row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]), 
-                        (Fracht.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt16(row.ItemArray[8])));
-                }
-                else if (Convert.ToInt16(row[6]) == 1)
-                {
-                    if (Convert.ToInt16(row[7]) == sp.ID)
-                    {
-                        sp.Auftraege.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(),
-                        row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]),
-                        (Fracht.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt16(row.ItemArray[8])));
-                    }
-                }
-            }
+            // Werte: ID, Startort, Zielort, Bezeichnung, Menge, Wert, Status, SpielerID, FahrzeugID
+            //foreach (DataRow row in dtaTemp.Rows)
+            //{
+            //    if (Convert.ToInt16(row[6]) == 0)
+            //    {
+            //        frachten.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(), 
+            //            row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]), 
+            //            (Fracht.Status)Convert.ToInt16(row.ItemArray[6])));
+            //    }
+            //    else if (Convert.ToInt16(row[6]) == 1)
+            //    {
+            //        if (Convert.ToInt16(row[7]) == sp.ID)
+            //        {
+            //            sp.Auftraege.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(),
+            //            row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]),
+            //            (Fracht.Status)Convert.ToInt16(row.ItemArray[6])));
+            //        }
+            //    }
+            //}
 
             return frachten;
         }

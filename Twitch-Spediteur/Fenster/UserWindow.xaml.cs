@@ -43,10 +43,12 @@ namespace Twitch_Spediteur
         private void PruefeSpielerFuhrpark()
         {
             sql.HoleFuhrpark(sp);
+            dtgFuhrpark.ItemsSource = null;
 
             if (sp.Fuhrpark.Count > 0)
             {
                 cmdFracht.Visibility = Visibility.Visible;
+                dtgFuhrpark.ItemsSource = sp.Fuhrpark;
             }
         }
 
@@ -100,8 +102,11 @@ namespace Twitch_Spediteur
 
         private void cmdAusfuehren_Click(object sender, RoutedEventArgs e)
         {
-            Fracht temp = (Fracht)dtgSpielerAuftrage.SelectedItem;
-            int row = dtgSpielerAuftrage.SelectedIndex;            
+            Angebot temp = (Angebot)dtgSpielerAuftrage.SelectedItem;
+            int row = dtgSpielerAuftrage.SelectedIndex;
+
+            FahrzeugZuweisenMessageBox fzgmsgbox = new FahrzeugZuweisenMessageBox(sp.Fuhrpark, temp);
+            fzgmsgbox.ShowDialog();
         }
     }
 }

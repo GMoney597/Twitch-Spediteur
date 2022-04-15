@@ -23,7 +23,7 @@ namespace Twitch_Spediteur.Fenster
         public static Random rand = new Random();
         List<Entfernung> orte = new List<Entfernung>();
         List<Ware> waren = new List<Ware>();
-        List<Fracht> frachten = new List<Fracht>();
+        List<Angebot> frachten = new List<Angebot>();
         List<Ware> moeglicheWaren = new List<Ware>();
 
         List<int> ladungsKeys = new List<int>();
@@ -68,31 +68,32 @@ namespace Twitch_Spediteur.Fenster
                     Entfernung ort = orte[rand.Next(orte.Count)];
                     decimal summe = ort.Distanz * 0.5m;
 
-                    frachten.Add(new Fracht(ort.Start, ort.Ziel, ort.Distanz, w.Bezeichnung, w.BasisEinheit.ToString(), menge, summe));
+                    frachten.Add(new Angebot(ort.Start, ort.Ziel, ort.Distanz, w.Bezeichnung, w.BasisEinheit.ToString(), menge, summe));
                 }
             }
 
-            dtgFracht.ItemsSource = frachten;
+            dtgAngebot.ItemsSource = frachten;
         }
 
         private void cmdAnnehmen_Click(object sender, RoutedEventArgs e)
         {
-            Fracht temp = (Fracht)dtgFracht.CurrentItem;
+            Angebot temp = (Angebot)dtgAngebot.CurrentItem;
             //MessageBoxButton accept = new MessageBoxButton();
             //MessageBoxButton decline = new MessageBoxButton();
 
-            MessageBoxResult msgResult = MessageBox.Show("Auftrag: \t" + 
-                temp.Bezeichnung + "\nBezahlung: \t" + String.Format("{0:C2}", temp.Wert) + " annehmen?\n" +
-                "Abhol-Ort: \t" + temp.Abholort + "\nLiefer-Ort: \t" + temp.Lieferort, "Fracht annehmen", 
+            MessageBoxResult msgResult = MessageBox.Show("Auftrag: \t\t" + temp.Bezeichnung + 
+                "\nBezahlung: \t" + String.Format("{0:C2}", temp.Wert) +
+                "\nAbhol-Ort: \t" + temp.Abholort + 
+                "\nLiefer-Ort: \t" + temp.Lieferort, "Fracht annehmen", 
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             
             if (msgResult == MessageBoxResult.Yes)
             {
                 spieler.Auftraege.Add(temp);
 
-                dtgFracht.ItemsSource = null;
+                dtgAngebot.ItemsSource = null;
                 frachten.Remove(temp);
-                dtgFracht.ItemsSource = frachten;
+                dtgAngebot.ItemsSource = frachten;
             }
         }
     }

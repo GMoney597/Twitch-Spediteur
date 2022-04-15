@@ -15,7 +15,7 @@
             <RowDefinition Height="9*" />
         </Grid.RowDefinitions>
         <TextBlock Text="FRACHT - BÖRSE" Grid.Row="0" Foreground="AliceBlue" FontFamily="Alfa Slab One" FontSize="30" TextAlignment="Center" Margin="10, 5"/>
-        <DataGrid Name="dtgFracht" Grid.Row="1" Margin="10" AlternationCount="2" AutoGenerateColumns="False">
+        <DataGrid Name="dtgAngebot" Grid.Row="1" Margin="10" AlternationCount="2" AutoGenerateColumns="False">
             <DataGrid.RowBackground>
                 <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                     <GradientStop Color="White"/>

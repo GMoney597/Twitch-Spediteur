@@ -18,6 +18,16 @@ namespace Twitch_Spediteur.Klassen
         public DateTime AbgabeDatum { get; private set; }
         public bool IsGekauft { get; private set; }
         public int VerladeSchlüssel { get; private set; }
+        public bool HatAuftrag { get; private set; }
+        public string Standort { get; set; }
+        public Status Ladung { get; set; }
+
+        public enum Status
+        {
+            leer,
+            beladen,
+            voll
+        }
 
         public Fahrzeug(string type, decimal load, decimal tank, decimal rent, decimal buy, int flag)
         {
@@ -31,7 +41,8 @@ namespace Twitch_Spediteur.Klassen
         }
 
         // Konstruktor für Fuhrparkabfrage SQL
-        public Fahrzeug(string type, decimal load, decimal tank, decimal rent, decimal buy, int flag, bool eigner, DateTime erwerb, DateTime abgabe)
+        public Fahrzeug(string type, decimal load, decimal tank, decimal rent, decimal buy, int flag, bool gekauft, 
+            DateTime erwerb, DateTime abgabe, string stand, bool auftrag)
         {
             Typ = type;
             Zuladung = load;
@@ -40,21 +51,23 @@ namespace Twitch_Spediteur.Klassen
             KaufPreis = buy;
             VerkaufPreis = buy * 0.7m;
             VerladeSchlüssel = flag;
-            IsGekauft = eigner;
+            IsGekauft = gekauft;
             AktionsDatum = erwerb;
             AbgabeDatum = abgabe;
+            HatAuftrag = auftrag;
+            Standort = stand;
         }
 
-            /*
-             * Kombi:       mieten 400      kaufen 40000
-             * Transporter: mieten 900      kaufen 60000
-             * Mini-Truck:  mieten 1350     kaufen 75000
-             * LKW 7.5t:    mieten 2000     kaufen 120000
-             * LKW 12t:     mieten 4500     kaufen 150000
-             * Sattelzug:   mieten 15000    kaufen 300000
-             */
+        /*
+         * Kombi:       mieten 400      kaufen 40000
+         * Transporter: mieten 900      kaufen 60000
+         * Mini-Truck:  mieten 1350     kaufen 75000
+         * LKW 7.5t:    mieten 2000     kaufen 120000
+         * LKW 12t:     mieten 4500     kaufen 150000
+         * Sattelzug:   mieten 15000    kaufen 300000
+         */
 
-            public decimal FahrzeugMieten()
+        public decimal FahrzeugMieten()
         {
             AktionsDatum = DateTime.Now;
             IsGekauft = false;
@@ -64,6 +77,11 @@ namespace Twitch_Spediteur.Klassen
         internal void WurdeGekauft()
         {
             this.IsGekauft = true;
+        }
+
+        internal void GebeAuftrag()
+        {
+            HatAuftrag = true;
         }
     }
 }

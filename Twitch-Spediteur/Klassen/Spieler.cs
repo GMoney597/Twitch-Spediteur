@@ -18,7 +18,7 @@ namespace Twitch_Spediteur
         public decimal Bargeld { get; private set; }
         public decimal Konto { get; private set; }
         public List<Fahrzeug> Fuhrpark { get; private set; } = new List<Fahrzeug>();
-        public List<Fracht> Auftraege { get; private set; } = new List<Fracht>();
+        public List<Angebot> Auftraege { get; private set; } = new List<Angebot>();
         public List<Nachricht> Nachrichten { get; private set; } = new List<Nachricht>();
         public string Startort { get; private set; }
 

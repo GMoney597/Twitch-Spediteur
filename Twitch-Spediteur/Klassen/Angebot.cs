@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
+using Twitch_Spediteur.Klassen;
 
 namespace Twitch_Spediteur.Fenster
 {
-    public class Fracht
+    public class Angebot
     {
         public int ID { get; private set; }
         public string Abholort { get; private set; }
@@ -12,8 +14,7 @@ namespace Twitch_Spediteur.Fenster
         public decimal Kapazitaet { get; private set; }
         public string Basiseinheit { get; private set; }
         public decimal Wert { get; private set; }
-        public Status Ausfuehrung { get; private set; }
-        public int FahrzeugID { get; private set; }
+        public Status Zustand { get; set; }
 
         public enum Status { 
             Offen,
@@ -25,7 +26,7 @@ namespace Twitch_Spediteur.Fenster
         }
 
         // Aufbau für Fracht-Börse
-        public Fracht(string abhol, string liefer, int entf, string bez, string einheit, decimal kap, decimal wert)
+        public Angebot(string abhol, string liefer, int entf, string bez, string einheit, decimal kap, decimal wert)
         {
             Abholort = abhol;
             Lieferort = liefer; 
@@ -34,11 +35,10 @@ namespace Twitch_Spediteur.Fenster
             Kapazitaet = kap;
             Basiseinheit = einheit;
             Wert = wert;
-            Ausfuehrung = Status.Offen;
         }
 
         // SQL-Konstruktor: ID, Startort, Zielort, Bezeichnung, Menge, Wert, Status, SpielerID, FahrzeugID
-        public Fracht(int id, string abhol, string liefer, string bez, decimal kap, decimal wert, Status aus, int fahr)
+        public Angebot(int id, string abhol, string liefer, string bez, decimal kap, decimal wert)
         {
             ID = id;
             Abholort = abhol;
@@ -46,8 +46,6 @@ namespace Twitch_Spediteur.Fenster
             Bezeichnung = bez;
             Kapazitaet = kap;
             Wert = wert;
-            Ausfuehrung = aus;            
-            FahrzeugID = fahr;
         }
     }
 }

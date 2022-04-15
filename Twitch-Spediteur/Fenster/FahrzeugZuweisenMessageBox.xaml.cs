@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using Twitch_Spediteur.Klassen;
+
+namespace Twitch_Spediteur.Fenster
+{
+    /// <summary>
+    /// Interaktionslogik für FahrzeugZuweisenMessageBox.xaml
+    /// </summary>
+    public partial class FahrzeugZuweisenMessageBox : Window
+    {
+        List<Fahrzeug> Fuhrpark = new List<Fahrzeug>();
+        Angebot angebot;
+
+        public FahrzeugZuweisenMessageBox(List<Fahrzeug> fuhr, Angebot ang)
+        {
+            InitializeComponent();
+            Fuhrpark = fuhr;
+            angebot = ang;
+
+            cboFahrzeuge.ItemsSource = Fuhrpark;
+        }
+
+        private void cmdSend_Click(object sender, RoutedEventArgs e)
+        {
+            Auftrag auftrag = new Auftrag(angebot.ID, angebot.Abholort, angebot.Lieferort, angebot.Bezeichnung, 
+                angebot.Zustand, ((Fahrzeug)cboFahrzeuge.SelectedItem).Typ, ((Fahrzeug)cboFahrzeuge.SelectedItem).HatAuftrag);
+            MessageBox.Show("Fahrzeug wurde mit einem Auftrag versendet", "Auftrag in Ausführung", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.Close();
+        }
+
+        private void cboFahrzeuge_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            tbkGewaehltesFahrzeug.Text = "Fahrzeug:\t " + ((Fahrzeug)cboFahrzeuge.SelectedItem).Typ +
+                "\nStandort:\t" + ((Fahrzeug)cboFahrzeuge.SelectedItem).HatAuftrag;
+        }
+    }
+}
