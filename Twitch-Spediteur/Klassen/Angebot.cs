@@ -14,16 +14,6 @@ namespace Twitch_Spediteur.Fenster
         public decimal Kapazitaet { get; private set; }
         public string Basiseinheit { get; private set; }
         public decimal Wert { get; private set; }
-        public Status Zustand { get; set; }
-
-        public enum Status { 
-            Offen,
-            Abholung,
-            Beladung,
-            Zustellung,
-            Entladung,
-            Erledigt
-        }
 
         // Aufbau für Fracht-Börse
         public Angebot(string abhol, string liefer, int entf, string bez, string einheit, decimal kap, decimal wert)

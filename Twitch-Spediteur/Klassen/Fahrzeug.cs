@@ -8,6 +8,7 @@ namespace Twitch_Spediteur.Klassen
 {
     public class Fahrzeug
     {
+        public int ID { get; private set; }
         public string Typ { get; private set; }
         public decimal Zuladung { get; private set; }
         public decimal Tankvolumen { get; private set; }
@@ -16,9 +17,10 @@ namespace Twitch_Spediteur.Klassen
         public decimal VerkaufPreis { get; private set; }
         public DateTime AktionsDatum { get; private set; }
         public DateTime AbgabeDatum { get; private set; }
-        public bool IsGekauft { get; private set; }
+        public bool IsGekauft { get; set; }
         public int VerladeSchlüssel { get; private set; }
-        public bool HatAuftrag { get; private set; }
+        public bool HatAuftrag { get; set; }
+        public int AuftragsNummer { get; private set; }
         public string Standort { get; set; }
         public Status Ladung { get; set; }
 
@@ -41,9 +43,10 @@ namespace Twitch_Spediteur.Klassen
         }
 
         // Konstruktor für Fuhrparkabfrage SQL
-        public Fahrzeug(string type, decimal load, decimal tank, decimal rent, decimal buy, int flag, bool gekauft, 
-            DateTime erwerb, DateTime abgabe, string stand, bool auftrag)
+        public Fahrzeug(int id, string type, decimal load, decimal tank, decimal rent, decimal buy, int flag, bool gekauft, 
+            DateTime erwerb, DateTime abgabe, string stand, bool auftrag, int auftragnummer)
         {
+            ID = id;
             Typ = type;
             Zuladung = load;
             Tankvolumen = tank;
@@ -55,6 +58,7 @@ namespace Twitch_Spediteur.Klassen
             AktionsDatum = erwerb;
             AbgabeDatum = abgabe;
             HatAuftrag = auftrag;
+            AuftragsNummer = auftragnummer;
             Standort = stand;
         }
 
@@ -67,11 +71,10 @@ namespace Twitch_Spediteur.Klassen
          * Sattelzug:   mieten 15000    kaufen 300000
          */
 
-        public decimal FahrzeugMieten()
+        public void FahrzeugMieten()
         {
             AktionsDatum = DateTime.Now;
             IsGekauft = false;
-            return MietPreis;
         }
 
         internal void WurdeGekauft()
@@ -79,9 +82,11 @@ namespace Twitch_Spediteur.Klassen
             this.IsGekauft = true;
         }
 
-        internal void GebeAuftrag()
+        internal void GebeAuftrag(int auftrag)
         {
             HatAuftrag = true;
+            AuftragsNummer = auftrag;
+            Standort = "==> Abfahrt";
         }
     }
 }

@@ -9,12 +9,12 @@ namespace Twitch_Spediteur.Fenster
     /// <summary>
     /// Interaktionslogik für WareWindow.xaml
     /// </summary>
-    public partial class WareWindow : Window
+    public partial class WareFenster : Window
     {
         List<Ware> waren = new List<Ware>();
         SQLite sql = new SQLite();
 
-        public WareWindow()
+        public WareFenster()
         {
             InitializeComponent();
             InitializeWarenKatalog();
@@ -26,7 +26,7 @@ namespace Twitch_Spediteur.Fenster
 
         private void InitializeWarenKatalog()
         {
-            waren = sql.HoleWaren(waren);
+            sql.HoleWaren(waren);
             AktualisiereWarenKatalog();
         }
 

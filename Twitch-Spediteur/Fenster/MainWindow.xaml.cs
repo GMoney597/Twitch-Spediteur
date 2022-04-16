@@ -115,7 +115,7 @@ namespace Twitch_Spediteur
                 {
                     if (sp.Einloggen(name_mail, passwort))
                     {
-                        UserWindow user = new UserWindow(sp);
+                        SpielerFenster user = new SpielerFenster(sp);
                         user.Show();
                     }
 
@@ -126,13 +126,13 @@ namespace Twitch_Spediteur
 
         private void cmdFrachtmarkt_Click(object sender, RoutedEventArgs e)
         {
-            WareWindow ware = new WareWindow();
+            WareFenster ware = new WareFenster();
             ware.Show();
         }
 
         private void cmdEntfernungen_Click(object sender, RoutedEventArgs e)
         {
-            Entfernungen entfernungen = new Entfernungen();
+            EntfernungFenster entfernungen = new EntfernungFenster();
             entfernungen.Show();
         }
     }

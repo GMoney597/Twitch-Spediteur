@@ -20,30 +20,33 @@ namespace Twitch_Spediteur.Fenster
     /// </summary>
     public partial class FahrzeugZuweisenMessageBox : Window
     {
+        SQLite sql = new SQLite();
         List<Fahrzeug> Fuhrpark = new List<Fahrzeug>();
-        Angebot angebot;
+        Fahrzeug gewaehltesFahrzeug;
+        Auftrag gewaehlterAuftrag;
 
-        public FahrzeugZuweisenMessageBox(List<Fahrzeug> fuhr, Angebot ang)
+        public FahrzeugZuweisenMessageBox(List<Fahrzeug> fuhr, Auftrag auf)
         {
             InitializeComponent();
             Fuhrpark = fuhr;
-            angebot = ang;
+            gewaehlterAuftrag = auf;
 
             cboFahrzeuge.ItemsSource = Fuhrpark;
         }
 
         private void cmdSend_Click(object sender, RoutedEventArgs e)
         {
-            Auftrag auftrag = new Auftrag(angebot.ID, angebot.Abholort, angebot.Lieferort, angebot.Bezeichnung, 
-                angebot.Zustand, ((Fahrzeug)cboFahrzeuge.SelectedItem).Typ, ((Fahrzeug)cboFahrzeuge.SelectedItem).HatAuftrag);
+            // Parameter: AngebotID, Abholort, Lieferort, Ware, AuftragStatus, FahrzeugID
+            sql.AktualisiereAuftrag(gewaehlterAuftrag, gewaehltesFahrzeug);
             MessageBox.Show("Fahrzeug wurde mit einem Auftrag versendet", "Auftrag in Ausführung", MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
         }
 
         private void cboFahrzeuge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            tbkGewaehltesFahrzeug.Text = "Fahrzeug:\t " + ((Fahrzeug)cboFahrzeuge.SelectedItem).Typ +
-                "\nStandort:\t" + ((Fahrzeug)cboFahrzeuge.SelectedItem).HatAuftrag;
+            gewaehltesFahrzeug = (Fahrzeug)cboFahrzeuge.SelectedItem;
+            tbkGewaehltesFahrzeug.Text = "Fahrzeug: " + gewaehltesFahrzeug.Typ;
+            tbkStandort.Text = "Standort: " + gewaehltesFahrzeug.Standort;
         }
     }
 }

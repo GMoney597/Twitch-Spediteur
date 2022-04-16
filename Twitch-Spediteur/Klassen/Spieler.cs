@@ -18,7 +18,7 @@ namespace Twitch_Spediteur
         public decimal Bargeld { get; private set; }
         public decimal Konto { get; private set; }
         public List<Fahrzeug> Fuhrpark { get; private set; } = new List<Fahrzeug>();
-        public List<Angebot> Auftraege { get; private set; } = new List<Angebot>();
+        public List<Auftrag> Auftraege { get; private set; } = new List<Auftrag>();
         public List<Nachricht> Nachrichten { get; private set; } = new List<Nachricht>();
         public string Startort { get; private set; }
 
@@ -35,6 +35,11 @@ namespace Twitch_Spediteur
             Konto = 0.0M;
         }
 
+        internal void ResetAuftraege()
+        {
+            Auftraege = new List<Auftrag>();
+        }
+
         public Spieler(int id, string Name, string Mail, decimal Bar, decimal Kontostand, string Ort)
         {
             ID = id;
@@ -43,6 +48,11 @@ namespace Twitch_Spediteur
             Bargeld = Bar;
             Konto = Kontostand;
             Startort = Ort;
+        }
+
+        internal void ResetFuhrpark()
+        {
+            Fuhrpark = new List<Fahrzeug>();
         }
 
         public bool Registrieren()
@@ -72,6 +82,12 @@ namespace Twitch_Spediteur
         {
             Fuhrpark.Add(temp);
             sql.ParkeFahrzeug(this.Spielername, temp);
+        }
+
+        internal void GebeAuftrag(Auftrag gewaehlterAuftrag)
+        {
+            Auftraege.Add(gewaehlterAuftrag);
+            sql.SpeichereAuftrag(gewaehlterAuftrag, ID);
         }
     }
 }

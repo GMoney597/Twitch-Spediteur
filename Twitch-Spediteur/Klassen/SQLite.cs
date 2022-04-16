@@ -21,6 +21,7 @@ namespace Twitch_Spediteur
         static SQLiteDataAdapter sqlDA = new SQLiteDataAdapter();
         DataTable dtaTemp = new DataTable();
         SHA256 sha256 = SHA256.Create();
+        Random random = new Random();
 
         public SQLite()
         {
@@ -60,6 +61,70 @@ namespace Twitch_Spediteur
             return result;
         }
 
+        internal void AktualisiereAuftrag(Auftrag gewaehlterAuftrag, Fahrzeug gewaehltesFahrzeug)
+        {
+            //Auftrag.FahrzeugID = ((Fahrzeug)cboFahrzeuge.SelectedItem).ID;
+            //Auftrag.AendereAusfuehrung(Angebot.Status.Abholung);
+            //((Fahrzeug)cboFahrzeuge.SelectedItem).GebeAuftrag(Auftrag.Auftragsnummer);
+
+            sqlCom.CommandText = "UPDATE t_Auftraege SET Status = @status, " +
+                "Fahrzeug_ID = @fzgID, AuftragsStart = @startZeit " +
+                "WHERE A_ID = @auftragsNummer";
+            sqlCom.Parameters.AddWithValue("@status", Auftrag.Status.Abholung);
+            sqlCom.Parameters.AddWithValue("@fzgID", gewaehltesFahrzeug.ID);
+            sqlCom.Parameters.AddWithValue("@startZeit", DateTime.Now.ToString());
+            sqlCom.Parameters.AddWithValue("@auftragsNummer", gewaehlterAuftrag.Auftragsnummer);
+
+            SQLiteCommand sqlCom2 = new SQLiteCommand(sqlCon);
+            sqlCom2.CommandText = "UPDATE t_Fahrzeuge SET HatAuftrag = 1, Auftragsnummer = @aID";
+            sqlCom2.Parameters.AddWithValue("@aID", gewaehlterAuftrag.Auftragsnummer);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+                sqlCom2.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
+        internal void HoleRouten(List<Entfernung> routen)
+        {
+            sqlCom.CommandText = "SELECT * FROM t_Routen";
+            sqlDA.SelectCommand = sqlCom;
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+                sqlDA.Fill(dtaTemp = new DataTable());
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+
+            foreach (DataRow row in dtaTemp.Rows)
+            {
+                string[] routenOrte = row.ItemArray[1].ToString().Split('-');
+                int start = random.Next(routenOrte.Length);
+                string abhol = routenOrte[start];
+                string end = routenOrte[routenOrte.Length - start - 1];
+                routen.Add(new Entfernung(abhol, end, abhol + " ==> " + end, Convert.ToInt32(row.ItemArray[2])));
+            }
+        }
+
         internal void HoleFuhrpark(Spieler spieler)
         {
             sqlCom.CommandText = "SELECT * FROM t_Fahrzeuge WHERE Spieler_ID = @sid";
@@ -83,16 +148,44 @@ namespace Twitch_Spediteur
 
             foreach (DataRow row in dtaTemp.Rows)
             {
-                spieler.Fuhrpark.Add(new Fahrzeug("Kombi", 0.5m, 60, 400, 4000, 6, 
-                    Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()), 
-                    DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(), 
-                    Convert.ToBoolean(row.ItemArray[7])));
+                // 
+                spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
+                    Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
+                    DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(),
+                    Convert.ToBoolean(row.ItemArray[7]), Convert.ToInt32(row.ItemArray[8])));
             }
         }
 
-        internal List<Entfernung> HoleOrte(List<Entfernung> orte)
+        internal void SpeichereAuftrag(Auftrag auftrag, int spielerID)
         {
-            sqlCom.CommandText = "SELECT * FROM t_Entfernungen";
+            sqlCom.CommandText = "INSERT INTO t_Auftraege (Abhol, Liefer, Entfernung, Bezeichnung, Wert, Status, Spieler_ID) " +
+                "VALUES (@abhol, @liefer, @entf, @bez, @wert, @status, @spID)";
+            sqlCom.Parameters.AddWithValue("@abhol", auftrag.Abholort);
+            sqlCom.Parameters.AddWithValue("@liefer", auftrag.Lieferort);
+            sqlCom.Parameters.AddWithValue("@entf", auftrag.Entfernung);
+            sqlCom.Parameters.AddWithValue("@bez", auftrag.Bezeichnung);
+            sqlCom.Parameters.AddWithValue("@wert", auftrag.Auftragssumme);
+            sqlCom.Parameters.AddWithValue("@status", auftrag.Zustand);
+            sqlCom.Parameters.AddWithValue("@spID", spielerID);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
+        internal void HoleOrte(List<Ort> orte)
+        {
+            sqlCom.CommandText = "SELECT * FROM t_Orte";
             sqlDA.SelectCommand = sqlCom;
 
             try
@@ -112,13 +205,11 @@ namespace Twitch_Spediteur
 
             foreach (DataRow row in dtaTemp.Rows)
             {
-                orte.Add(new Entfernung(row.ItemArray[1].ToString(), row.ItemArray[2].ToString(), Convert.ToInt16(row.ItemArray[3])));
+                orte.Add(new Ort(row.ItemArray[1].ToString()));
             }
-
-            return orte;
         }
 
-        internal List<Angebot> HoleAuftraege(List<Angebot> frachten, Spieler sp)
+        internal void HoleAuftraege(Spieler sp)
         {
             Spieler spieler = sp;
 
@@ -140,53 +231,37 @@ namespace Twitch_Spediteur
                 sqlCon.Close();
             }
 
-            // Werte: ID, Startort, Zielort, Bezeichnung, Menge, Wert, Status, SpielerID, FahrzeugID
-            //foreach (DataRow row in dtaTemp.Rows)
-            //{
-            //    if (Convert.ToInt16(row[6]) == 0)
-            //    {
-            //        frachten.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(), 
-            //            row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]), 
-            //            (Fracht.Status)Convert.ToInt16(row.ItemArray[6])));
-            //    }
-            //    else if (Convert.ToInt16(row[6]) == 1)
-            //    {
-            //        if (Convert.ToInt16(row[7]) == sp.ID)
-            //        {
-            //            sp.Auftraege.Add(new Fracht(Convert.ToInt16(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(),
-            //            row.ItemArray[3].ToString(), Convert.ToDecimal(row.ItemArray[4]), Convert.ToDecimal(row.ItemArray[5]),
-            //            (Fracht.Status)Convert.ToInt16(row.ItemArray[6])));
-            //        }
-            //    }
-            //}
-
-            return frachten;
+            // Werte: ID, Startort, Zielort, Entfernung, Bezeichnung, Wert, Status, SpielerID, FahrzeugID, AuftragsDatum
+            foreach (DataRow row in dtaTemp.Rows)
+            {
+                if (row.ItemArray[9] == DBNull.Value)
+                {
+                    sp.Auftraege.Add(new Auftrag(Convert.ToInt32(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(),
+                        Convert.ToInt32(row.ItemArray[3]), row.ItemArray[4].ToString(), Convert.ToDecimal(row.ItemArray[5]),
+                        (Auftrag.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt32(row.ItemArray[7]),
+                        Convert.ToInt32(row.ItemArray[8])));
+                }
+                else
+                {
+                    sp.Auftraege.Add(new Auftrag(Convert.ToInt32(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(),
+                        Convert.ToInt32(row.ItemArray[3]), row.ItemArray[4].ToString(), Convert.ToDecimal(row.ItemArray[5]),
+                        (Auftrag.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt32(row.ItemArray[7]),
+                        Convert.ToInt32(row.ItemArray[8]), DateTime.Parse(row.ItemArray[9].ToString())));
+                }
+            }
         }
 
-        internal void SpeichereEntfernung(string start, string ziel, int distanz)
+        internal void SpeichereEntfernung(string route, int distanz)
         {
-            int row = 0;
-
-            SQLiteCommand sqlCom2 = new SQLiteCommand(sqlCon);
-            sqlCom2.CommandText = "SELECT SZ_Bezeichnung FROM t_Entfernungen WHERE SZ_Bezeichnung = @sz OR SZ_Bezeichnung = @zs";
-            sqlCom2.Parameters.AddWithValue(@"sz", start+ziel);
-            sqlCom2.Parameters.AddWithValue(@"zs", ziel+start);
-
-                sqlCom.CommandText = "INSERT INTO t_Entfernungen (Start, Ziel, Distanz, SZ_Bezeichnung) " +
-                    "VALUES (@start, @ziel, @dist, @sz)";
-                sqlCom.Parameters.AddWithValue(@"start", start);
-                sqlCom.Parameters.AddWithValue(@"ziel", ziel);
-                sqlCom.Parameters.AddWithValue(@"dist", distanz);
-                sqlCom.Parameters.AddWithValue(@"sz", start + ziel);
+            sqlCom.CommandText = "INSERT INTO t_Route (Route, Distanz) " +
+                "VALUES (@route, @dist)";
+            sqlCom.Parameters.AddWithValue(@"route", route);
+            sqlCom.Parameters.AddWithValue(@"dist", distanz);
 
             try
             {
                 sqlCon.Open();
-                row = Convert.ToInt32(sqlCom2.ExecuteNonQuery());
-                if (row <= 1)
-                {
-                    sqlCom.ExecuteNonQuery();
-                }
+                sqlCom.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -198,7 +273,7 @@ namespace Twitch_Spediteur
             }
         }
 
-        internal List<Ware> HoleWaren(List<Ware> waren)
+        internal void HoleWaren(List<Ware> waren)
         {
             sqlCom.CommandText = "SELECT * FROM t_Waren";
             sqlDA.SelectCommand = sqlCom;
@@ -224,8 +299,6 @@ namespace Twitch_Spediteur
                     Convert.ToDecimal(row.ItemArray[3]), (Ware.Einheit)Convert.ToInt16(row.ItemArray[4]),
                     (Ware.Merkmal)Convert.ToInt16(row.ItemArray[5])));
             }
-
-            return waren;
         }
 
         internal void BargeldUpdate(string spielername, decimal bargeld)
@@ -356,8 +429,8 @@ namespace Twitch_Spediteur
 
             foreach (DataRow dr in dtaTemp.Rows)
             {
-                list.Add(new Spieler(Convert.ToInt16(dr[0]), dr.ItemArray[1].ToString(), dr.ItemArray[2].ToString(), 
-                    Convert.ToDecimal(dr.ItemArray[3]), Convert.ToDecimal(dr.ItemArray[4]), 
+                list.Add(new Spieler(Convert.ToInt16(dr[0]), dr.ItemArray[1].ToString(), dr.ItemArray[2].ToString(),
+                    Convert.ToDecimal(dr.ItemArray[3]), Convert.ToDecimal(dr.ItemArray[4]),
                     dr.ItemArray[5].ToString()));
             }
 
@@ -385,7 +458,7 @@ namespace Twitch_Spediteur
 
                     if (dtaTemp.Rows[0].ItemArray[3].ToString() == pwComp)
                     {
-                       result = true;
+                        result = true;
                     }
                 }
             }

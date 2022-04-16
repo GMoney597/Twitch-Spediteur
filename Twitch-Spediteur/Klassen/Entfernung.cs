@@ -2,17 +2,17 @@
 {
     public class Entfernung
     {
-        public string Start { get; private set; }
-        public string Ziel { get; private set; }
+        public string Abholort { get; private set; }
+        public string Lieferort { get; private set; }
+        public string Route { get; private set; }
         public int Distanz { get; private set; }
-        public string SZ { get; private set; }
 
-        public Entfernung(string start, string ziel, int dist)
+        public Entfernung(string start, string ziel, string rou, int dist)
         {
-            Start = start;
-            Ziel = ziel;
+            Abholort = start;
+            Lieferort = ziel;
+            Route = rou;
             Distanz = dist;
-            SZ = start + ziel;
         }
     }
 }

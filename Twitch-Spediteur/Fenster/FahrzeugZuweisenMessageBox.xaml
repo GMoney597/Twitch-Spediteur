@@ -18,7 +18,10 @@
         </Grid.RowDefinitions>
         <TextBlock Text="Welches Fahrzeug soll dieses Auftrags-Angebot ausführen?" Grid.Row="0" Grid.ColumnSpan="2" FontSize="20" TextWrapping="Wrap" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <ComboBox Name="cboFahrzeuge" DisplayMemberPath="Typ" Grid.Row="1" Grid.Column="0" Margin="10" SelectionChanged="cboFahrzeuge_SelectionChanged"/>
-        <TextBlock Name="tbkGewaehltesFahrzeug" Grid.Row="1" Grid.Column="1" Margin="10" TextAlignment="Right"/>
+        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10" Orientation="Vertical">
+            <TextBlock Name="tbkGewaehltesFahrzeug" HorizontalAlignment="Left" />
+            <TextBlock Name="tbkStandort" HorizontalAlignment="Left" />
+        </StackPanel>
         <Button Name="cmdSend" Content="Zuweisen" Grid.Row="2" Grid.Column="0" Margin="10" Click="cmdSend_Click" IsDefault="True"/>
         <Button Name="cmdAbort" Content="Abbrechen" Grid.Row="2" Grid.Column="1" Margin="10" IsCancel="True"/>
     </Grid>

@@ -1,4 +1,4 @@
-﻿<Window x:Class="Twitch_Spediteur.UserWindow"
+﻿<Window x:Class="Twitch_Spediteur.SpielerFenster"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -30,17 +30,19 @@
         </UniformGrid>
         <TextBlock Text="Fuhrpark- und Auftragsübersicht" HorizontalAlignment="Center" DockPanel.Dock="Top" FontSize="30"/>
 
-        <TabControl Margin="10" Background="LightGray">
+        <TabControl Margin="10" Background="LightGray" >
             <!--#region Fuhrpark-->
             <TabItem Header="Fuhrpark" Background="Aqua">
                 <DataGrid Name="dtgFuhrpark" Margin="2" AutoGenerateColumns="False">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Fahrzeug" Binding="{Binding Typ}" Width="100"/>
-                        <DataGridTextColumn Header="Tankstand" Binding="{Binding Tankvolumen}" Width="100"/>
-                        <DataGridTextColumn Header="Abgabedatum" Binding="{Binding Abgabedatum}" Width="100"/>
-                        <DataGridTextColumn Header="Standort" Binding="{Binding Standort}" Width="100"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Ladung}" Width="100"/>
-                        <DataGridTextColumn Header="Auftrag" Width="67"/>
+                        <DataGridTextColumn Header="Fahrzeug" Binding="{Binding Typ}" />
+                        <DataGridTextColumn Header="Tankstand" Binding="{Binding Tankvolumen}" />
+                        <DataGridTextColumn Header="Abgabedatum" Binding="{Binding AbgabeDatum, StringFormat=dd.MM.yyyy}" />
+                        <DataGridCheckBoxColumn Header="Ist gekauft" Binding="{Binding IsGekauft}" IsReadOnly="True" />
+                        <DataGridTextColumn Header="Standort" Binding="{Binding Standort}" />
+                        <DataGridTextColumn Header="Status" Binding="{Binding Ladung}" />
+                        <DataGridCheckBoxColumn Header="HatAuftrag" Binding="{Binding HatAuftrag}" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Auftrag#" Binding="{Binding AuftragsNummer}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
@@ -49,27 +51,21 @@
             <TabItem Header="Aufträge" Background="Aquamarine">
                 <DataGrid Name="dtgSpielerAuftrage" Margin="2" AutoGenerateColumns="False" >
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" Width="100"/>
-                        <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}" Width="100"/>
-                        <DataGridTemplateColumn Header="Strecke in %" Width="100">
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <TextBlock Name="tbkStrecke" TextAlignment="Center" />
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
-                        <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Wert, StringFormat=#0.00 €}"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Ausfuehrung}" Width="100"/>
-                        <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" Visibility="Collapsed"/>
-                        <DataGridTemplateColumn Header="Ausführen" Width="74">
+                        <DataGridTextColumn Header="#" Binding="{Binding Auftragsnummer}" />
+                        <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" />
+                        <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}" />
+                        <DataGridTextColumn Header="Strecke in %" TextBlock.TextAlignment="Center" Binding="{Binding Erfuellungsgrad, StringFormat=#0 %}" />
+                        <DataGridTextColumn Header="Warenart" Binding="{Binding Bezeichnung}" />
+                        <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Auftragssumme, StringFormat=#0.00 €}"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding Zustand}" />
+                        <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" />
+                       <DataGridTemplateColumn Header="Ausführen" >
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Name="cmdAusfuehren" Content="LOS !" Margin="2" Click="cmdAusfuehren_Click"/>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
-
                         </DataGridTemplateColumn>
-
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>

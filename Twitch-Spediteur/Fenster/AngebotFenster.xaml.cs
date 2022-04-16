@@ -1,16 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using Twitch_Spediteur.Klassen;
 
 namespace Twitch_Spediteur.Fenster
@@ -18,19 +8,19 @@ namespace Twitch_Spediteur.Fenster
     /// <summary>
     /// Interaktionslogik für FreightWindow.xaml
     /// </summary>
-    public partial class FreightWindow : Window
+    public partial class AngebotFenster : Window
     {
         public static Random rand = new Random();
-        List<Entfernung> orte = new List<Entfernung>();
+        List<Ort> orte = new List<Ort>();
+        List<Entfernung> routen = new List<Entfernung>();
         List<Ware> waren = new List<Ware>();
         List<Angebot> frachten = new List<Angebot>();
         List<Ware> moeglicheWaren = new List<Ware>();
-
         List<int> ladungsKeys = new List<int>();
         Spieler spieler;
         SQLite sql = new SQLite();
 
-        public FreightWindow(Spieler sp)
+        public AngebotFenster(Spieler sp)
         {
             InitializeComponent();
             spieler = sp;
@@ -39,15 +29,15 @@ namespace Twitch_Spediteur.Fenster
 
         private void InitializeFrachtBoerse()
         {
-
             // Hole aktuelle Frachtaufträge aus der DB und weise sie der Börse oder dem Spieler zu
-            frachten = sql.HoleAuftraege(frachten, spieler);
+            // frachten = sql.HoleAuftraege(frachten, spieler);
 
             if (frachten.Count < 10)
             {
                 // Erstelle Frachtaufträge bis Börse mindestens 10 Aufträge anbietet
-                orte = sql.HoleOrte(orte);
-                waren = sql.HoleWaren(waren);
+                sql.HoleOrte(orte);
+                sql.HoleWaren(waren);
+                sql.HoleRouten(routen);
 
                 foreach (Fahrzeug fahrzeug in spieler.Fuhrpark)
                 {
@@ -58,17 +48,17 @@ namespace Twitch_Spediteur.Fenster
                     }
                 }
 
+                // Wenn weniger als 10 Frachtangebote vorhanden sind, ergänze, bis 10 Angebote
                 while (frachten.Count < 10)
                 {
                     Ware w = moeglicheWaren[rand.Next(moeglicheWaren.Count)];
 
                     int menge = rand.Next(0, 500);
-                    // decimal summe = Math.Round(Convert.ToDecimal((rand.Next(50, 120) * (Double)w.Preis) * menge), 2);
+                    
+                    Entfernung ent = (Entfernung)routen[rand.Next(routen.Count)];
+                    decimal summe = ent.Distanz * 0.5m;
 
-                    Entfernung ort = orte[rand.Next(orte.Count)];
-                    decimal summe = ort.Distanz * 0.5m;
-
-                    frachten.Add(new Angebot(ort.Start, ort.Ziel, ort.Distanz, w.Bezeichnung, w.BasisEinheit.ToString(), menge, summe));
+                    frachten.Add(new Angebot(ent.Abholort, ent.Lieferort, ent.Distanz, w.Bezeichnung, w.BasisEinheit.ToString(), menge, summe));
                 }
             }
 
@@ -77,22 +67,20 @@ namespace Twitch_Spediteur.Fenster
 
         private void cmdAnnehmen_Click(object sender, RoutedEventArgs e)
         {
-            Angebot temp = (Angebot)dtgAngebot.CurrentItem;
-            //MessageBoxButton accept = new MessageBoxButton();
-            //MessageBoxButton decline = new MessageBoxButton();
+            Angebot gewaehlterAuftrag = (Angebot)dtgAngebot.CurrentItem;
 
-            MessageBoxResult msgResult = MessageBox.Show("Auftrag: \t\t" + temp.Bezeichnung + 
-                "\nBezahlung: \t" + String.Format("{0:C2}", temp.Wert) +
-                "\nAbhol-Ort: \t" + temp.Abholort + 
-                "\nLiefer-Ort: \t" + temp.Lieferort, "Fracht annehmen", 
+            MessageBoxResult msgResult = MessageBox.Show("Auftrag: \t\t" + gewaehlterAuftrag.Bezeichnung + 
+                "\nBezahlung: \t" + String.Format("{0:C2}", gewaehlterAuftrag.Wert) +
+                "\nAbhol-Ort: \t" + gewaehlterAuftrag.Abholort + 
+                "\nLiefer-Ort: \t" + gewaehlterAuftrag.Lieferort, "Fracht annehmen", 
                 MessageBoxButton.YesNo, MessageBoxImage.Question);
             
             if (msgResult == MessageBoxResult.Yes)
             {
-                spieler.Auftraege.Add(temp);
-
+                spieler.GebeAuftrag(new Auftrag(gewaehlterAuftrag));
+                
                 dtgAngebot.ItemsSource = null;
-                frachten.Remove(temp);
+                frachten.Remove(gewaehlterAuftrag);
                 dtgAngebot.ItemsSource = frachten;
             }
         }

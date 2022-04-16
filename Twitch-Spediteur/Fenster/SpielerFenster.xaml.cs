@@ -9,7 +9,7 @@ namespace Twitch_Spediteur
     /// <summary>
     /// Interaktionslogik für UserInterface.xaml
     /// </summary>
-    public partial class UserWindow : Window
+    public partial class SpielerFenster : Window
     {
         SQLite sql = new SQLite();
         //public static List<Ort> ortsListe = new List<Ort>();
@@ -18,7 +18,7 @@ namespace Twitch_Spediteur
         private Spieler sp;
         //FileStream file = new FileStream("")
 
-        public UserWindow(Spieler spieler)
+        public SpielerFenster(Spieler spieler)
         {
             sp = spieler;
             InitializeComponent();
@@ -35,13 +35,14 @@ namespace Twitch_Spediteur
 
         private void PruefeSpielerAuftraege()
         {
-            dtgSpielerAuftrage.ItemsSource = null;
-            // dtgSpielerAuftrage.ItemsSource = sql.HoleAuftraege(sp);
+            sp.ResetAuftraege();
+            sql.HoleAuftraege(sp);
             dtgSpielerAuftrage.ItemsSource = sp.Auftraege;
         }
 
         private void PruefeSpielerFuhrpark()
         {
+            sp.ResetFuhrpark();
             sql.HoleFuhrpark(sp);
             dtgFuhrpark.ItemsSource = null;
 
@@ -88,25 +89,29 @@ namespace Twitch_Spediteur
 
         private void cmdFahrzeug_Click(object sender, RoutedEventArgs e)
         {
-            VehicleWindow vehicle = new VehicleWindow(sp);
+            FahrzeugFenster vehicle = new FahrzeugFenster(sp);
             vehicle.ShowDialog();
             txtBargeld.Text = sp.Bargeld.ToString();
         }
 
         private void cmdFracht_Click(object sender, RoutedEventArgs e)
         {
-            FreightWindow freight = new FreightWindow(sp);
+            AngebotFenster freight = new AngebotFenster(sp);
             freight.ShowDialog();
             PruefeSpielerAuftraege();
         }
 
         private void cmdAusfuehren_Click(object sender, RoutedEventArgs e)
         {
-            Angebot temp = (Angebot)dtgSpielerAuftrage.SelectedItem;
+            Auftrag temp = (Auftrag)dtgSpielerAuftrage.SelectedItem;
             int row = dtgSpielerAuftrage.SelectedIndex;
 
             FahrzeugZuweisenMessageBox fzgmsgbox = new FahrzeugZuweisenMessageBox(sp.Fuhrpark, temp);
             fzgmsgbox.ShowDialog();
+
+            PruefeSpielerFuhrpark();
+            PruefeSpielerAuftraege();
+
         }
     }
 }

@@ -18,7 +18,7 @@ namespace Twitch_Spediteur.Fenster
     /// <summary>
     /// Interaktionslogik für VehicleWindow.xaml
     /// </summary>
-    public partial class VehicleWindow : Window
+    public partial class FahrzeugFenster : Window
     {
         List<Fahrzeug> neuFahrzeuge = new List<Fahrzeug>();
         List<Fahrzeug> gebrauchtFahrzeuge = new List<Fahrzeug>();
@@ -26,7 +26,7 @@ namespace Twitch_Spediteur.Fenster
         Spieler sp;
         Fahrzeug temp;
 
-        public VehicleWindow(Spieler spieler)
+        public FahrzeugFenster(Spieler spieler)
         {
             InitializeComponent();
 
@@ -106,6 +106,7 @@ namespace Twitch_Spediteur.Fenster
                     " Woche mieten?\nAbgabe ist am: " + DateTime.Today.AddDays(7).ToShortDateString(), "Bestätige den Mietvertrag", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
+                    temp.FahrzeugMieten();
                     sp.ParkeFahrzeug(temp);
                     sp.GeldTransaktion(temp.MietPreis);
                     cmdClose_Click(sender, e);
