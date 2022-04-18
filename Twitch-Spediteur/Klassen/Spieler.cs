@@ -20,8 +20,8 @@ namespace Twitch_Spediteur
         public List<Fahrzeug> Fuhrpark { get; private set; } = new List<Fahrzeug>();
         public List<Auftrag> Auftraege { get; private set; } = new List<Auftrag>();
         public List<Nachricht> Nachrichten { get; private set; } = new List<Nachricht>();
+        public List<Fracht> Frachten { get; private set; } = new List<Fracht>();
         public string Startort { get; private set; }
-
 
         public Spieler(string name, string mail, string passwort)
         {
@@ -72,16 +72,22 @@ namespace Twitch_Spediteur
             throw new System.NotImplementedException();
         }
 
+        internal void KontoTransaktion(decimal auftragssumme)
+        {
+            Konto += auftragssumme;
+            sql.KontoUpdate(this, Konto);
+        }
+
         internal void GeldTransaktion(decimal preis)
         {
             Bargeld -= preis;
-            sql.BargeldUpdate(this.Spielername, Bargeld);
+            sql.BargeldUpdate(this, Bargeld);
         }
 
         internal void ParkeFahrzeug(Fahrzeug temp)
         {
             Fuhrpark.Add(temp);
-            sql.ParkeFahrzeug(this.Spielername, temp);
+            sql.ParkeFahrzeug(this, temp);
         }
 
         internal void GebeAuftrag(Auftrag gewaehlterAuftrag)

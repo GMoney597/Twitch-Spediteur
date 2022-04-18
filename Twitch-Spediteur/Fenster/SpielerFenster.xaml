@@ -8,6 +8,7 @@
         Title="Spieler-Informationen" Height="450" Width="800">
     <DockPanel Background="#FFFF7F00" LastChildFill="True">
         <StackPanel Orientation="Vertical" VerticalAlignment="Center" DockPanel.Dock="Left" MinWidth="200">
+            <TextBlock Name="tbkSpielZeit" FontSize="30" Foreground="Magenta" TextAlignment="Right" />
             <TextBlock Name="tbkSpieler" Text="Spieler" FontSize="20"/>
             <Label Background="DarkGray" Height="15" />
             <TextBlock Text="Standort:" />
@@ -33,7 +34,7 @@
         <TabControl Margin="10" Background="LightGray" >
             <!--#region Fuhrpark-->
             <TabItem Header="Fuhrpark" Background="Aqua">
-                <DataGrid Name="dtgFuhrpark" Margin="2" AutoGenerateColumns="False">
+                <DataGrid Name="dtgFuhrpark" Margin="2" AutoGenerateColumns="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Fahrzeug" Binding="{Binding Typ}" />
                         <DataGridTextColumn Header="Tankstand" Binding="{Binding Tankvolumen}" />
@@ -49,27 +50,27 @@
             <!--#endregion-->
             <!--#region Auftragsliste-->
             <TabItem Header="Aufträge" Background="Aquamarine">
-                <DataGrid Name="dtgSpielerAuftrage" Margin="2" AutoGenerateColumns="False" >
+                <DataGrid Name="dtgSpielerAuftrage" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" 
+                          CanUserDeleteRows="False" MouseDoubleClick="dtgSpielerAuftrage_MouseDoubleClick">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding Auftragsnummer}" />
                         <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" />
                         <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}" />
-                        <DataGridTextColumn Header="Strecke in %" TextBlock.TextAlignment="Center" Binding="{Binding Erfuellungsgrad, StringFormat=#0 %}" />
+                        <DataGridTextColumn Header="Strecke in %" Binding="{Binding Erfuellungsgrad}" />
                         <DataGridTextColumn Header="Warenart" Binding="{Binding Bezeichnung}" />
                         <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Auftragssumme, StringFormat=#0.00 €}"/>
                         <DataGridTextColumn Header="Status" Binding="{Binding Zustand}" />
                         <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" />
-                       <DataGridTemplateColumn Header="Ausführen" >
-                            <DataGridTemplateColumn.CellTemplate>
-                                <DataTemplate>
-                                    <Button Name="cmdAusfuehren" Content="LOS !" Margin="2" Click="cmdAusfuehren_Click"/>
-                                </DataTemplate>
-                            </DataGridTemplateColumn.CellTemplate>
-                        </DataGridTemplateColumn>
                     </DataGrid.Columns>
                 </DataGrid>
             </TabItem>
             <!--#endregion-->
+            <!--#region Frachten in Ausführung-->
+            <TabItem Header="Frachten" Background="LightSkyBlue">
+                <DataGrid Name="dtgFrachten" Margin="2" IsReadOnly="True">
+                    
+                </DataGrid>
+            </TabItem>
         </TabControl>
     </DockPanel>
 </Window>

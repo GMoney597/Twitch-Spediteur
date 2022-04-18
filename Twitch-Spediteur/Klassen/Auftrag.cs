@@ -9,20 +9,17 @@ namespace Twitch_Spediteur.Fenster
         public string Abholort { get; private set; }
         public string Lieferort { get; private set; }
         public int Entfernung { get; set; }
-        public int Erfuellungsgrad { get; private set; }
+        public string Erfuellungsgrad { get; private set; }
         public string Bezeichnung { get; set; }
         public decimal Auftragssumme { get; private set; }
         public Status Zustand { get; set; }
         public int SpielerID { get; private set; }
-        public int FahrzeugID { get; set; }
+        public string FahrzeugID { get; set; }
         public DateTime AuftragsDatum { get; private set; }
         public enum Status
         {
             Offen,
-            Abholung,
-            Beladung,
             Zustellung,
-            Entladung,
             Erledigt
         }
 
@@ -50,13 +47,13 @@ namespace Twitch_Spediteur.Fenster
             Auftragssumme = wert;
             Zustand = stat;
             SpielerID = spID;
-            FahrzeugID = fzgID;
+            FahrzeugID = fzgID.ToString();
             AuftragsDatum = start;
         }
 
         // Konstruktor für SQL-Abfrage ohne Start-Datum = DB-Null
         public Auftrag(int auftragID, string abhol, string liefer, int entf, string bez, decimal wert,
-            Status stat, int spID, int fzgID)
+            Status stat, int spID)
         {
             Auftragsnummer = auftragID;
             Abholort = abhol;
@@ -66,7 +63,7 @@ namespace Twitch_Spediteur.Fenster
             Auftragssumme = wert;
             Zustand = stat;
             SpielerID = spID;
-            FahrzeugID = fzgID;
+            FahrzeugID = "keins";
         }
     }
 }

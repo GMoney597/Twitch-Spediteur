@@ -86,3 +86,10 @@
 	14. April 2022
 	- Waren im Spieler-Fenster anzeigen: Start-Ziel-Status%-Auftragssumme-StatusErledigung-FahrzeugID
 	- Twitch-Datenbank ist hochgeladen: NuGet-Package herunterladen: System.Data.Sqlite
+
+	18. April 2022
+	- Fahrzeuge können Aufträge annehmen
+	- Aufträge werden in der DB gespeichert
+	- Aufträge können nur erfüllt werden, wenn Fahrzeuge verfügbar sind -> Zuweisung(Fenster)
+	- Auftrags- / Fahrzeug-Übersicht nur noch ReadOnly
+	- Auftrags-Übersicht Doppelklick sorgt für Auftragszuweisung

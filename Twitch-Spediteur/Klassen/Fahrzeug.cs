@@ -20,7 +20,7 @@ namespace Twitch_Spediteur.Klassen
         public bool IsGekauft { get; set; }
         public int VerladeSchlüssel { get; private set; }
         public bool HatAuftrag { get; set; }
-        public int AuftragsNummer { get; private set; }
+        public string AuftragsNummer { get; private set; }
         public string Standort { get; set; }
         public Status Ladung { get; set; }
 
@@ -44,7 +44,7 @@ namespace Twitch_Spediteur.Klassen
 
         // Konstruktor für Fuhrparkabfrage SQL
         public Fahrzeug(int id, string type, decimal load, decimal tank, decimal rent, decimal buy, int flag, bool gekauft, 
-            DateTime erwerb, DateTime abgabe, string stand, bool auftrag, int auftragnummer)
+            DateTime erwerb, DateTime abgabe, string stand, bool auftrag, string auftragnummer)
         {
             ID = id;
             Typ = type;
@@ -62,6 +62,7 @@ namespace Twitch_Spediteur.Klassen
             Standort = stand;
         }
 
+
         /*
          * Kombi:       mieten 400      kaufen 40000
          * Transporter: mieten 900      kaufen 60000
@@ -76,17 +77,21 @@ namespace Twitch_Spediteur.Klassen
             AktionsDatum = DateTime.Now;
             IsGekauft = false;
         }
-
         internal void WurdeGekauft()
         {
             this.IsGekauft = true;
         }
-
         internal void GebeAuftrag(int auftrag)
         {
             HatAuftrag = true;
-            AuftragsNummer = auftrag;
+            AuftragsNummer = auftrag.ToString();
             Standort = "==> Abfahrt";
+        }
+        internal void Freigeben()
+        {
+            HatAuftrag = false;
+            AuftragsNummer = "";
+            Ladung = Status.leer;
         }
     }
 }

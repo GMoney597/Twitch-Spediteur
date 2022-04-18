@@ -1,0 +1,4 @@
+﻿Ideen für weitere Implementierungen oder Ausbaustufen
+
+- Fahrzeuge mit Folgeaufträgen (max 1) ausstatten -> Nevs08
+- Fahrzeuge generell als Enum-Typen ausstatten, geht an "harten" Verbindungen, Bezeichnungen vorbei -> oo_icke_oo

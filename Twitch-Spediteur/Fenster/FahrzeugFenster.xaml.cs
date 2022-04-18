@@ -102,8 +102,10 @@ namespace Twitch_Spediteur.Fenster
         {
             if (temp != null)
             {
+                DateTime rueckgabe = DateTime.Now.AddHours(42);
+
                 MessageBoxResult result = MessageBox.Show("Willst Du das Fahrzeug zu einem Preis von " + temp.MietPreis + " für eine" +
-                    " Woche mieten?\nAbgabe ist am: " + DateTime.Today.AddDays(7).ToShortDateString(), "Bestätige den Mietvertrag", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                    " Woche mieten?\nAbgabe ist am: " + rueckgabe.ToString(), "Bestätige den Mietvertrag", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
                     temp.FahrzeugMieten();

@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Threading;
 using Twitch_Spediteur.Fenster;
 
 namespace Twitch_Spediteur

@@ -21,14 +21,16 @@ namespace Twitch_Spediteur.Fenster
     public partial class FahrzeugZuweisenMessageBox : Window
     {
         SQLite sql = new SQLite();
-        List<Fahrzeug> Fuhrpark = new List<Fahrzeug>();
+        List<Fahrzeug> Fuhrpark;
+        List<Fracht> Frachten;
         Fahrzeug gewaehltesFahrzeug;
         Auftrag gewaehlterAuftrag;
 
-        public FahrzeugZuweisenMessageBox(List<Fahrzeug> fuhr, Auftrag auf)
+        public FahrzeugZuweisenMessageBox(List<Fahrzeug> fuhr, Auftrag auf, List<Fracht> fra)
         {
             InitializeComponent();
             Fuhrpark = fuhr;
+            Frachten = fra;
             gewaehlterAuftrag = auf;
 
             cboFahrzeuge.ItemsSource = Fuhrpark;
@@ -38,6 +40,7 @@ namespace Twitch_Spediteur.Fenster
         {
             // Parameter: AngebotID, Abholort, Lieferort, Ware, AuftragStatus, FahrzeugID
             sql.AktualisiereAuftrag(gewaehlterAuftrag, gewaehltesFahrzeug);
+            Frachten.Add(new Fracht(gewaehltesFahrzeug, gewaehlterAuftrag));
             MessageBox.Show("Fahrzeug wurde mit einem Auftrag versendet", "Auftrag in Ausführung", MessageBoxButton.OK, MessageBoxImage.Information);
             this.Close();
         }

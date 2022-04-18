@@ -70,7 +70,7 @@ namespace Twitch_Spediteur
             sqlCom.CommandText = "UPDATE t_Auftraege SET Status = @status, " +
                 "Fahrzeug_ID = @fzgID, AuftragsStart = @startZeit " +
                 "WHERE A_ID = @auftragsNummer";
-            sqlCom.Parameters.AddWithValue("@status", Auftrag.Status.Abholung);
+            sqlCom.Parameters.AddWithValue("@status", Auftrag.Status.Offen);
             sqlCom.Parameters.AddWithValue("@fzgID", gewaehltesFahrzeug.ID);
             sqlCom.Parameters.AddWithValue("@startZeit", DateTime.Now.ToString());
             sqlCom.Parameters.AddWithValue("@auftragsNummer", gewaehlterAuftrag.Auftragsnummer);
@@ -84,6 +84,27 @@ namespace Twitch_Spediteur
                 sqlCon.Open();
                 sqlCom.ExecuteNonQuery();
                 sqlCom2.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
+        internal void KontoUpdate(Spieler spieler, decimal konto)
+        {
+            sqlCom.CommandText = "UPDATE t_Spieler SET Kontostand = @konto WHERE S_ID = @sid";
+            sqlCom.Parameters.AddWithValue("@konto", konto);
+            sqlCom.Parameters.AddWithValue("@sid", spieler.ID);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
             }
             catch (Exception ex)
             {
@@ -148,11 +169,22 @@ namespace Twitch_Spediteur
 
             foreach (DataRow row in dtaTemp.Rows)
             {
-                // 
-                spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
-                    Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
-                    DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(),
-                    Convert.ToBoolean(row.ItemArray[7]), Convert.ToInt32(row.ItemArray[8])));
+                // DB-Null-Abfrage
+                if (row.ItemArray[8] == DBNull.Value || row.ItemArray[8] == null)
+                {
+                    spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
+                        Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
+                        DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(),
+                        Convert.ToBoolean(row.ItemArray[7]), "kein"));
+                }
+                else
+                {
+                    // Abfrage ohne DBNull
+                    spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
+                        Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
+                        DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(),
+                        Convert.ToBoolean(row.ItemArray[7]), row.ItemArray[8].ToString()));
+                }
             }
         }
 
@@ -234,12 +266,11 @@ namespace Twitch_Spediteur
             // Werte: ID, Startort, Zielort, Entfernung, Bezeichnung, Wert, Status, SpielerID, FahrzeugID, AuftragsDatum
             foreach (DataRow row in dtaTemp.Rows)
             {
-                if (row.ItemArray[9] == DBNull.Value)
+                if (row.ItemArray[9] == DBNull.Value || row.ItemArray[9] == null)
                 {
                     sp.Auftraege.Add(new Auftrag(Convert.ToInt32(row.ItemArray[0]), row.ItemArray[1].ToString(), row.ItemArray[2].ToString(),
                         Convert.ToInt32(row.ItemArray[3]), row.ItemArray[4].ToString(), Convert.ToDecimal(row.ItemArray[5]),
-                        (Auftrag.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt32(row.ItemArray[7]),
-                        Convert.ToInt32(row.ItemArray[8])));
+                        (Auftrag.Status)Convert.ToInt16(row.ItemArray[6]), Convert.ToInt32(row.ItemArray[7])));
                 }
                 else
                 {
@@ -301,11 +332,11 @@ namespace Twitch_Spediteur
             }
         }
 
-        internal void BargeldUpdate(string spielername, decimal bargeld)
+        internal void BargeldUpdate(Spieler spieler, decimal bargeld)
         {
-            sqlCom.CommandText = "UPDATE t_Spieler SET Bargeld = @bar WHERE Spielername = @spieler";
+            sqlCom.CommandText = "UPDATE t_Spieler SET Bargeld = @bar WHERE S_ID = @sid";
             sqlCom.Parameters.AddWithValue("@bar", bargeld);
-            sqlCom.Parameters.AddWithValue("@spieler", spielername);
+            sqlCom.Parameters.AddWithValue("@sid", spieler.ID);
 
             try
             {
@@ -322,29 +353,24 @@ namespace Twitch_Spediteur
             }
         }
 
-        internal void ParkeFahrzeug(string spielername, Fahrzeug temp)
+        internal void ParkeFahrzeug(Spieler sp, Fahrzeug temp)
         {
-            SQLiteCommand sqlCom2 = new SQLiteCommand(sqlCon);
-            sqlCom2.CommandText = "SELECT S_ID FROM t_Spieler WHERE Spielername = @spieler";
-            sqlCom2.Parameters.AddWithValue("@spieler", spielername);
-            int rowID = -1;
-
-            sqlCom.CommandText = "INSERT INTO t_Fahrzeuge (Bezeichnung, Spieler_ID, IsGekauft, Erwerbdatum, Abgabedatum) " +
-                "VALUES (@bez, @spieler, @gekauft, @erwerb, @abgabe)";
+            sqlCom.CommandText = "INSERT INTO t_Fahrzeuge (Bezeichnung, Spieler_ID, IsGekauft, Erwerbdatum, Abgabedatum, Standort, HatAuftrag) " +
+                "VALUES (@bez, @spieler, @gekauft, @erwerb, @abgabe, @stand, @hatauftrag)";
             sqlCom.Parameters.AddWithValue("@bez", temp.Typ);
-            //sqlCom.Parameters.AddWithValue("@spieler", rowID);
+            sqlCom.Parameters.AddWithValue("@spieler", sp.ID);
             sqlCom.Parameters.AddWithValue("@gekauft", temp.IsGekauft);
             sqlCom.Parameters.AddWithValue("@erwerb", temp.AktionsDatum);
             if (!temp.IsGekauft)
             {
-                sqlCom.Parameters.AddWithValue("@abgabe", temp.AktionsDatum.AddDays(7));
+                sqlCom.Parameters.AddWithValue("@abgabe", temp.AktionsDatum.AddHours(42));
             }
+            sqlCom.Parameters.AddWithValue("@stand", sp.Startort);
+            sqlCom.Parameters.AddWithValue("@hatauftrag", 0);
 
             try
             {
                 sqlCon.Open();
-                rowID = Convert.ToInt16(sqlCom2.ExecuteScalar());
-                sqlCom.Parameters.AddWithValue("@spieler", rowID);
                 sqlCom.ExecuteNonQuery();
             }
             catch (Exception ex)
