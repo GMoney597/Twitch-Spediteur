@@ -93,3 +93,6 @@
 	- Aufträge können nur erfüllt werden, wenn Fahrzeuge verfügbar sind -> Zuweisung(Fenster)
 	- Auftrags- / Fahrzeug-Übersicht nur noch ReadOnly
 	- Auftrags-Übersicht Doppelklick sorgt für Auftragszuweisung
+
+	19. April 2022
+	- 

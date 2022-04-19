@@ -25,20 +25,22 @@ namespace Twitch_Spediteur
             sp = spieler;
             InitializeComponent();
             InitializeOrteListe();
+            PruefeSpielerFinanzen();
             PruefeSpielerStartort();
             PruefeSpielerFuhrpark();
             PruefeSpielerAuftraege();
             PruefeSpielerFrachten();
             InitializeSpielZeit();
+        }
 
-            tbkSpielZeit.Text = DateTime.Now.ToShortTimeString();
+        private void PruefeSpielerFinanzen()
+        {
+            sql.HoleSpielerFinanzen(sp);
             tbkSpieler.Text = sp.Spielername;
             txtStandort.Text = sp.Startort;
             txtBargeld.Text = Convert.ToDecimal(sp.Bargeld) + " €";
             txtKontostand.Text = Convert.ToDecimal(sp.Konto) + " €";
         }
-
-        // PRUEFE SPIELER-DATEN Bargeld und Kontostand abrufen, Fahrzeugstandort !!!
 
         private void PruefeSpielerFrachten()
         {
@@ -54,15 +56,15 @@ namespace Twitch_Spediteur
                     AuftragErledigt(fracht);
                     loeschbareFrachten.Add(fracht);
                 }
-                else if (fracht.Zustand != Fracht.Status.Offen)
-                {
-                    var bearbeiteterAuftrag = sp.Auftraege.FindAll(auf => auf.Zustand == Auftrag.Status.Offen);
+                //else if (fracht.Zustand != Fracht.Status.Offen )
+                //{
+                //    var bearbeiteterAuftrag = sp.Auftraege.FindAll(auf => auf.Zustand == Auftrag.Status.Offen);
 
-                    foreach (Auftrag auftrag in sp.Auftraege)
-                    {
-                        auftrag.Zustand = Auftrag.Status.Zustellung;
-                    }
-                }
+                //    foreach (Auftrag auftrag in sp.Auftraege)
+                //    {
+                //        auftrag.Zustand = Auftrag.Status.Zustellung;
+                //    }
+                //}
             }
 
             foreach (Fracht loeschen in loeschbareFrachten)
@@ -75,24 +77,29 @@ namespace Twitch_Spediteur
 
         private void AuftragErledigt(Fracht fracht)
         {
-            var genutztesFahrzeug = sp.Fuhrpark.Find(fuhr => int.Parse(fuhr.AuftragsNummer) == fracht.AuftragID);
+            var FahrzeugeUnterwegs = sp.Fuhrpark.FindAll(fuhr => fuhr.HatAuftrag == true);
+            var genutztesFahrzeug = FahrzeugeUnterwegs.Find(fahr => int.Parse(fahr.AuftragsNummer) == fracht.AuftragID);
             genutztesFahrzeug.Freigeben();
 
             var erfuellterAuftrag = sp.Auftraege.Find(auf => auf.Auftragsnummer == fracht.AuftragID);
             erfuellterAuftrag.Zustand = Auftrag.Status.Erledigt;
             sp.KontoTransaktion(erfuellterAuftrag.Auftragssumme);
+
+            sql.ErledigeAuftrag(fracht);
+            PruefeSpielerFinanzen();
+            PruefeSpielerAuftraege();
+            PruefeSpielerFuhrpark();
         }
 
         private void InitializeSpielZeit()
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 250);
             timer.Start();
             timer.Tick += Timer_Tick;
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            tbkSpielZeit.Text = (DateTime.Parse(tbkSpielZeit.Text)).AddMinutes(1).ToShortTimeString();
             PruefeSpielerFrachten();
         }
 
@@ -154,7 +161,6 @@ namespace Twitch_Spediteur
         {
             FahrzeugFenster vehicle = new FahrzeugFenster(sp);
             vehicle.ShowDialog();
-            txtBargeld.Text = sp.Bargeld.ToString();
             PruefeSpielerFuhrpark();
         }
 

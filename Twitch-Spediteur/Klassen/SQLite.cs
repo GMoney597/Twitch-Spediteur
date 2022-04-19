@@ -61,23 +61,70 @@ namespace Twitch_Spediteur
             return result;
         }
 
+        internal void HoleSpielerFinanzen(Spieler sp)
+        {
+            sqlCom.CommandText = "SELECT Bargeld, Kontostand FROM t_Spieler WHERE S_ID = @sid";
+            sqlCom.Parameters.AddWithValue("@sid", sp.ID);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
         internal void AktualisiereAuftrag(Auftrag gewaehlterAuftrag, Fahrzeug gewaehltesFahrzeug)
         {
-            //Auftrag.FahrzeugID = ((Fahrzeug)cboFahrzeuge.SelectedItem).ID;
-            //Auftrag.AendereAusfuehrung(Angebot.Status.Abholung);
-            //((Fahrzeug)cboFahrzeuge.SelectedItem).GebeAuftrag(Auftrag.Auftragsnummer);
-
             sqlCom.CommandText = "UPDATE t_Auftraege SET Status = @status, " +
                 "Fahrzeug_ID = @fzgID, AuftragsStart = @startZeit " +
                 "WHERE A_ID = @auftragsNummer";
-            sqlCom.Parameters.AddWithValue("@status", Auftrag.Status.Offen);
+            sqlCom.Parameters.AddWithValue("@status", Auftrag.Status.Zustellung);
             sqlCom.Parameters.AddWithValue("@fzgID", gewaehltesFahrzeug.ID);
             sqlCom.Parameters.AddWithValue("@startZeit", DateTime.Now.ToString());
             sqlCom.Parameters.AddWithValue("@auftragsNummer", gewaehlterAuftrag.Auftragsnummer);
 
             SQLiteCommand sqlCom2 = new SQLiteCommand(sqlCon);
-            sqlCom2.CommandText = "UPDATE t_Fahrzeuge SET HatAuftrag = 1, Auftragsnummer = @aID";
+            sqlCom2.CommandText = "UPDATE t_Fahrzeuge SET HatAuftrag = 1, Auftragsnummer = @aID " +
+                "WHERE F_ID = @fzgid";
             sqlCom2.Parameters.AddWithValue("@aID", gewaehlterAuftrag.Auftragsnummer);
+            sqlCom2.Parameters.AddWithValue("@fzgid", gewaehltesFahrzeug.ID);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+                sqlCom2.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
+        internal void ErledigeAuftrag(Fracht fracht)
+        {
+            sqlCom.CommandText = "UPDATE t_Auftraege SET Status = @status " +
+                "WHERE A_ID = @aID";
+            sqlCom.Parameters.AddWithValue("@status", Auftrag.Status.Erledigt);
+            sqlCom.Parameters.AddWithValue("@aID", fracht.AuftragID);
+
+            SQLiteCommand sqlCom2 = new SQLiteCommand(sqlCon);
+            sqlCom2.CommandText = "UPDATE t_Fahrzeuge SET Standort = @neuerStandort, HatAuftrag = 0, Auftragsnummer = NULL " + 
+                "WHERE Auftragsnummer = @aID";
+            sqlCom2.Parameters.AddWithValue("@neuerStandort", fracht.Lieferort);
+            sqlCom2.Parameters.AddWithValue("@aID", fracht.AuftragID);
 
             try
             {
@@ -169,12 +216,24 @@ namespace Twitch_Spediteur
 
             foreach (DataRow row in dtaTemp.Rows)
             {
+                string unterwegs = "";
+
+                if (Convert.ToBoolean(row.ItemArray[7]))
+                {
+                    unterwegs = "=>unterwegs";
+                }
+                else
+                {
+                    unterwegs = row.ItemArray[6].ToString();
+                }
+
+
                 // DB-Null-Abfrage
                 if (row.ItemArray[8] == DBNull.Value || row.ItemArray[8] == null)
                 {
                     spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
                         Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
-                        DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(),
+                        DateTime.Parse(row.ItemArray[5].ToString()), unterwegs,
                         Convert.ToBoolean(row.ItemArray[7]), "kein"));
                 }
                 else
@@ -182,7 +241,7 @@ namespace Twitch_Spediteur
                     // Abfrage ohne DBNull
                     spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
                         Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
-                        DateTime.Parse(row.ItemArray[5].ToString()), row.ItemArray[6].ToString(),
+                        DateTime.Parse(row.ItemArray[5].ToString()), unterwegs,
                         Convert.ToBoolean(row.ItemArray[7]), row.ItemArray[8].ToString()));
                 }
             }

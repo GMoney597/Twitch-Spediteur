@@ -9,7 +9,7 @@ namespace Twitch_Spediteur.Fenster
         public string Abholort { get; private set; }
         public string Lieferort { get; private set; }
         public int Entfernung { get; set; }
-        public string Erfuellungsgrad { get; private set; }
+        //public string Erfuellungsgrad { get; private set; }
         public string Bezeichnung { get; set; }
         public decimal Auftragssumme { get; private set; }
         public Status Zustand { get; set; }
