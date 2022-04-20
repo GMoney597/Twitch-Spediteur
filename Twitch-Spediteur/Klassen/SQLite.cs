@@ -296,7 +296,7 @@ namespace Twitch_Spediteur
 
             foreach (DataRow row in dtaTemp.Rows)
             {
-                orte.Add(new Ort(row.ItemArray[1].ToString()));
+                orte.Add(new Ort(Convert.ToInt32(row.ItemArray[0]), row.ItemArray[1].ToString()));
             }
         }
 
@@ -343,7 +343,7 @@ namespace Twitch_Spediteur
 
         internal void SpeichereEntfernung(string route, int distanz)
         {
-            sqlCom.CommandText = "INSERT INTO t_Route (Route, Distanz) " +
+            sqlCom.CommandText = "INSERT INTO t_Routen (Route, Distanz) " +
                 "VALUES (@route, @dist)";
             sqlCom.Parameters.AddWithValue(@"route", route);
             sqlCom.Parameters.AddWithValue(@"dist", distanz);

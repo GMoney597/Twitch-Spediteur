@@ -13,13 +13,13 @@
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0">
-            <TextBlock Text="Spielername:" />
-            <TextBox Name="txtName" />
-            <TextBlock Text="Mail-Adresse" />
-            <TextBox Name="txtMail" />
-            <TextBlock Text="Passwort" />
-            <PasswordBox Name="pwdPasswort" PasswordChar="°"/>
-            <TextBlock Name="tbkMessage"/>
+            <TextBlock Text="Spielername:" Foreground="AntiqueWhite" FontSize="14"/>
+            <TextBox Name="txtName" FontSize="14"/>
+            <TextBlock Text="Mail-Adresse:" Foreground="AntiqueWhite" FontSize="14"/>
+            <TextBox Name="txtMail" FontSize="14"/>
+            <TextBlock Text="Passwort:" Foreground="AntiqueWhite" FontSize="14"/>
+            <PasswordBox Name="pwdPasswort" PasswordChar="°" FontSize="14"/>
+            <TextBlock Name="tbkMessage" Foreground="AntiqueWhite" FontSize="14"/>
             <Button Name="cmdRegistrieren" Content="Registrieren" Click="cmdRegistrieren_Click"/>
             <TextBlock />
             <Button Name="cmdEinloggen" Content="Einloggen" Click="cmdEinloggen_Click" />

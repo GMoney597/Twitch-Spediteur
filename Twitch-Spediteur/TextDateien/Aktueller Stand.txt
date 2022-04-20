@@ -94,5 +94,10 @@
 	- Auftrags- / Fahrzeug-Übersicht nur noch ReadOnly
 	- Auftrags-Übersicht Doppelklick sorgt für Auftragszuweisung
 
-	19. April 2022
-	- 
+	20. April 2022
+	- Spiel ist lauffähig
+	- neue Routen können per HTTP-Request hinzugefügt werden
+	- neue Orte können durch Spieler hinzugefügt werden
+	- Übersichtsansicht auf vorhandene Objekte beschränkt
+	- Startmaske übersichtlicher gestaltet
+	- Spielermaske nach Spielerstand angepasst

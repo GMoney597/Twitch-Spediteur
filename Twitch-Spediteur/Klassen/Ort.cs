@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace Twitch_Spediteur.Klassen
 {
-    internal class Ort
+    public class Ort
     {
+        public int ID { get; private set; }
         public string Ortsname { get; private set; }
 
-        public Ort(string ort) 
+        public Ort(int id, string ort) 
         {
+            ID = id;
             Ortsname = ort;
         }
     }

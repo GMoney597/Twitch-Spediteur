@@ -78,10 +78,10 @@ namespace Twitch_Spediteur.Klassen
         {
             ZeitZaehler++;
 
-            if (Erfuellungsgrad == Entfernung)
-            {
-                Zustand = Status.Zustellung;
-            }
+            //if (Erfuellungsgrad == Entfernung)
+            //{
+            //    Zustand = Status.Zustellung;
+            //}
 
             // Entfernungs-Summe =  Standort -> Abholort -> Lieferort
             // Zeitfluss-Summe=     Standort -> Abholort -> Beladen -> Lieferort -> Entladen -> Erledigung
@@ -107,7 +107,7 @@ namespace Twitch_Spediteur.Klassen
                             else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
-                                Erfuellungsgrad += 7;
+                                Erfuellungsgrad = Entfernung;
                                 ZeitZaehler = 0;
                             }
                             break;

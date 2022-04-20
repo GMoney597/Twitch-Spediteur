@@ -14,18 +14,16 @@ namespace Twitch_Spediteur
     {
         SQLite sql = new SQLite();
         DispatcherTimer timer = new DispatcherTimer();
-
-        //public static List<Ort> ortsListe = new List<Ort>();
+        public List<Ort> ortsListe = new List<Ort>();
         public List<Fahrzeug> fuhrpark = new List<Fahrzeug>();
         private Spieler sp;
-        //FileStream file = new FileStream("")
 
         public SpielerFenster(Spieler spieler)
         {
             sp = spieler;
             InitializeComponent();
             InitializeOrteListe();
-            PruefeSpielerFinanzen();
+            PruefeSpielerDaten();
             PruefeSpielerStartort();
             PruefeSpielerFuhrpark();
             PruefeSpielerAuftraege();
@@ -33,7 +31,7 @@ namespace Twitch_Spediteur
             InitializeSpielZeit();
         }
 
-        private void PruefeSpielerFinanzen()
+        private void PruefeSpielerDaten()
         {
             sql.HoleSpielerFinanzen(sp);
             tbkSpieler.Text = sp.Spielername;
@@ -86,7 +84,7 @@ namespace Twitch_Spediteur
             sp.KontoTransaktion(erfuellterAuftrag.Auftragssumme);
 
             sql.ErledigeAuftrag(fracht);
-            PruefeSpielerFinanzen();
+            PruefeSpielerDaten();
             PruefeSpielerAuftraege();
             PruefeSpielerFuhrpark();
         }
@@ -125,34 +123,32 @@ namespace Twitch_Spediteur
 
         private void PruefeSpielerStartort()
         {
-            if (!String.IsNullOrEmpty(sp.Startort))
+            if (String.IsNullOrEmpty(sp.Startort))
             {
-                stackOrtWaehlen.Visibility = Visibility.Collapsed;
+                stackOrtWaehlen.Visibility = Visibility.Visible;
+                uniAktivitaet.Visibility = Visibility.Hidden;
+                stackUebersicht.Visibility = Visibility.Hidden;
             }
         }
 
         private void InitializeOrteListe()
         {
-            //Ort ort = new Ort("Bremen");
-            //cboOrte.ItemsSource = ortsListe;
-            cboOrte.Items.Add("Hannover");
-            cboOrte.Items.Add("Berlin");
-            cboOrte.Items.Add("München");
-            cboOrte.Items.Add("Bonn");
-            cboOrte.Items.Add("Stuttgart");
-            cboOrte.Items.Add("Hamburg");
-            cboOrte.Items.Add("Leverkusen");
+            cboOrte.ItemsSource = null;
+            sql.HoleOrte(ortsListe);
+            cboOrte.ItemsSource = ortsListe;            
         }
 
         private void cmdSpeichereStandort_Click(object sender, RoutedEventArgs e)
         {
             if (String.IsNullOrEmpty(sp.Startort))
             {
-                SQLite sql = new SQLite();
                 if (sql.SpeichereStartort(sp, cboOrte.Text))
                 {
                     stackOrtWaehlen.Visibility = Visibility.Collapsed;
+                    stackUebersicht.Visibility = Visibility.Visible;
+                    uniAktivitaet.Visibility = Visibility.Visible;
                     txtStandort.Text = cboOrte.Text;
+                    PruefeSpielerStartort();
                 }
             }
         }

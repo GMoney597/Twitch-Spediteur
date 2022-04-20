@@ -9,9 +9,14 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="5*" />
+            <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
-        <Button Name="cmdImport" Content="Importieren" Grid.Column="0" VerticalAlignment="Center" Margin="10" Click="cmdImport_Click"/>
+        <StackPanel Grid.Column="0" VerticalAlignment="Center" Margin="10">
+            <Button Name="cmdImport" Content="Importieren" Margin="0,2" Click="cmdImport_Click"/>
+            <Button Name="cmdRouteCheck" Content="Pruefe fehlende Routen" Margin="0,2" Click="cmdRouteCheck_Click" />
+            <ListView Name="lstNachricht" Margin="0,2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Height="300" ScrollViewer.CanContentScroll="True"/>
+            <Button Name="cmdErstelleRouten" Content="Ergänze fehlende Routen" Margin="0,2" IsEnabled="False" Click="cmdErstelleRouten_Click"/>
+        </StackPanel>
         <DataGrid Name="dtgEntfernungen" Grid.Column="1" Margin="10" AutoGenerateColumns="True">
             
         </DataGrid>
