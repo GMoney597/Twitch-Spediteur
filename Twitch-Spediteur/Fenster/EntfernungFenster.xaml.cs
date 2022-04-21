@@ -19,7 +19,7 @@ namespace Twitch_Spediteur.Fenster
         List<Entfernung> distances = new List<Entfernung>();
         List<Ort> orte = new List<Ort>();
         List<string> routen = new List<string>();
-        List<Ort> fehlendeRouten = new List<Ort>();
+        List<Ort> fehlendeVerbindungen = new List<Ort>();
         DispatcherTimer abfrageTimer = new DispatcherTimer();
         static int verbindungsZaehler = 0;
         int fehlenderOrt = 0;
@@ -38,6 +38,8 @@ namespace Twitch_Spediteur.Fenster
 
         private void InitializeRoutenUndOrte()
         {
+            distances.Clear();
+            orte.Clear();
             sql.HoleRouten(distances);
             sql.HoleOrte(orte);
 
@@ -79,6 +81,9 @@ namespace Twitch_Spediteur.Fenster
         private void cmdRouteCheck_Click(object sender, RoutedEventArgs e)
         {
             int zaehleRoute = 0;
+            lstNachricht.ItemsSource = null;
+            fehlendeVerbindungen.Clear();
+            routen.Clear();
 
             foreach (Ort ort in orte)
             {
@@ -92,7 +97,7 @@ namespace Twitch_Spediteur.Fenster
 
                 if (zaehleRoute == 0)
                 {
-                    fehlendeRouten.Add(new Ort(ort.ID, ort.Ortsname));
+                    fehlendeVerbindungen.Add(new Ort(ort.ID, ort.Ortsname));
                 }
 
                 string route = zaehleRoute + " Routen(mit " + ort.Ortsname + ")vorhanden";
@@ -100,14 +105,12 @@ namespace Twitch_Spediteur.Fenster
                 zaehleRoute = 0;
             }
 
-            fehlenderOrt = fehlendeRouten.Count;
+            fehlenderOrt = fehlendeVerbindungen.Count;
             vorhandenerOrt = orte.Count;
-
-            //MessageBox.Show("Orte ohne Verbindungen: " + fehlendeRouten.Count, "Fehlende Stadtverbingen", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
             lstNachricht.ItemsSource = routen;
 
-            if (fehlendeRouten.Count != 0)
+            if (fehlendeVerbindungen.Count != 0)
             {
                 cmdErstelleRouten.IsEnabled = true;
             }
@@ -136,16 +139,20 @@ namespace Twitch_Spediteur.Fenster
             if (fehlenderOrt == 0)
             {
                 abfrageTimer.Stop();
+                abfrageTimer = null;
+                MessageBox.Show("Alle fehlenden Routen wurden ergänzt.", "Routen aktualisiert", MessageBoxButton.OK, MessageBoxImage.Information);
+                cmdRouteCheck_Click(this, null);
                 return;
             }
 
-            string startOrt = fehlendeRouten[fehlenderOrt - 1].Ortsname;
+            string startOrt = fehlendeVerbindungen[fehlenderOrt - 1].Ortsname;
             string zielOrt = orte[vorhandenerOrt - 1].Ortsname;
             string abfrageUri = "";
 
             if (startOrt != zielOrt)
             {
                 verbindungsZaehler++;
+                tbkImportStand.Text = "Aktuelle Route: " + verbindungsZaehler + " von " + (orte.Count() - 1) + " wird erstellt.";
 
                 abfrageUri = "http://dev.virtualearth.net/REST/V1/Routes/Driving?wp.0=" + startOrt + "&wp.1=" + zielOrt + "&key=" + apikey;
 
@@ -164,8 +171,15 @@ namespace Twitch_Spediteur.Fenster
                 string hin = startOrt + "-" + zielOrt;
                 string her = zielOrt + "-" + startOrt;
 
-                sql.SpeichereEntfernung(hin, entfernung);
-                sql.SpeichereEntfernung(her, entfernung);
+                var vorhandeneRoute = distances.Find(rou => rou.Route == her || rou.Route == hin);
+
+                if (vorhandeneRoute == null)
+                {
+                    distances.Add(new Entfernung(startOrt, zielOrt, hin, entfernung));
+                    distances.Add(new Entfernung(zielOrt, startOrt, her, entfernung));
+                    sql.SpeichereEntfernung(hin, entfernung);
+                    sql.SpeichereEntfernung(her, entfernung);
+                }
 
                 //MessageBox.Show("Verbindung-#: " + verbindungsZaehler + "\n" + startOrt + " ==> " + zielOrt + ": " + entfernung.ToString() + " km", "Abfrageergebnis erhalten",
                 //    MessageBoxButton.OK, MessageBoxImage.Information);
@@ -178,7 +192,7 @@ namespace Twitch_Spediteur.Fenster
         {
             string key = "";
 
-            using FileStream file = new FileStream(@"d:\projekte\api-keys.txt", FileMode.Open, FileAccess.Read);
+            using FileStream file = new FileStream(Properties.Settings.Default["API_Key"].ToString(), FileMode.Open, FileAccess.Read);
             using (StreamReader sr = new StreamReader(file))
             {
                 key = sr.ReadLine().ToString().Split(';')[1];

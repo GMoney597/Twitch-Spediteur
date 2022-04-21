@@ -16,6 +16,7 @@
             <Button Name="cmdRouteCheck" Content="Pruefe fehlende Routen" Margin="0,2" Click="cmdRouteCheck_Click" />
             <ListView Name="lstNachricht" Margin="0,2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" Height="300" ScrollViewer.CanContentScroll="True"/>
             <Button Name="cmdErstelleRouten" Content="Ergänze fehlende Routen" Margin="0,2" IsEnabled="False" Click="cmdErstelleRouten_Click"/>
+            <TextBlock Name="tbkImportStand" Margin="0,2" />
         </StackPanel>
         <DataGrid Name="dtgEntfernungen" Grid.Column="1" Margin="10" AutoGenerateColumns="True">
             

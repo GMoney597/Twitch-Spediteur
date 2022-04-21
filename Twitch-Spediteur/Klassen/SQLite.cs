@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Media;
 using Twitch_Spediteur.Fenster;
 using Twitch_Spediteur.Klassen;
 
@@ -16,7 +11,8 @@ namespace Twitch_Spediteur
 {
     internal class SQLite
     {
-        static SQLiteConnection sqlCon = new SQLiteConnection(@"Data Source = e:\projects\twitch.db; Version=3;FailIfMissing=True", true);
+        //static SQLiteConnection sqlCon = new SQLiteConnection(@"Data Source = e:\projects\twitch.db; Version=3;FailIfMissing=True", true);
+        static SQLiteConnection sqlCon = new SQLiteConnection(Properties.Settings.Default["SQLConnection"].ToString(), true);
         static SQLiteCommand sqlCom = new SQLiteCommand(sqlCon);
         static SQLiteDataAdapter sqlDA = new SQLiteDataAdapter();
         DataTable dtaTemp = new DataTable();

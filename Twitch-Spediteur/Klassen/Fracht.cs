@@ -78,10 +78,11 @@ namespace Twitch_Spediteur.Klassen
         {
             ZeitZaehler++;
 
-            //if (Erfuellungsgrad == Entfernung)
-            //{
-            //    Zustand = Status.Zustellung;
-            //}
+            if (Erfuellungsgrad == Entfernung)
+            {
+                Zustand = Status.Zustellung;
+                Erfuellungsgrad = Entfernung;
+            }
 
             // Entfernungs-Summe =  Standort -> Abholort -> Lieferort
             // Zeitfluss-Summe=     Standort -> Abholort -> Beladen -> Lieferort -> Entladen -> Erledigung
@@ -107,7 +108,7 @@ namespace Twitch_Spediteur.Klassen
                             else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
-                                Erfuellungsgrad = Entfernung;
+                                Erfuellungsgrad += 7;
                                 ZeitZaehler = 0;
                             }
                             break;
@@ -115,7 +116,7 @@ namespace Twitch_Spediteur.Klassen
                             if (Zustand == Status.Erledigt)
                             {
                                 MessageBox.Show("Du hast den folgenden \nAuftrag: \t#" + AuftragID + "\nFrachtauftrag: " + Bezeichnung + 
-                                    "\n" + Abholort + " -> " + Lieferort + "\n erfolgreich abgeschlossen.", "Ladung übergeben", 
+                                    "\n" + Abholort + " -> " + Lieferort + "\nerfolgreich abgeschlossen.", "Ladung übergeben", 
                                     MessageBoxButton.OK, MessageBoxImage.Information);
                                 Zustand = Status.Loeschen;
                             }

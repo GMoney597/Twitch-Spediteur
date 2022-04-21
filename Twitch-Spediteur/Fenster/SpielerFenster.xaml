@@ -51,7 +51,7 @@
             <!--#region Auftragsliste-->
             <TabItem Header="Aufträge" Background="Aquamarine">
                 <DataGrid Name="dtgSpielerAuftrage" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" 
-                          CanUserDeleteRows="False" MouseDoubleClick="dtgSpielerAuftrage_MouseDoubleClick">
+                          CanUserDeleteRows="False" MouseDoubleClick="dtgSpielerAuftrage_MouseDoubleClick" SelectionMode="Single" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding Auftragsnummer}" />
                         <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" />
