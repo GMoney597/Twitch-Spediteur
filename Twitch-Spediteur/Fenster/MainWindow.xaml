@@ -23,6 +23,8 @@
             <Button Name="cmdRegistrieren" Content="Registrieren" Click="cmdRegistrieren_Click"/>
             <TextBlock />
             <Button Name="cmdEinloggen" Content="Einloggen" Click="cmdEinloggen_Click" />
+            <TextBlock Text="Registrierte Spieler benötigen zum Einloggen nur Spielername oder Mail und das Passwort" TextWrapping="Wrap" Margin="5,5" FontSize="9" Foreground="LightYellow" />
+
         </StackPanel>
         <ListView Name="lstSpieler" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
             <ListView.View>
@@ -31,7 +33,6 @@
                 </GridView>
             </ListView.View>
         </ListView>
-
         <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical" Grid.Column="2">
             <Button Name="cmdFrachtmarkt" Content="Frachtmarkt" Margin="10" Padding="5" Click="cmdFrachtmarkt_Click" />
             <Button Name="cmdEntfernungen" Content="Entfernungen" Margin="10" Padding="5" Click="cmdEntfernungen_Click" Visibility="Visible"/>

@@ -26,15 +26,16 @@
             <Button Name="cmdSpeichereStandort" Content="Speichern" Margin="0, 10, 0, 0" Click="cmdSpeichereStandort_Click"/>
         </StackPanel>
         <UniformGrid Name="uniAktivitaet" DockPanel.Dock="Top">
+            <Button Name="cmdBank" Content="Bank-Geschäfte" Padding="10" Margin="5" Click="cmdBank_Click" />
             <Button Name="cmdFahrzeug" Content="Fahrzeug-Angebot" Padding="10" Margin="5" Click="cmdFahrzeug_Click"/>
-            <Button Name="cmdFracht" Content="Fracht-Börse" Padding="10" Margin="5" Click="cmdFracht_Click" Visibility="Hidden"/>
+            <Button Name="cmdFracht" Content="Fracht-Börse" Padding="10" Margin="5" Click="cmdFracht_Click" Visibility="Collapsed"/>
         </UniformGrid>
         <StackPanel Name="stackUebersicht">
             <TextBlock Text="Fuhrpark- und Auftragsübersicht" HorizontalAlignment="Center" DockPanel.Dock="Top" FontSize="30"/>
-            <TabControl Margin="10" Background="LightGray" >
+            <TabControl Margin="10" Background="LightGray" Height="265" >
             <!--#region Fuhrpark-->
             <TabItem Header="Fuhrpark" Background="Aqua">
-                <DataGrid Name="dtgFuhrpark" Margin="2" AutoGenerateColumns="False" IsReadOnly="True">
+                <DataGrid Name="dtgFuhrpark" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.CanContentScroll="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Fahrzeug" Binding="{Binding Typ}" />
                         <DataGridTextColumn Header="Tankstand" Binding="{Binding Tankvolumen}" />
@@ -49,14 +50,13 @@
             </TabItem>
             <!--#endregion-->
             <!--#region Auftragsliste-->
-            <TabItem Header="Aufträge" Background="Aquamarine">
+            <TabItem Header="Aufträge" Background="Aquamarine" ScrollViewer.CanContentScroll="True">
                 <DataGrid Name="dtgSpielerAuftrage" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" 
-                          CanUserDeleteRows="False" MouseDoubleClick="dtgSpielerAuftrage_MouseDoubleClick" SelectionMode="Single" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                          CanUserDeleteRows="False" MouseDoubleClick="dtgSpielerAuftrage_MouseDoubleClick" SelectionMode="Single" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="#" Binding="{Binding Auftragsnummer}" />
                         <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" />
                         <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}" />
-                        <DataGridTextColumn Header="Strecke in %" Binding="{Binding Erfuellungsgrad}" />
                         <DataGridTextColumn Header="Warenart" Binding="{Binding Bezeichnung}" />
                         <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Auftragssumme, StringFormat=#0.00 €}"/>
                         <DataGridTextColumn Header="Status" Binding="{Binding Zustand}" />

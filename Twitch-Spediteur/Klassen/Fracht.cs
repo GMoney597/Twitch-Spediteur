@@ -11,6 +11,8 @@ namespace Twitch_Spediteur.Klassen
         public string Lieferort { get; private set; }
         public string Bezeichnung { get; private set; }
         public int Entfernung { get; private set; }
+        public int AbholEntfernung { get; private set; }
+        public int ZustellEntfernung { get; private set; }
         public int Erfuellungsgrad { get; private set; }
         public DateTime Start { get; private set; }
         public DateTime Ende { get; private set; }
@@ -42,18 +44,28 @@ namespace Twitch_Spediteur.Klassen
         //    Sattelzug
         //}
 
-        public Fracht(Fahrzeug fahr, Auftrag auf)
+        public Fracht(Fahrzeug fahr, Auftrag auf, Entfernung entf)
         {
             AuftragID = auf.Auftragsnummer;
             Abholort = auf.Abholort;
             Lieferort = auf.Lieferort;
             Bezeichnung = auf.Bezeichnung;
             Standort = fahr.Standort;
-            Entfernung = auf.Entfernung;
+            ZustellEntfernung = auf.Entfernung;
+            AbholEntfernung = entf.Distanz;
             Start = auf.AuftragsDatum;
             Typ = fahr.Typ;
             Zustand = Status.Offen;
             ZeitZaehler = 0;
+
+            if (Standort != auf.Abholort)
+            {
+                Entfernung = AbholEntfernung;
+            }
+            else
+            {
+                Entfernung = ZustellEntfernung;
+            }
         }
 
         // Standort-Ideen
@@ -78,10 +90,10 @@ namespace Twitch_Spediteur.Klassen
         {
             ZeitZaehler++;
 
-            if (Erfuellungsgrad == Entfernung)
+            if (Erfuellungsgrad == ZustellEntfernung)
             {
                 Zustand = Status.Zustellung;
-                Erfuellungsgrad = Entfernung;
+                Erfuellungsgrad = ZustellEntfernung;
             }
 
             // Entfernungs-Summe =  Standort -> Abholort -> Lieferort
@@ -105,6 +117,19 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
+                            else if (Zustand == Status.Offen && AbholEntfernung <= Erfuellungsgrad)
+                            {
+                                Standort = Abholort;
+                                Erfuellungsgrad = 0;
+                                Entfernung = ZustellEntfernung;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Offen && Standort != Abholort)
+                            {
+                                Standort = "--> " + Abholort;
+                                Erfuellungsgrad += 7;
+                                ZeitZaehler = 0;
+                            }
                             else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
@@ -115,8 +140,8 @@ namespace Twitch_Spediteur.Klassen
                         case 10:
                             if (Zustand == Status.Erledigt)
                             {
-                                MessageBox.Show("Du hast den folgenden \nAuftrag: \t#" + AuftragID + "\nFrachtauftrag: " + Bezeichnung + 
-                                    "\n" + Abholort + " -> " + Lieferort + "\nerfolgreich abgeschlossen.", "Ladung übergeben", 
+                                MessageBox.Show("Du hast den folgenden \nAuftrag: \t#" + AuftragID + "\nFrachtauftrag: " + Bezeichnung +
+                                    "\n" + Abholort + " -> " + Lieferort + "\nerfolgreich abgeschlossen.", "Ladung übergeben",
                                     MessageBoxButton.OK, MessageBoxImage.Information);
                                 Zustand = Status.Loeschen;
                             }
@@ -167,7 +192,7 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && Entfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 13;
@@ -229,7 +254,7 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && Entfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 6;
@@ -291,7 +316,7 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && Entfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 11;
@@ -353,7 +378,7 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && Entfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 5;
@@ -415,7 +440,7 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && Entfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 9;

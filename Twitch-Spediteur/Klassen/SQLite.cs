@@ -11,7 +11,6 @@ namespace Twitch_Spediteur
 {
     internal class SQLite
     {
-        //static SQLiteConnection sqlCon = new SQLiteConnection(@"Data Source = e:\projects\twitch.db; Version=3;FailIfMissing=True", true);
         static SQLiteConnection sqlCon = new SQLiteConnection(Properties.Settings.Default["SQLConnection"].ToString(), true);
         static SQLiteCommand sqlCom = new SQLiteCommand(sqlCon);
         static SQLiteDataAdapter sqlDA = new SQLiteDataAdapter();
@@ -138,6 +137,26 @@ namespace Twitch_Spediteur
             }
         }
 
+        internal void GebeFahrzeugAb(int id)
+        {
+            sqlCom.CommandText = "DELETE t_Fahrzeuge WHERE F_ID = @fid";
+            sqlCom.Parameters.AddWithValue("@fid", id);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
+            }
+        }
+
         internal void KontoUpdate(Spieler spieler, decimal konto)
         {
             sqlCom.CommandText = "UPDATE t_Spieler SET Kontostand = @konto WHERE S_ID = @sid";
@@ -212,15 +231,21 @@ namespace Twitch_Spediteur
 
             foreach (DataRow row in dtaTemp.Rows)
             {
-                string unterwegs = "";
+                string aktuellerStandort = "";
+
+                if (DateTime.Parse(row.ItemArray[5].ToString()) < DateTime.Now)
+                {
+                    LoescheFahrzeug(Convert.ToInt32(row.ItemArray[0]));
+                    continue;
+                }
 
                 if (Convert.ToBoolean(row.ItemArray[7]))
                 {
-                    unterwegs = "=>unterwegs";
+                    aktuellerStandort = "=>unterwegs";
                 }
                 else
                 {
-                    unterwegs = row.ItemArray[6].ToString();
+                    aktuellerStandort = row.ItemArray[6].ToString();
                 }
 
 
@@ -229,7 +254,7 @@ namespace Twitch_Spediteur
                 {
                     spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
                         Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
-                        DateTime.Parse(row.ItemArray[5].ToString()), unterwegs,
+                        DateTime.Parse(row.ItemArray[5].ToString()), aktuellerStandort,
                         Convert.ToBoolean(row.ItemArray[7]), "kein"));
                 }
                 else
@@ -237,9 +262,29 @@ namespace Twitch_Spediteur
                     // Abfrage ohne DBNull
                     spieler.Fuhrpark.Add(new Fahrzeug(Convert.ToInt32(row.ItemArray[0]), "Kombi", 0.5m, 60, 400, 4000, 6,
                         Convert.ToBoolean(row.ItemArray[3]), DateTime.Parse(row.ItemArray[4].ToString()),
-                        DateTime.Parse(row.ItemArray[5].ToString()), unterwegs,
+                        DateTime.Parse(row.ItemArray[5].ToString()), aktuellerStandort,
                         Convert.ToBoolean(row.ItemArray[7]), row.ItemArray[8].ToString()));
                 }
+            }
+        }
+
+        private void LoescheFahrzeug(int fzgID)
+        {
+            sqlCom.CommandText = "DELETE FROM t_Fahrzeuge WHERE F_ID = @fid";
+            sqlCom.Parameters.AddWithValue("@fid", fzgID);
+
+            try
+            {
+                sqlCon.Open();
+                sqlCom.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                string error = ex.Message;
+            }
+            finally
+            {
+                sqlCon.Close();
             }
         }
 

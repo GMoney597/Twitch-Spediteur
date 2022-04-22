@@ -1,0 +1,36 @@
+﻿<Window x:Class="Twitch_Spediteur.Fenster.BankFenster"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Twitch_Spediteur.Fenster"
+        mc:Ignorable="d"
+        Title="BankFenster" Height="450" Width="800" FontSize="20">
+    <Grid>
+        <Grid.Background>
+            <ImageBrush ImageSource="/Bilder/frankfurt_banken.jpg" Opacity="0.2"/>
+        </Grid.Background>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="0.1*"/>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="0.1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="0.1*" />
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <TextBlock Text="Bargeld" />
+            <TextBox Name="txtBargeld" TextAlignment="Center"/>
+            <Slider Name="sliTransfer" />
+            <TextBlock Text="Transfer-Summe"/>
+            <TextBox Name="txtTransfer" Text="{Binding ElementName=sliTransfer, Path=Value, Mode=TwoWay, StringFormat={}{0:####0.00 €}}" TextAlignment="Center"/>
+            <TextBlock Text="Kontostand" />
+            <TextBox Name="txtKonto" TextAlignment="Center"/>
+            <TextBlock />
+            <Button Name="cmdSpeichern" Content="Übertragen" Click="cmdSpeichern_Click" Margin="5"/>
+            <Button Name="cmdSchließen" Content="Schließen" Click="cmdSchließen_Click" Margin="5"/>
+        </StackPanel>
+    </Grid>
+</Window>

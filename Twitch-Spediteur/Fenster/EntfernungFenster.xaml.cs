@@ -22,6 +22,7 @@ namespace Twitch_Spediteur.Fenster
         List<Ort> fehlendeVerbindungen = new List<Ort>();
         DispatcherTimer abfrageTimer = new DispatcherTimer();
         static int verbindungsZaehler = 0;
+        int moeglicheRouten = 0;
         int fehlenderOrt = 0;
         int vorhandenerOrt = 0;
 
@@ -95,13 +96,14 @@ namespace Twitch_Spediteur.Fenster
                     }
                 }
 
-                if (zaehleRoute == 0)
+                if (zaehleRoute < moeglicheRouten)
                 {
                     fehlendeVerbindungen.Add(new Ort(ort.ID, ort.Ortsname));
                 }
 
                 string route = zaehleRoute + " Routen(mit " + ort.Ortsname + ")vorhanden";
                 routen.Add(route);
+                moeglicheRouten = zaehleRoute;
                 zaehleRoute = 0;
             }
 

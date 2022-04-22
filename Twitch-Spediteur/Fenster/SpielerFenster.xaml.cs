@@ -16,6 +16,7 @@ namespace Twitch_Spediteur
         DispatcherTimer timer = new DispatcherTimer();
         public List<Ort> ortsListe = new List<Ort>();
         public List<Fahrzeug> fuhrpark = new List<Fahrzeug>();
+        public List<int> fahrzeugAbgeben = new List<int>();
         private Spieler sp;
 
         public SpielerFenster(Spieler spieler)
@@ -169,11 +170,11 @@ namespace Twitch_Spediteur
 
         private void dtgSpielerAuftrage_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Auftrag temp = (Auftrag)dtgSpielerAuftrage.SelectedItem;
+            Auftrag gewaehlterAuftrag = (Auftrag)dtgSpielerAuftrage.SelectedItem;
 
-            if (temp != null)
+            if (gewaehlterAuftrag != null)
             {
-                if (temp.FahrzeugID == "keins")
+                if (gewaehlterAuftrag.FahrzeugID == "keins")
                 {
                     List<Fahrzeug> moeglicheFahrzeuge = new List<Fahrzeug>();
 
@@ -186,7 +187,7 @@ namespace Twitch_Spediteur
                             moeglicheFahrzeuge.Add(item);
                         }
 
-                        FahrzeugZuweisenMessageBox fzgmsgbox = new FahrzeugZuweisenMessageBox(moeglicheFahrzeuge, temp, sp.Frachten);
+                        FahrzeugZuweisenMessageBox fzgmsgbox = new FahrzeugZuweisenMessageBox(moeglicheFahrzeuge, gewaehlterAuftrag, sp.Frachten);
                         fzgmsgbox.ShowDialog();
                     }
                     else
@@ -199,6 +200,13 @@ namespace Twitch_Spediteur
                     PruefeSpielerAuftraege();
                 }
             }
+        }
+
+        private void cmdBank_Click(object sender, RoutedEventArgs e)
+        {
+            BankFenster bank = new BankFenster(sp);
+            bank.ShowDialog();
+            PruefeSpielerDaten();
         }
     }
 }

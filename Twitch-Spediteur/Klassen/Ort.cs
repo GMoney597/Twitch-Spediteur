@@ -16,5 +16,10 @@ namespace Twitch_Spediteur.Klassen
             ID = id;
             Ortsname = ort;
         }
+        
+        public Ort(string ort)
+        {
+            Ortsname = ort;
+        }
     }
 }

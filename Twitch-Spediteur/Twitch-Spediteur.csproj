@@ -10,6 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Bilder\frankfurt_banken.jpg" />
     <None Remove="Bilder\kombi.jpg" />
     <None Remove="Bilder\lkw.jpg" />
     <None Remove="Bilder\lkw12.jpg" />
@@ -21,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Bilder\frankfurt_banken.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Bilder\kombi.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

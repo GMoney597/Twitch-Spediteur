@@ -1,0 +1,7 @@
+BING-API;---hier steht der Schlüssel---
+
+API-Key bei Bing anfordern
+- BingMaps Dev Center: -> https://www.bingmapsportal.com/Announcement
+- Konto erstellen
+- Seite Account-MyKeys --> click here to create a new key -> https://www.bingmapsportal.com/Application#
+- Key über "Show Key" anzeigen lassen und ggf. rauskopieren
