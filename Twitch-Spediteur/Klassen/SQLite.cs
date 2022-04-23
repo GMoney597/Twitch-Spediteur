@@ -11,7 +11,8 @@ namespace Twitch_Spediteur
 {
     internal class SQLite
     {
-        static SQLiteConnection sqlCon = new SQLiteConnection(Properties.Settings.Default["SQLConnection"].ToString(), true);
+        //static SQLiteConnection sqlCon = new SQLiteConnection(Properties.Settings.Default["SQLConnection"].ToString(), true);
+        static SQLiteConnection sqlCon = new SQLiteConnection(@"Data Source=twitch.db; Version=3; FailIfMissing=true", true);
         static SQLiteCommand sqlCom = new SQLiteCommand(sqlCon);
         static SQLiteDataAdapter sqlDA = new SQLiteDataAdapter();
         DataTable dtaTemp = new DataTable();

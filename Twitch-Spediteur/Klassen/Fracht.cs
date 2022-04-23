@@ -11,7 +11,7 @@ namespace Twitch_Spediteur.Klassen
         public string Lieferort { get; private set; }
         public string Bezeichnung { get; private set; }
         public int Entfernung { get; private set; }
-        public int AbholEntfernung { get; private set; }
+        public int AbholEntfernung { get; private set; } = 0;
         public int ZustellEntfernung { get; private set; }
         public int Erfuellungsgrad { get; private set; }
         public DateTime Start { get; private set; }
@@ -52,7 +52,10 @@ namespace Twitch_Spediteur.Klassen
             Bezeichnung = auf.Bezeichnung;
             Standort = fahr.Standort;
             ZustellEntfernung = auf.Entfernung;
-            AbholEntfernung = entf.Distanz;
+            if (entf != null)
+            {
+                AbholEntfernung = entf.Distanz;
+            }
             Start = auf.AuftragsDatum;
             Typ = fahr.Typ;
             Zustand = Status.Offen;
@@ -192,12 +195,26 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Offen && AbholEntfernung <= Erfuellungsgrad)
+                            {
+                                Standort = Abholort;
+                                Erfuellungsgrad = 0;
+                                Entfernung = ZustellEntfernung;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Offen && Standort != Abholort)
+                            {
+                                Standort = "--> " + Abholort;
+                                Erfuellungsgrad += 13;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 13;
                                 ZeitZaehler = 0;
                             }
+                            break;
                             break;
                         case 10:
                             if (Zustand == Status.Erledigt)
@@ -254,12 +271,26 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Offen && AbholEntfernung <= Erfuellungsgrad)
+                            {
+                                Standort = Abholort;
+                                Erfuellungsgrad = 0;
+                                Entfernung = ZustellEntfernung;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Offen && Standort != Abholort)
+                            {
+                                Standort = "--> " + Abholort;
+                                Erfuellungsgrad += 6;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 6;
                                 ZeitZaehler = 0;
                             }
+                            break;
                             break;
                         case 10:
                             if (Zustand == Status.Erledigt)
@@ -308,7 +339,7 @@ namespace Twitch_Spediteur.Klassen
                     switch (ZeitZaehler)
                     {
                         // 60 Minuten = 55 km
-                        // 12 Minuten = 11 km => 6 Ticks = 6 Minuten
+                        // 12 Minuten = 11 km => 12 Ticks = 11 Minuten
                         case 12:
                             if (Zustand == Status.Offen && Standort == Abholort)
                             {
@@ -316,12 +347,26 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Offen && AbholEntfernung <= Erfuellungsgrad)
+                            {
+                                Standort = Abholort;
+                                Erfuellungsgrad = 0;
+                                Entfernung = ZustellEntfernung;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Offen && Standort != Abholort)
+                            {
+                                Standort = "--> " + Abholort;
+                                Erfuellungsgrad += 11;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 11;
                                 ZeitZaehler = 0;
                             }
+                            break;
                             break;
                         case 10:
                             if (Zustand == Status.Erledigt)
@@ -378,12 +423,26 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Offen && AbholEntfernung <= Erfuellungsgrad)
+                            {
+                                Standort = Abholort;
+                                Erfuellungsgrad = 0;
+                                Entfernung = ZustellEntfernung;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Offen && Standort != Abholort)
+                            {
+                                Standort = "--> " + Abholort;
+                                Erfuellungsgrad += 5;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 5;
                                 ZeitZaehler = 0;
                             }
+                            break;
                             break;
                         case 10:
                             if (Zustand == Status.Erledigt)
@@ -432,7 +491,7 @@ namespace Twitch_Spediteur.Klassen
                     switch (ZeitZaehler)
                     {
                         // 60 Minuten = 45 km
-                        // 12 Minuten = 9 km => 6 Ticks = 6 Minuten
+                        // 12 Minuten = 9 km => 12 Ticks = 9 Minuten
                         case 12:
                             if (Zustand == Status.Offen && Standort == Abholort)
                             {
@@ -440,12 +499,26 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Abholung;
                                 ZeitZaehler = 0;
                             }
-                            else if (Zustand == Status.Zustellung && AbholEntfernung > Erfuellungsgrad)
+                            else if (Zustand == Status.Offen && AbholEntfernung <= Erfuellungsgrad)
+                            {
+                                Standort = Abholort;
+                                Erfuellungsgrad = 0;
+                                Entfernung = ZustellEntfernung;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Offen && Standort != Abholort)
+                            {
+                                Standort = "--> " + Abholort;
+                                Erfuellungsgrad += 9;
+                                ZeitZaehler = 0;
+                            }
+                            else if (Zustand == Status.Zustellung && Entfernung >= Erfuellungsgrad)
                             {
                                 Standort = "--> " + Lieferort;
                                 Erfuellungsgrad += 9;
                                 ZeitZaehler = 0;
                             }
+                            break;
                             break;
                         case 10:
                             if (Zustand == Status.Erledigt)

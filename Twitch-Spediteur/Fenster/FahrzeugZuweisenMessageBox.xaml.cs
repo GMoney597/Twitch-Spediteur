@@ -43,6 +43,8 @@ namespace Twitch_Spediteur.Fenster
 
         private void cboFahrzeuge_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            sql.HoleRouten(vorhandeneRouten);
+
             gewaehltesFahrzeug = (Fahrzeug)cboFahrzeuge.SelectedItem;
             tbkGewaehltesFahrzeug.Text = "Fahrzeug: " + gewaehltesFahrzeug.Typ;
             tbkStandort.Text = "Standort: " + gewaehltesFahrzeug.Standort;
@@ -54,8 +56,6 @@ namespace Twitch_Spediteur.Fenster
 
                 if (result == MessageBoxResult.Yes)
                 {
-                    sql.HoleRouten(vorhandeneRouten);
-
                     var routeVorhanden = vorhandeneRouten.Find(rou => rou.Abholort == gewaehltesFahrzeug.Standort && rou.Lieferort == gewaehlterAuftrag.Abholort);
 
                     if (routeVorhanden != null)
@@ -76,8 +76,8 @@ namespace Twitch_Spediteur.Fenster
             }
             else
             {
-                var routeVorhanden = vorhandeneRouten.Find(rou => rou.Abholort == gewaehltesFahrzeug.Standort && rou.Lieferort == gewaehlterAuftrag.Abholort);
-                startRoute = new Entfernung(routeVorhanden.Abholort, routeVorhanden.Lieferort, routeVorhanden.Route, routeVorhanden.Distanz);
+                //var routeVorhanden = vorhandeneRouten.Find(rou => rou.Abholort == gewaehltesFahrzeug.Standort && rou.Lieferort == gewaehlterAuftrag.Abholort);
+                //startRoute = new Entfernung(routeVorhanden.Abholort, routeVorhanden.Lieferort, routeVorhanden.Route, routeVorhanden.Distanz);
             }
         }
 
