@@ -7,6 +7,7 @@ namespace Twitch_Spediteur.Klassen
     public class Fracht
     {
         public int AuftragID { get; private set; }
+        public int FahrzeugID { get; private set; }
         public string Abholort { get; private set; }
         public string Lieferort { get; private set; }
         public string Bezeichnung { get; private set; }
@@ -19,9 +20,10 @@ namespace Twitch_Spediteur.Klassen
         public string Typ { get; private set; }
         public Status Zustand { get; private set; }
         public string Standort { get; private set; }
-        public bool IsAbgeholt { get; private set; }
-        public bool IsZugestellt { get; private set; }
-        public int ZeitZaehler { get; private set; } 
+        public bool IsAbgeholt { get; set; }
+        public bool IsZugestellt { get; set; }
+        public int ZeitZaehler { get; private set; }
+        public int Fortschritt { get; private set; }
 
         public enum Status
         {
@@ -47,6 +49,7 @@ namespace Twitch_Spediteur.Klassen
         public Fracht(Fahrzeug fahr, Auftrag auf, Entfernung entf)
         {
             AuftragID = auf.Auftragsnummer;
+            FahrzeugID = fahr.ID;
             Abholort = auf.Abholort;
             Lieferort = auf.Lieferort;
             Bezeichnung = auf.Bezeichnung;
@@ -162,7 +165,7 @@ namespace Twitch_Spediteur.Klassen
                                 Zustand = Status.Zustellung;
                                 IsAbgeholt = true;
                                 ZeitZaehler = 0;
-                            }                            
+                            }
                             else if (Zustand == Status.Abholung)
                             {
                                 Standort = "-> " + Abholort + " <-";
@@ -565,6 +568,8 @@ namespace Twitch_Spediteur.Klassen
                 default:
                     break;
             }
+
+            Fortschritt = (int)((Erfuellungsgrad * 100) / Entfernung);
         }
 
         public bool IsErledigt()

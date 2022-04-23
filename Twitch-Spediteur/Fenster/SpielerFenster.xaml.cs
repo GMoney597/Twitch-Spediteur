@@ -12,6 +12,7 @@ namespace Twitch_Spediteur
     /// </summary>
     public partial class SpielerFenster : Window
     {
+        MainWindow main;
         SQLite sql = new SQLite();
         DispatcherTimer timer = new DispatcherTimer();
         public List<Ort> ortsListe = new List<Ort>();
@@ -19,9 +20,10 @@ namespace Twitch_Spediteur
         public List<int> fahrzeugAbgeben = new List<int>();
         private Spieler sp;
 
-        public SpielerFenster(Spieler spieler)
+        public SpielerFenster(Spieler spieler, MainWindow mw)
         {
             sp = spieler;
+            main = mw;
             InitializeComponent();
             InitializeOrteListe();
             PruefeSpielerDaten();
@@ -92,7 +94,7 @@ namespace Twitch_Spediteur
 
         private void InitializeSpielZeit()
         {
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 250);
+            timer.Interval = new TimeSpan(0, 0, 15);
             timer.Start();
             timer.Tick += Timer_Tick;
         }
@@ -106,7 +108,12 @@ namespace Twitch_Spediteur
         {
             sp.ResetAuftraege();
             sql.HoleAuftraege(sp);
-            dtgSpielerAuftrage.ItemsSource = sp.Auftraege;
+
+            var aktuelleAuftraege = sp.Auftraege.FindAll(auf => auf.Zustand != Auftrag.Status.Erledigt);
+            var erledigteAuftraege = sp.Auftraege.FindAll(auf => auf.Zustand == Auftrag.Status.Erledigt);
+
+            dtgSpielerAuftrage.ItemsSource = aktuelleAuftraege;
+            dtgAuftragsArchiv.ItemsSource = erledigteAuftraege;
         }
 
         private void PruefeSpielerFuhrpark()
@@ -117,8 +124,12 @@ namespace Twitch_Spediteur
 
             if (sp.Fuhrpark.Count > 0)
             {
-                cmdFracht.Visibility = Visibility.Visible;
+                menuAuftrag.IsEnabled = true;
                 dtgFuhrpark.ItemsSource = sp.Fuhrpark;
+            }
+            else
+            {
+                menuAuftrag.IsEnabled = false;
             }
         }
 
@@ -127,7 +138,7 @@ namespace Twitch_Spediteur
             if (String.IsNullOrEmpty(sp.Startort))
             {
                 stackOrtWaehlen.Visibility = Visibility.Visible;
-                uniAktivitaet.Visibility = Visibility.Hidden;
+                menuAusgang.IsEnabled = false;
                 stackUebersicht.Visibility = Visibility.Hidden;
             }
         }
@@ -147,21 +158,21 @@ namespace Twitch_Spediteur
                 {
                     stackOrtWaehlen.Visibility = Visibility.Collapsed;
                     stackUebersicht.Visibility = Visibility.Visible;
-                    uniAktivitaet.Visibility = Visibility.Visible;
+                    menuAusgang.IsEnabled = true;
                     txtStandort.Text = cboOrte.Text;
                     PruefeSpielerStartort();
                 }
             }
         }
 
-        private void cmdFahrzeug_Click(object sender, RoutedEventArgs e)
+        private void menuFahrzeug_Click(object sender, RoutedEventArgs e)
         {
             FahrzeugFenster vehicle = new FahrzeugFenster(sp);
             vehicle.ShowDialog();
             PruefeSpielerFuhrpark();
         }
 
-        private void cmdFracht_Click(object sender, RoutedEventArgs e)
+        private void menuAuftrag_Click(object sender, RoutedEventArgs e)
         {
             AngebotFenster freight = new AngebotFenster(sp);
             freight.ShowDialog();
@@ -202,11 +213,17 @@ namespace Twitch_Spediteur
             }
         }
 
-        private void cmdBank_Click(object sender, RoutedEventArgs e)
+        private void menuBank_Click(object sender, RoutedEventArgs e)
         {
             BankFenster bank = new BankFenster(sp);
             bank.ShowDialog();
             PruefeSpielerDaten();
+        }
+
+        private void menuAusloggen_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+            main.Show();
         }
     }
 }

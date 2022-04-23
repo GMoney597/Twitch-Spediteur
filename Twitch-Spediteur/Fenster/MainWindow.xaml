@@ -5,37 +5,54 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Spediteur"
         mc:Ignorable="d"
-        Title="Twitch-Spediteur" Height="450" Width="800" Background="#6441a5">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*" />
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0">
-            <TextBlock Text="Spielername:" Foreground="AntiqueWhite" FontSize="14"/>
-            <TextBox Name="txtName" FontSize="14"/>
-            <TextBlock Text="Mail-Adresse:" Foreground="AntiqueWhite" FontSize="14"/>
-            <TextBox Name="txtMail" FontSize="14"/>
-            <TextBlock Text="Passwort:" Foreground="AntiqueWhite" FontSize="14"/>
-            <PasswordBox Name="pwdPasswort" PasswordChar="°" FontSize="14"/>
-            <TextBlock Name="tbkMessage" Foreground="AntiqueWhite" FontSize="14"/>
-            <Button Name="cmdRegistrieren" Content="Registrieren" Click="cmdRegistrieren_Click"/>
-            <TextBlock />
-            <Button Name="cmdEinloggen" Content="Einloggen" Click="cmdEinloggen_Click" />
-            <TextBlock Text="Registrierte Spieler benötigen zum Einloggen nur Spielername oder Mail und das Passwort" TextWrapping="Wrap" Margin="5,5" FontSize="9" Foreground="LightYellow" />
+        Title="Twitch-Spediteur" Height="450" Width="800" Background="#6441a5" WindowStartupLocation="CenterScreen" WindowStyle="None">
+    <DockPanel LastChildFill="True">
+        <TextBlock Text="TWITCH-Spediteur" DockPanel.Dock="Top" Background="LightGray" FontSize="14" Padding="5"/>
+        <Menu DockPanel.Dock="Top" >
+            <MenuItem Header="Programm">
+                <MenuItem Header="Beenden" Name="menuBeenden" Click="menuBeenden_Click"/>
+            </MenuItem>
+            <MenuItem Header="Spieler" >
+                <MenuItem Header="Registrieren" Name="menuRegistrieren" Click="menuRegistrieren_Click"/>
+                <MenuItem Header="Einloggen" Name="menuEinloggen" Click="menuEinloggen_Click"/>
+            </MenuItem>
+            <MenuItem Header="Zusatz">
+                <MenuItem Header="Warenkatalog" Name="menuWarenKatalog" Click="menuWarenKatalog_Click"/>
+                <MenuItem Header="Routen" Name="menuRouten" Click="menuRouten_Click"/>
+            </MenuItem>
+        </Menu>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Name="stackRegisterLogin" Orientation="Vertical" Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="0" Visibility="Hidden">
+                <TextBlock Text="Spielername:" Foreground="AntiqueWhite" FontSize="14"/>
+                <TextBox Name="txtName" FontSize="14"/>
+                <TextBlock Name="tbkEinlogAnforderung" TextAlignment="Center" Foreground="IndianRed"/>
+                <TextBlock Text="Mail-Adresse:" Foreground="AntiqueWhite" FontSize="14"/>
+                <TextBox Name="txtMail" FontSize="14"/>
+                <TextBlock Text="Passwort:" Foreground="AntiqueWhite" FontSize="14"/>
+                <PasswordBox Name="pwdPasswort" PasswordChar="°" FontSize="14"/>
+                <Label Height="40" />
+                <Button Name="cmdRegistrieren" Content="Registrieren" Click="cmdRegistrieren_Click"/>
+                <Button Name="cmdEinloggen" Content="Einloggen" Click="cmdEinloggen_Click" />
+                <TextBlock Name="tbkMessage" />
+                <!--TextBlock Text="Registrierte Spieler benötigen zum Einloggen nur Spielername oder Mail und das Passwort" TextWrapping="Wrap" Margin="5,5" FontSize="9" Foreground="LightYellow" /-->
 
-        </StackPanel>
-        <ListView Name="lstSpieler" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Spielername" Width="200" DisplayMemberBinding="{Binding Spielername}" />
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Orientation="Vertical" Grid.Column="2">
-            <Button Name="cmdFrachtmarkt" Content="Frachtmarkt" Margin="10" Padding="5" Click="cmdFrachtmarkt_Click" />
-            <Button Name="cmdEntfernungen" Content="Entfernungen" Margin="10" Padding="5" Click="cmdEntfernungen_Click" Visibility="Visible"/>
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                <TextBlock Name="tbkRegistrierteSpieler" Foreground="AntiqueWhite" HorizontalAlignment="Center" FontSize="14"/>
+                <ListView Name="lstSpieler" Grid.Column="2" HorizontalAlignment="Center">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Spielername" Width="200" DisplayMemberBinding="{Binding Spielername}" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+                
+            </StackPanel>
+        </Grid>
+    </DockPanel>
 </Window>

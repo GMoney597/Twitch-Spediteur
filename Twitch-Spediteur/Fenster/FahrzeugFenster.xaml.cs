@@ -46,7 +46,7 @@ namespace Twitch_Spediteur.Fenster
         {
             temp = (Fahrzeug)cboNeuFahrzeuge.SelectedItem;
 
-            if (sp.Bargeld > temp.KaufPreis)
+            if (sp.Bargeld >= temp.KaufPreis)
             {
                 // Bereich Mieten
                 txtMietpreis.Text = temp.MietPreis.ToString();
@@ -57,7 +57,7 @@ namespace Twitch_Spediteur.Fenster
                 txtKaufpreis.Visibility = Visibility.Visible;
                 cmdKaufen.Visibility = Visibility.Visible;
             }
-            else if (sp.Bargeld > temp.MietPreis)
+            else if (sp.Bargeld >= temp.MietPreis)
             {
                 // Bereich Mieten
                 txtMietpreis.Text = temp.MietPreis.ToString();

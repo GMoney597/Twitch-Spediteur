@@ -27,7 +27,7 @@ namespace Twitch_Spediteur
         {
             spielerList = sql.HoleSpieler();
 
-            tbkMessage.Text = spielerList.Count.ToString() + " Spieler bereits registriert.";
+            tbkRegistrierteSpieler.Text = spielerList.Count.ToString() + " Spieler bereits registriert";
 
             SpielerListeAktualisieren();
         }
@@ -116,8 +116,9 @@ namespace Twitch_Spediteur
                 {
                     if (sp.Einloggen(name_mail, passwort))
                     {
-                        SpielerFenster user = new SpielerFenster(sp);
+                        SpielerFenster user = new SpielerFenster(sp, this);
                         user.Show();
+                        this.Hide();
                     }
 
                     continue;
@@ -125,16 +126,37 @@ namespace Twitch_Spediteur
             }
         }
 
-        private void cmdFrachtmarkt_Click(object sender, RoutedEventArgs e)
+        private void menuWarenKatalog_Click(object sender, RoutedEventArgs e)
         {
             WareFenster ware = new WareFenster();
             ware.Show();
         }
 
-        private void cmdEntfernungen_Click(object sender, RoutedEventArgs e)
+        private void menuRouten_Click(object sender, RoutedEventArgs e)
         {
             EntfernungFenster entfernungen = new EntfernungFenster();
             entfernungen.Show();
+        }
+
+        private void menuBeenden_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void menuRegistrieren_Click(object sender, RoutedEventArgs e)
+        {
+            stackRegisterLogin.Visibility = Visibility.Visible;
+            cmdEinloggen.Visibility = Visibility.Collapsed;
+            cmdRegistrieren.Visibility = Visibility.Visible;
+            tbkEinlogAnforderung.Visibility = Visibility.Hidden;
+        }
+
+        private void menuEinloggen_Click(object sender, RoutedEventArgs e)
+        {
+            stackRegisterLogin.Visibility = Visibility.Visible;
+            cmdRegistrieren.Visibility = Visibility.Collapsed;
+            cmdEinloggen.Visibility = Visibility.Visible;
+            tbkEinlogAnforderung.Text = "Spielername oder Mail angeben";
         }
     }
 }

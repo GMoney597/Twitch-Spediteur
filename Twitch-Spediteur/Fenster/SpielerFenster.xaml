@@ -5,73 +5,117 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Twitch_Spediteur"
         mc:Ignorable="d"
-        Title="Spieler-Informationen" Height="450" Width="800">
-    <DockPanel Background="#FFFF7F00" LastChildFill="True">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Center" DockPanel.Dock="Left" MinWidth="200">
-            <TextBlock Name="tbkSpielZeit" FontSize="30" Foreground="Magenta" TextAlignment="Right" />
-            <TextBlock Name="tbkSpieler" Text="Spieler" FontSize="20"/>
-            <Label Background="DarkGray" Height="15" />
-            <TextBlock Text="Standort:" />
-            <TextBox Name="txtStandort" IsReadOnly="True" />
-            <TextBlock Text="Bargeld:" />
-            <TextBox Name="txtBargeld" TextAlignment="Right" IsReadOnly="True"/>
-            <TextBlock Text="Kontostand:" />
-            <TextBox Name="txtKontostand" TextAlignment="Right" IsReadOnly="True"/>
-            <TextBlock Name="tbkNachrichten" Text="Nachrichten:" />
-            <ListBox Name="lbxNachrichten" Height="200"/>
-        </StackPanel>
-        <StackPanel Name="stackOrtWaehlen"  DockPanel.Dock="Left" VerticalAlignment="Center" Margin="50" Visibility="Collapsed">
-            <TextBlock Name="tbkOrtWaehlen" Text="Wähle deinen Start-Ort:" />
-            <ComboBox Name="cboOrte" IsEditable="True" DisplayMemberPath="Ortsname" Margin= "0, 0, 0, 10" />
-            <Button Name="cmdSpeichereStandort" Content="Speichern" Margin="0, 10, 0, 0" Click="cmdSpeichereStandort_Click"/>
-        </StackPanel>
-        <UniformGrid Name="uniAktivitaet" DockPanel.Dock="Top">
-            <Button Name="cmdBank" Content="Bank-Geschäfte" Padding="10" Margin="5" Click="cmdBank_Click" />
-            <Button Name="cmdFahrzeug" Content="Fahrzeug-Angebot" Padding="10" Margin="5" Click="cmdFahrzeug_Click"/>
-            <Button Name="cmdFracht" Content="Fracht-Börse" Padding="10" Margin="5" Click="cmdFracht_Click" Visibility="Collapsed"/>
-        </UniformGrid>
-        <StackPanel Name="stackUebersicht">
-            <TextBlock Text="Fuhrpark- und Auftragsübersicht" HorizontalAlignment="Center" DockPanel.Dock="Top" FontSize="30"/>
-            <TabControl Margin="10" Background="LightGray" Height="265" >
-            <!--#region Fuhrpark-->
-            <TabItem Header="Fuhrpark" Background="Aqua">
-                <DataGrid Name="dtgFuhrpark" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" ScrollViewer.CanContentScroll="True">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="Fahrzeug" Binding="{Binding Typ}" />
-                        <DataGridTextColumn Header="Tankstand" Binding="{Binding Tankvolumen}" />
-                        <DataGridTextColumn Header="Abgabedatum" Binding="{Binding AbgabeDatum, StringFormat=dd.MM.yyyy}" />
-                        <DataGridCheckBoxColumn Header="Ist gekauft" Binding="{Binding IsGekauft}" IsReadOnly="True" />
-                        <DataGridTextColumn Header="Standort" Binding="{Binding Standort}" />
-                        <DataGridTextColumn Header="Status" Binding="{Binding Ladung}" />
-                        <DataGridCheckBoxColumn Header="HatAuftrag" Binding="{Binding HatAuftrag}" IsReadOnly="True"/>
-                        <DataGridTextColumn Header="Auftrag#" Binding="{Binding AuftragsNummer}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-            <!--#endregion-->
-            <!--#region Auftragsliste-->
-            <TabItem Header="Aufträge" Background="Aquamarine" ScrollViewer.CanContentScroll="True">
-                <DataGrid Name="dtgSpielerAuftrage" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" CanUserAddRows="False" 
-                          CanUserDeleteRows="False" MouseDoubleClick="dtgSpielerAuftrage_MouseDoubleClick" SelectionMode="Single" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Header="#" Binding="{Binding Auftragsnummer}" />
-                        <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" />
-                        <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}" />
-                        <DataGridTextColumn Header="Warenart" Binding="{Binding Bezeichnung}" />
-                        <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Auftragssumme, StringFormat=#0.00 €}"/>
-                        <DataGridTextColumn Header="Status" Binding="{Binding Zustand}" />
-                        <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </TabItem>
-            <!--#endregion-->
-            <!--#region Frachten in Ausführung-->
-            <TabItem Header="Frachten" Background="LightSkyBlue">
-                <DataGrid Name="dtgFrachten" Margin="2" IsReadOnly="True">
-                    
-                </DataGrid>
-            </TabItem>
-        </TabControl>
-        </StackPanel>
+        Title="Spieler-Informationen" Height="450" Width="800" WindowStyle="None" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <DockPanel Background="#FFFF7F00" >
+        <TextBlock Text="Spielerinformationen" Background="DarkGray" FontSize="14" Padding="5" DockPanel.Dock="Top"/>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Ausloggen" Name="menuAusloggen" Click="menuAusloggen_Click" />
+            <MenuItem Header="Büro verlassen" Name="menuAusgang">
+                <MenuItem Header="Bank" Name="menuBank" Click="menuBank_Click" />
+                <MenuItem Header="Fahrzeughändler" Name="menuFahrzeug" Click="menuFahrzeug_Click" />
+                <MenuItem Header="Auftragsbörse" Name="menuAuftrag" Click="menuAuftrag_Click" />
+            </MenuItem>
+        </Menu>
+        <Grid DockPanel.Dock="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="3*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical" MinWidth="200">
+                <TextBlock Name="tbkSpieler" Text="Spieler" FontSize="20"/>
+                <Label Background="DarkGray" Height="15" />
+                <TextBlock Text="Standort:" />
+                <TextBox Name="txtStandort" IsReadOnly="True" />
+                <TextBlock Text="Bargeld:" />
+                <TextBox Name="txtBargeld" TextAlignment="Right" IsReadOnly="True"/>
+                <TextBlock Text="Kontostand:" />
+                <TextBox Name="txtKontostand" TextAlignment="Right" IsReadOnly="True"/>
+                <TextBlock Name="tbkNachrichten" Text="Nachrichten:" />
+                <ListBox Name="lbxNachrichten" Height="200"/>
+            </StackPanel>
+            <StackPanel Name="stackOrtWaehlen" Grid.Column="1" VerticalAlignment="Center" Margin="50" Visibility="Collapsed">
+                <TextBlock Name="tbkOrtWaehlen" Text="Wähle deinen Start-Ort:" />
+                <ComboBox Name="cboOrte" IsEditable="True" DisplayMemberPath="Ortsname" Margin= "0, 0, 0, 10" />
+                <Button Name="cmdSpeichereStandort" Content="Speichern" Margin="0, 10, 0, 0" Click="cmdSpeichereStandort_Click"/>
+            </StackPanel>
+            <StackPanel Name="stackUebersicht" Grid.Column="1">
+                <TextBlock Text="Fuhrpark- und Auftragsübersicht" HorizontalAlignment="Center" DockPanel.Dock="Top" FontSize="30"/>
+                <TabControl Margin="10" Background="LightGray" >
+                    <!--#region Fuhrpark-->
+                    <TabItem Header="Fuhrpark" Background="Aqua">
+                        <ScrollViewer>
+                            <DataGrid Name="dtgFuhrpark" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" MaxHeight="320">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Fahrzeug" Binding="{Binding Typ}" />
+                                    <DataGridTextColumn Header="Tankstand" Binding="{Binding Tankvolumen}" />
+                                    <DataGridTextColumn Header="Abgabedatum" Binding="{Binding AbgabeDatum, StringFormat=dd.MM.yyyy}" />
+                                    <DataGridCheckBoxColumn Header="Ist gekauft" Binding="{Binding IsGekauft}" IsReadOnly="True" />
+                                    <DataGridTextColumn Header="Standort" Binding="{Binding Standort}" />
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Ladung}" />
+                                    <DataGridCheckBoxColumn Header="HatAuftrag" Binding="{Binding HatAuftrag}" IsReadOnly="True"/>
+                                    <DataGridTextColumn Header="Auftrag#" Binding="{Binding AuftragsNummer}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </ScrollViewer>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Auftragsliste-->
+                    <TabItem Header="Aufträge" Background="Aquamarine">
+                        <ScrollViewer>
+                            <DataGrid Name="dtgSpielerAuftrage" Margin="2" AutoGenerateColumns="False" MaxHeight="320" IsReadOnly="True"  
+                          MouseDoubleClick="dtgSpielerAuftrage_MouseDoubleClick" SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding Auftragsnummer}" />
+                                    <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" />
+                                    <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}" />
+                                    <DataGridTextColumn Header="Warenart" Binding="{Binding Bezeichnung}" />
+                                    <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Auftragssumme, StringFormat=#0.00 €}"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Zustand}" />
+                                    <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+
+                        </ScrollViewer>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Frachten in Ausführung-->
+                    <TabItem Header="Frachten" Background="LightSkyBlue">
+                        <ScrollViewer>
+                            <DataGrid Name="dtgFrachten" Margin="2" IsReadOnly="True" AutoGenerateColumns="False" MaxHeight="320" CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding AuftragID}" />
+                                    <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" />
+                                    <DataGridTextColumn Header="% erledigt" Binding="{Binding Fortschritt}" />
+                                    <DataGridTextColumn Header="Ware" Binding="{Binding Bezeichnung}" />
+                                    <DataGridTextColumn Header="Phase" Binding="{Binding Zustand}" />
+                                    <DataGridTextColumn Header="Standort" Binding="{Binding Standort}" />
+                                    <DataGridCheckBoxColumn Header="abgeholt" Binding="{Binding IsAbgeholt}" />
+                                    <DataGridCheckBoxColumn Header="zugestellt" Binding="{Binding IsZugestelt}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </TabItem>
+                    <!--#endregion-->
+                    <!--#region Auftrags-Archiv -->
+                    <TabItem Header="Auftragsarchiv" Background="LightSeaGreen">
+                        <!--<ScrollViewer >-->
+                            <DataGrid Name="dtgAuftragsArchiv" Margin="2" AutoGenerateColumns="False" IsReadOnly="True" SelectionMode="Single" MaxHeight="320" >
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="#" Binding="{Binding Auftragsnummer}" />
+                                    <DataGridTextColumn Header="Start" Binding="{Binding Abholort}" />
+                                    <DataGridTextColumn Header="Ziel" Binding="{Binding Lieferort}" />
+                                    <DataGridTextColumn Header="Warenart" Binding="{Binding Bezeichnung}" />
+                                    <DataGridTextColumn Header="Auftragssumme" Binding="{Binding Auftragssumme, StringFormat=#0.00 €}"/>
+                                    <DataGridTextColumn Header="Status" Binding="{Binding Zustand}" />
+                                    <DataGridTextColumn Header="Fahrzeug" Binding="{Binding FahrzeugID}" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        <!--</ScrollViewer>-->
+                    </TabItem>
+                    <!--#endregion-->
+                </TabControl>
+            </StackPanel>
+        </Grid>
     </DockPanel>
 </Window>
