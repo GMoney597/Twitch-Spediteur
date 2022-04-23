@@ -9,7 +9,9 @@ Im besten Fall startet das Programm andernfalls kann es sein, dass
 a) das richtige Framework von Microsoft nachinstalliert werden muss, passiert fast von selbst, ihr müsst über den
   Browser-Aufruf nur bestätigen, dass das Framework heruntergeladen und installiert werden darf
 b) noch andere Fehler vorliegen, die müsstest Ihr mir dann bitte ohnehin mitteilen, es ist eine FRÜH-Version,
-  also bitte noch keine großen Erwartungen setzen 
+  also bitte noch keine großen Erwartungen setzen
+c) wenn Ihr Updates von der Anwendung zieht, bitte vorher Datenbank sichern "twitch.db", sonst fangt ihr von vorne an
+  und Euer Geld ist weg, sowie der Account gelöscht
   
 Gruß
 und viel Spaß mit "unserem" TWITCH-SPEDITEUR
